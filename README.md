@@ -1,23 +1,17 @@
-# OncoResponde — Commit 001
+# OncoResponde — Commit 001.1
 
-Primer cambio funcional del proyecto real.
+Refinamiento visual de la pantalla Hoy.
 
-## Incluye
+## Cambios
+- Reduce el solapamiento de la tarjeta Háblame a aproximadamente 20–24 px.
+- Aumenta la altura de la fotografía institucional.
+- Reduce la altura y el peso visual de la tarjeta Háblame.
+- Aumenta el espacio entre el saludo y el mensaje de acompañamiento.
+- Ajusta el tamaño y la separación de los botones Hablar y Escribir.
+- Añade una aparición suave de la tarjeta, respetando `prefers-reduced-motion`.
 
-- Pantalla **Hoy** definitiva.
-- Fotografía institucional del camino.
-- Saludo dinámico separado de la finalidad de OncoResponde.
-- Tarjeta principal **Háblame** con acceso a voz y escritura.
-- Estado emocional con recomendaciones enlazadas y barras de energía.
-- Teléfonos de apoyo cuando se selecciona **Necesito apoyo**.
-- Bloque **Todo lo que puede ayudarte** con tarjetas diferenciadas.
-- Navegación inferior adaptable a móvil.
-- Corrección TypeScript para importaciones CSS.
+## Instalación en GitHub
+Sube la carpeta `src` incluida en este ZIP a la raíz del repositorio. GitHub sustituirá únicamente `src/styles.css`.
 
-## Subir a GitHub
-
-Sube el contenido de esta carpeta a la raíz del repositorio y usa como mensaje del commit:
-
-`Commit 001 - Pantalla Hoy definitiva`
-
-Netlify desplegará automáticamente el cambio.
+Mensaje recomendado del commit:
+`Commit 001.1 - Refinamiento visual de Hoy`

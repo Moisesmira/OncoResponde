@@ -1,206 +1,237 @@
-import { Link } from 'react-router-dom';
-import BottomNav from '../components/BottomNav';
-import { useAppStore } from '../store/useAppStore';
-
-type MoodId = 'bien' | 'regular' | 'preocupado' | 'apoyo';
-
-type Recommendation = {
-  label: string;
-  detail: string;
-  to: string;
-};
-
-const moodOptions: Array<{ id: MoodId; label: string; icon: string; detail: string }> = [
-  { id: 'bien', label: 'Bien', icon: '🙂', detail: 'Me encuentro con ánimo' },
-  { id: 'regular', label: 'Regular', icon: '😐', detail: 'Necesito bajar el ritmo' },
-  { id: 'preocupado', label: 'Preocupado', icon: '😟', detail: 'Hay algo que me inquieta' },
-  { id: 'apoyo', label: 'Necesito apoyo', icon: '♥', detail: 'Quiero sentirme acompañado' },
-];
-
-const recommendations: Record<MoodId, { intro: string; energy: number; actions: Recommendation[] }> = {
-  bien: {
-    intro: 'Hoy puede ser un buen momento para cuidarte y mantener aquello que te ayuda.',
-    energy: 4,
-    actions: [
-      { label: 'Muévete', detail: 'Actividad física adaptada', to: '/cuidate' },
-      { label: 'Aliméntate mejor', detail: 'Consejos de alimentación', to: '/cuidate' },
-      { label: 'Escribe en Mi Camino', detail: 'Guarda cómo te encuentras', to: '/camino' },
-    ],
-  },
-  regular: {
-    intro: 'Hoy quizá te ayude ir un poco más despacio y elegir una sola cosa sencilla.',
-    energy: 3,
-    actions: [
-      { label: 'Descansa mejor', detail: 'Ideas para el sueño y el descanso', to: '/cuidate' },
-      { label: 'Encuentra calma', detail: 'Respiración, música y pausa', to: '/calma' },
-      { label: 'Escribe en Mi Camino', detail: 'Pon por escrito cómo estás', to: '/camino' },
-    ],
-  },
-  preocupado: {
-    intro: 'No tienes que resolverlo todo ahora. Podemos empezar por aquello que más te preocupa.',
-    energy: 2,
-    actions: [
-      { label: 'Respira conmigo', detail: 'Haz una pausa guiada', to: '/calma' },
-      { label: 'Cómo te sientes', detail: 'Bienestar emocional', to: '/cuidate' },
-      { label: 'Háblame', detail: 'Cuéntame qué te preocupa', to: '/hablame' },
-    ],
-  },
-  apoyo: {
-    intro: 'Estoy aquí contigo. Elige el paso que te resulte más fácil en este momento.',
-    energy: 1,
-    actions: [
-      { label: 'Un minuto para ti', detail: 'Una pausa breve y sin exigencias', to: '/calma' },
-      { label: 'Háblame', detail: 'Puedes hablar o escribir', to: '/hablame' },
-      { label: 'Familia y apoyo', detail: 'Recursos para ti y los tuyos', to: '/familia' },
-    ],
-  },
-};
-
-const accessCards = [
-  { to: '/perfil', title: 'Cuéntame sobre tu cáncer', text: 'Información opcional para adaptar mejor la ayuda.', icon: '○', tone: 'blue' },
-  { to: '/oncoayuda', title: 'OncoAyuda', text: 'Haz una pregunta escrita y recibe orientación.', icon: '◌', tone: 'blue' },
-  { to: '/cuidate', title: 'Cuídate', text: 'Alimentación, movimiento, descanso y bienestar.', icon: '♧', tone: 'green' },
-  { to: '/calma', title: 'Encuentra calma', text: 'Respiración, música, audios y reflexiones.', icon: '≈', tone: 'teal' },
-  { to: '/preparate', title: 'Prepárate', text: 'Información práctica antes de pruebas y tratamientos.', icon: '▣', tone: 'orange' },
-  { to: '/camino', title: 'Mi Camino', text: 'Tu diario personal durante el proceso.', icon: '▤', tone: 'purple' },
-  { to: '/familia', title: 'Familia y cuidadores', text: 'Acompañar y cuidarse también importa.', icon: '◎', tone: 'rose' },
-  { to: '/fuentes', title: 'Fuentes fiables', text: 'Información sanitaria de referencia.', icon: '◇', tone: 'slate' },
-  { to: '/ajustes', title: 'Ajustes y privacidad', text: 'Accesibilidad, datos locales y transparencia.', icon: '⚙', tone: 'slate' },
-];
-
-function getGreeting() {
-  const hour = new Date().getHours();
-  if (hour < 12) return 'Buenos días';
-  if (hour < 20) return 'Buenas tardes';
-  return 'Buenas noches';
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #16344d;
+  background: #eef5f8;
+  font-size: 17px;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --blue-900: #073b6f;
+  --blue-800: #0b4e87;
+  --blue-700: #116bb5;
+  --blue-500: #3e9bea;
+  --blue-100: #e8f3fc;
+  --green-700: #238a66;
+  --green-100: #e7f6ef;
+  --teal-700: #168b91;
+  --teal-100: #e2f7f6;
+  --orange-700: #c66b20;
+  --orange-100: #fff0df;
+  --purple-700: #7655b5;
+  --purple-100: #f0eafb;
+  --rose-700: #bb5576;
+  --rose-100: #fcebf1;
+  --slate-700: #506b82;
+  --slate-100: #eaf0f5;
+  --surface: #ffffff;
+  --muted: #5d7487;
+  --border: #d8e5ed;
+  --shadow: 0 16px 42px rgba(27, 77, 108, 0.11);
 }
 
-export default function Today() {
-  const { mood, setMood } = useAppStore();
-  const selected = mood ? recommendations[mood] : null;
+* { box-sizing: border-box; }
+html { min-width: 320px; background: #eef5f8; }
+body { margin: 0; min-width: 320px; min-height: 100vh; background: linear-gradient(180deg, #f5fafc 0%, #edf5f8 100%); }
+a { color: inherit; text-decoration: none; }
+button, textarea, input { font: inherit; }
+button, .button { min-height: 48px; }
+button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 3px solid rgba(62, 155, 234, 0.45); outline-offset: 3px; }
 
-  return (
-    <>
-      <main className="today-page">
-        <section className="today-hero" aria-labelledby="today-title">
-          <img src="/assets/camino.png" alt="Persona recorriendo un sendero hacia la luz" />
-          <div className="today-hero__shade" />
-          <div className="today-hero__content">
-            <span className="brand-pill">OncoResponde · Información que acompaña</span>
-            <h1 id="today-title">{getGreeting()}</h1>
-            <p>Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.</p>
-          </div>
-        </section>
+main { max-width: 920px; margin: 0 auto; padding: 18px 18px 118px; }
+h1, h2, h3 { color: #0b3d68; line-height: 1.13; }
+h1 { font-size: clamp(2.25rem, 7vw, 4.2rem); }
+h2 { font-size: clamp(1.45rem, 4vw, 2rem); }
+h3 { font-size: 1.15rem; }
+p { line-height: 1.58; }
 
-        <section className="talk-card" aria-labelledby="talk-title">
-          <div className="talk-card__copy">
-            <span className="talk-card__eyebrow">Tu acceso principal</span>
-            <h2 id="talk-title">Háblame <span aria-hidden="true">♥</span></h2>
-            <p>Cuéntame qué necesitas o qué te preocupa. Puedes hablar con tranquilidad o escribir.</p>
-          </div>
-          <div className="talk-card__actions">
-            <Link className="button talk-card__primary" to="/hablame">🎤 Hablar</Link>
-            <Link className="button talk-card__secondary" to="/oncoayuda">✎ Escribir</Link>
-          </div>
-        </section>
+.button, button {
+  border: 0;
+  border-radius: 16px;
+  padding: 13px 19px;
+  font-weight: 800;
+  background: var(--blue-700);
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+.button:hover, button:hover { transform: translateY(-1px); }
+button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.secondary { background: var(--blue-100); color: var(--blue-800); }
 
-        <section className="card mood-card" aria-labelledby="mood-title">
-          <div className="section-heading">
-            <div>
-              <span className="section-kicker">Hoy</span>
-              <h2 id="mood-title">¿Cómo te encuentras hoy?</h2>
-            </div>
-            <p>Elige la opción que más se acerque a este momento.</p>
-          </div>
+.card, .oncobox, .answer {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(210, 226, 235, 0.9);
+  border-radius: 25px;
+  padding: clamp(20px, 4vw, 30px);
+  margin: 20px 0;
+  box-shadow: var(--shadow);
+}
 
-          <div className="mood-grid">
-            {moodOptions.map((option) => (
-              <button
-                type="button"
-                key={option.id}
-                className={`mood-option${mood === option.id ? ' is-selected' : ''}`}
-                onClick={() => setMood(option.id)}
-                aria-pressed={mood === option.id}
-              >
-                <span className="mood-option__icon" aria-hidden="true">{option.icon}</span>
-                <strong>{option.label}</strong>
-                <small>{option.detail}</small>
-              </button>
-            ))}
-          </div>
+.today-page { padding-top: 14px; }
+.today-hero {
+  position: relative;
+  min-height: clamp(350px, 62vw, 510px);
+  overflow: hidden;
+  border-radius: 34px;
+  box-shadow: 0 22px 55px rgba(17, 61, 91, .18);
+  isolation: isolate;
+}
+.today-hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+.today-hero__shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4, 45, 82, .72) 0%, rgba(7, 48, 81, .22) 40%, rgba(5, 34, 55, .65) 100%); }
+.today-hero__content { position: relative; z-index: 1; min-height: inherit; color: #fff; padding: clamp(24px, 6vw, 50px); display: flex; flex-direction: column; justify-content: flex-end; }
+.today-hero__content h1 { color: #fff; margin: 0 0 14px; letter-spacing: -.035em; text-shadow: 0 3px 16px rgba(5, 34, 55, .25); }
+.today-hero__content p { max-width: 620px; margin: 0; font-size: clamp(1.08rem, 3vw, 1.35rem); font-weight: 650; }
+.brand-pill { align-self: flex-start; margin-bottom: auto; padding: 9px 14px; border-radius: 999px; background: rgba(255,255,255,.88); color: var(--blue-900); font-size: .86rem; font-weight: 850; backdrop-filter: blur(10px); }
 
-          {selected ? (
-            <div className="daily-plan" aria-live="polite">
-              <div className="daily-plan__header">
-                <div>
-                  <span className="section-kicker">Tu plan para hoy</span>
-                  <h3>Una propuesta sencilla para este momento</h3>
-                </div>
-                <div className="energy-meter" aria-label={`Nivel orientativo de energía: ${selected.energy} de 5`}>
-                  {[1, 2, 3, 4, 5].map((level) => (
-                    <span key={level} className={level <= selected.energy ? 'is-on' : ''} />
-                  ))}
-                </div>
-              </div>
-              <p>{selected.intro}</p>
-              <div className="recommendation-list">
-                {selected.actions.map((action) => (
-                  <Link to={action.to} className="recommendation-item" key={action.label}>
-                    <span>
-                      <strong>{action.label}</strong>
-                      <small>{action.detail}</small>
-                    </span>
-                    <b aria-hidden="true">→</b>
-                  </Link>
-                ))}
-              </div>
-              {mood === 'apoyo' && (
-                <div className="support-strip">
-                  <strong>¿Necesitas ayuda inmediata?</strong>
-                  <a href="tel:900100036">AECC · 900 100 036</a>
-                  <a href="tel:717003717">Teléfono de la Esperanza · 717 003 717</a>
-                  <a href="tel:112">Emergencias · 112</a>
-                  <a href="tel:061">Salud Responde · 061</a>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="empty-plan">
-              <span aria-hidden="true">☼</span>
-              <p>Cuando elijas cómo te encuentras, aparecerán recomendaciones para hoy.</p>
-            </div>
-          )}
-        </section>
+.talk-card {
+  position: relative;
+  z-index: 2;
+  margin: 28px 22px 26px;
+  padding: clamp(23px, 5vw, 34px);
+  border-radius: 30px;
+  color: #fff;
+  background: linear-gradient(135deg, #07539a 0%, #0b66b9 48%, #104c87 100%);
+  box-shadow: 0 20px 46px rgba(5, 67, 122, .3);
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 26px;
+  align-items: center;
+}
+.talk-card h2 { color: #fff; font-size: clamp(2rem, 5vw, 2.7rem); margin: 5px 0 8px; }
+.talk-card h2 span { color: #7bc5ff; }
+.talk-card p { margin: 0; color: rgba(255,255,255,.92); }
+.talk-card__eyebrow { font-size: .82rem; font-weight: 850; text-transform: uppercase; letter-spacing: .08em; color: #badefb; }
+.talk-card__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.talk-card__primary { background: #4aa7f2; box-shadow: 0 8px 22px rgba(4, 34, 62, .2); }
+.talk-card__secondary { background: rgba(255,255,255,.08); color: #fff; border: 2px solid rgba(255,255,255,.7); }
 
-        <section className="access-section" aria-labelledby="access-title">
-          <div className="section-heading section-heading--compact">
-            <div>
-              <span className="section-kicker">Explora a tu ritmo</span>
-              <h2 id="access-title">Todo lo que puede ayudarte</h2>
-            </div>
-            <p>No necesitas descubrirlo todo hoy.</p>
-          </div>
-          <div className="access-grid">
-            {accessCards.map((card) => (
-              <Link className={`access-card access-card--${card.tone}`} to={card.to} key={card.to}>
-                <span className="access-card__icon" aria-hidden="true">{card.icon}</span>
-                <span className="access-card__body">
-                  <strong>{card.title}</strong>
-                  <small>{card.text}</small>
-                </span>
-                <b aria-hidden="true">→</b>
-              </Link>
-            ))}
-          </div>
-        </section>
+.section-heading { display: flex; justify-content: space-between; align-items: end; gap: 26px; margin-bottom: 20px; }
+.section-heading h2 { margin: 4px 0 0; }
+.section-heading > p { max-width: 330px; margin: 0; color: var(--muted); font-size: .93rem; }
+.section-heading--compact { margin: 34px 0 18px; }
+.section-kicker { color: var(--blue-700); font-weight: 850; font-size: .82rem; text-transform: uppercase; letter-spacing: .08em; }
 
-        <footer className="today-footer">
-          <strong>OncoResponde</strong>
-          <p>Orientación, no diagnóstico. La IA puede cometer errores. Contrasta siempre la información con tu equipo sanitario.</p>
-          <small>Información orientativa. No sustituye la atención médica ni los servicios de urgencias.</small>
-        </footer>
-      </main>
-      <BottomNav />
-    </>
-  );
+.mood-card { overflow: hidden; }
+.mood-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.mood-option { min-height: 142px; padding: 17px 12px; border: 1px solid var(--border); background: #f8fbfd; color: #17445f; display: flex; flex-direction: column; justify-content: center; border-radius: 20px; box-shadow: none; }
+.mood-option:hover { background: #edf6fb; }
+.mood-option.is-selected { background: linear-gradient(180deg, #116bb5 0%, #0b5594 100%); color: #fff; border-color: #0b5594; box-shadow: 0 12px 26px rgba(17, 107, 181, .25); }
+.mood-option__icon { display: block; font-size: 2rem; margin-bottom: 7px; }
+.mood-option small { display: block; font-weight: 550; margin-top: 5px; line-height: 1.3; opacity: .78; }
+
+.mood-option--support {
+  color: #b4232f;
+  border-color: #ef9aa2;
+  background: #fff7f8;
+}
+.mood-option--support:hover {
+  background: #fff0f2;
+  border-color: #e66f7a;
+}
+.mood-option--support .mood-option__icon { color: #d7192d; }
+.mood-option--support.is-selected {
+  color: #fff;
+  border-color: #c9162a;
+  background: linear-gradient(180deg, #e43545 0%, #bf1628 100%);
+  box-shadow: 0 12px 26px rgba(191, 22, 40, .24);
+}
+
+.daily-plan { margin: 24px -30px -30px; padding: 27px 30px 30px; border-top: 1px solid var(--border); background: linear-gradient(180deg, #f7fbfd 0%, #eef7fa 100%); }
+.daily-plan__header { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+.daily-plan h3 { margin: 5px 0 0; }
+.daily-plan > p { color: var(--muted); margin: 14px 0 18px; }
+.energy-meter { display: flex; align-items: end; gap: 5px; height: 42px; }
+.energy-meter span { display: block; width: 9px; border-radius: 999px; background: #cbdde7; }
+.energy-meter span:nth-child(1) { height: 14px; }
+.energy-meter span:nth-child(2) { height: 20px; }
+.energy-meter span:nth-child(3) { height: 27px; }
+.energy-meter span:nth-child(4) { height: 34px; }
+.energy-meter span:nth-child(5) { height: 41px; }
+.energy-meter span.is-on { background: linear-gradient(180deg, #56c496, #208763); }
+.recommendation-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.recommendation-item { border: 1px solid var(--border); border-radius: 17px; padding: 15px; background: #fff; display: flex; justify-content: space-between; gap: 12px; align-items: center; transition: transform .16s ease, box-shadow .16s ease; }
+.recommendation-item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(27, 77, 108, .1); }
+.recommendation-item strong, .recommendation-item small { display: block; }
+.recommendation-item small { margin-top: 5px; color: var(--muted); line-height: 1.3; }
+.recommendation-item b { color: var(--blue-700); font-size: 1.25rem; }
+.support-strip { margin-top: 18px; border-radius: 18px; padding: 17px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; background: #fff1f4; border: 1px solid #f2cbd6; }
+.support-strip strong { grid-column: 1/-1; color: #a43c5c; }
+.support-strip a { color: #8f3150; font-weight: 750; }
+.empty-plan { display: flex; align-items: center; gap: 13px; padding: 18px; margin-top: 22px; border-radius: 18px; background: #f1f7fa; color: var(--muted); }
+.empty-plan span { font-size: 1.8rem; color: var(--blue-700); }
+
+.access-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.access-card { min-height: 168px; border-radius: 23px; padding: 20px; display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: 13px; border: 1px solid rgba(255,255,255,.7); transition: transform .18s ease, box-shadow .18s ease; }
+.access-card:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(27, 77, 108, .11); }
+.access-card__icon { width: 47px; height: 47px; border-radius: 15px; display: grid; place-items: center; background: rgba(255,255,255,.76); font-size: 1.45rem; font-weight: 900; }
+.access-card__body strong, .access-card__body small { display: block; }
+.access-card__body strong { font-size: 1.05rem; color: #113f65; }
+.access-card__body small { margin-top: 8px; color: #425f74; line-height: 1.45; }
+.access-card b { align-self: center; color: #184f78; font-size: 1.3rem; }
+.access-card--blue { background: var(--blue-100); }
+.access-card--green { background: var(--green-100); }
+.access-card--teal { background: var(--teal-100); }
+.access-card--orange { background: var(--orange-100); }
+.access-card--purple { background: var(--purple-100); }
+.access-card--rose { background: var(--rose-100); }
+.access-card--slate { background: var(--slate-100); }
+
+.today-footer { margin-top: 36px; padding: 28px; text-align: center; color: var(--muted); }
+.today-footer strong { color: var(--blue-900); font-size: 1.15rem; }
+.today-footer p { max-width: 690px; margin: 10px auto; }
+
+.bottom-nav { position: fixed; z-index: 50; left: 50%; bottom: 12px; transform: translateX(-50%); width: min(880px, calc(100% - 24px)); padding: 8px; border: 1px solid rgba(207, 224, 233, .88); border-radius: 23px; background: rgba(255,255,255,.92); backdrop-filter: blur(18px); box-shadow: 0 15px 42px rgba(23, 64, 92, .18); display: grid; grid-template-columns: repeat(5, 1fr); }
+.bottom-nav__item { min-height: 60px; border-radius: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; color: #5c7182; font-weight: 720; font-size: .78rem; }
+.bottom-nav__item.is-active { background: var(--blue-100); color: var(--blue-800); }
+.bottom-nav__icon { font-size: 1.25rem; line-height: 1; }
+
+.nav-header { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; margin-bottom: 18px; }
+.nav-header h1 { text-align: center; font-size: 1.25rem; margin: 0; }
+.nav-header button { padding: 10px 12px; }
+textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-radius: 16px; padding: 14px; margin: 10px 0; resize: vertical; color: #16344d; background: #fff; }
+.muted { color: var(--muted); }
+.centered { text-align: center; }
+.voice-image { width: 100%; max-height: 300px; object-fit: cover; object-position: center 36%; border-radius: 20px; }
+.mic { font-size: 1.1rem; margin: 12px; }
+.answer h2 { color: var(--blue-800); }
+.error { border: 2px solid #d96b6b; }
+.row { display: flex; gap: 12px; flex-wrap: wrap; }
+.row > * { flex: 1; }
+
+@media (max-width: 760px) {
+  main { padding: 12px 12px 112px; }
+  .today-hero { min-height: 410px; border-radius: 27px; }
+  .today-hero__content { padding: 24px; }
+  .talk-card { margin: 22px 12px 22px; grid-template-columns: 1fr; gap: 18px; }
+  .mood-grid { grid-template-columns: 1fr 1fr; }
+  .section-heading { display: block; }
+  .section-heading > p { margin-top: 8px; }
+  .daily-plan { margin-left: -20px; margin-right: -20px; margin-bottom: -20px; padding: 24px 20px; }
+  .recommendation-list { grid-template-columns: 1fr; }
+  .access-grid { grid-template-columns: 1fr 1fr; }
+  .access-card { min-height: 150px; padding: 16px; grid-template-columns: auto 1fr; }
+  .access-card b { display: none; }
+}
+
+@media (max-width: 480px) {
+  :root { font-size: 16px; }
+  .today-hero { min-height: 365px; }
+  .brand-pill { font-size: .72rem; }
+  .talk-card__actions { grid-template-columns: 1fr; }
+  .mood-option { min-height: 130px; }
+  .daily-plan__header { align-items: flex-start; }
+  .access-grid { grid-template-columns: 1fr; }
+  .access-card { min-height: 125px; }
+  .support-strip { grid-template-columns: 1fr; }
+  .bottom-nav { bottom: 7px; width: calc(100% - 14px); }
+  .bottom-nav__item { font-size: .68rem; min-height: 57px; }
+  .bottom-nav__icon { font-size: 1.1rem; }
+  .nav-header h1 { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }

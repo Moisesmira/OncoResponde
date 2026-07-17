@@ -7,6 +7,7 @@ import CancerProfile from './pages/CancerProfile';
 import WellnessHub from './pages/WellnessHub';
 import WellnessTopic from './pages/WellnessTopic';
 import Breathing from './pages/Breathing';
+import Tracking from './pages/Tracking';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
       <Route path="/cuidate/:topicId" element={<WellnessTopic />} />
       <Route path="/respiracion" element={<Breathing />} />
       <Route path="/calma" element={<Breathing />} />
+      <Route path="/seguimiento" element={<Tracking />} />
       <Route path="/camino" element={<SimplePage title="Mi Camino" />} />
       <Route path="/preparate" element={<SimplePage title="Prepárate" />} />
       <Route path="/familia" element={<SimplePage title="Familia" />} />

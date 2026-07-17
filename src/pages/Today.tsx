@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import BottomNav from '../components/BottomNav';
 import { useAppStore } from '../store/useAppStore';
+import { saveMoodForToday } from '../utils/moodTracking';
 
 type MoodId = 'bien' | 'regular' | 'preocupado' | 'apoyo';
 
@@ -57,6 +58,7 @@ const recommendations: Record<MoodId, { intro: string; energy: number; actions: 
 };
 
 const accessCards = [
+  { to: '/seguimiento', title: 'Mi seguimiento', text: 'Registra en 20 segundos cómo te encuentras hoy.', icon: '◷', tone: 'teal' },
   { to: '/perfil', title: 'Cuéntame sobre tu cáncer', text: 'Información opcional para adaptar mejor la ayuda.', icon: '○', tone: 'blue' },
   { to: '/oncoayuda', title: 'OncoAyuda', text: 'Haz una pregunta escrita y recibe orientación.', icon: '◌', tone: 'blue' },
   { to: '/cuidate', title: 'Cuídate', text: 'Alimentación, movimiento, descanso y bienestar.', icon: '♧', tone: 'green' },
@@ -119,7 +121,7 @@ export default function Today() {
                 type="button"
                 key={option.id}
                 className={`mood-option${option.id === 'apoyo' ? ' mood-option--support' : ''}${mood === option.id ? ' is-selected' : ''}`}
-                onClick={() => setMood(option.id)}
+                onClick={() => { setMood(option.id); saveMoodForToday(option.id); }}
                 aria-pressed={mood === option.id}
               >
                 <span className="mood-option__icon" aria-hidden="true">{option.icon}</span>
@@ -197,7 +199,7 @@ export default function Today() {
         <footer className="today-footer">
           <strong>OncoResponde</strong>
           <p>Orientación, no diagnóstico. La IA puede cometer errores. Contrasta siempre la información con tu equipo sanitario.</p>
-          <small>Información orientativa. No sustituye la atención médica ni los servicios de urgencias.</small>
+          <small>OncoResponde 2.3 · Información orientativa. No sustituye la atención médica ni los servicios de urgencias.</small>
         </footer>
       </main>
       <BottomNav />

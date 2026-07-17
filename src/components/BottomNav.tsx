@@ -4,7 +4,7 @@ const items = [
   { to: '/', label: 'Hoy', icon: '⌂' },
   { to: '/oncoayuda', label: 'OncoAyuda', icon: '◌' },
   { to: '/cuidate', label: 'Cuídate', icon: '♧' },
-  { to: '/camino', label: 'Mi Camino', icon: '▤' },
+  { to: '/seguimiento', label: 'Seguimiento', icon: '◷' },
   { to: '/ajustes', label: 'Ajustes', icon: '⚙' },
 ];
 

@@ -10,6 +10,10 @@ const sourceByContext = {
   ejercicio: [{ name: 'American College of Sports Medicine: Moving Through Cancer', url: 'https://www.exerciseismedicine.org/eim-in-action/moving-through-cancer/' }],
   'bienestar-emocional': [{ name: 'AECC: apoyo y acompañamiento', url: 'https://www.contraelcancer.es/es/te-ayudamos' }],
   comunicacion: [{ name: 'NCI: Communication in Cancer Care', url: 'https://www.cancer.gov/about-cancer/coping/adjusting-to-cancer/communication-pdq' }],
+  sintomas: [
+    { name: 'NCI: Side Effects of Cancer Treatment', url: 'https://www.cancer.gov/about-cancer/treatment/side-effects' },
+    { name: 'NCI: Infection and Neutropenia', url: 'https://www.cancer.gov/about-cancer/treatment/side-effects/infection' },
+  ],
 };
 
 const basePrompt = `Eres OncoResponde, un asistente de educación sanitaria y acompañamiento para pacientes oncológicos y familiares.
@@ -25,6 +29,7 @@ const contextPrompts = {
   'bienestar-emocional': `Tema: bienestar emocional. Empieza validando la emoción. Si sugiere autolesión, suicidio, desesperanza extrema o peligro inmediato, indica ayuda urgente 112/061 en España y no dejar sola a la persona.`,
   comunicacion: `Tema: comunicación con familia, hijos y equipo sanitario. Ofrece frases modelo breves y preguntas útiles, sin imponer cuánto debe contar la persona.`,
   respiracion: `Tema: respiración y regulación de la tensión. Propón ejercicios suaves. Si hay dificultad respiratoria nueva o intensa, dolor torácico, coloración azulada, confusión o desmayo, indica atención urgente.`,
+  sintomas: `Tema: síntomas declarados en un diario personal. No diagnostiques ni atribuyas causalidad. Prioriza autocuidado prudente, hidratación, descanso y comunicación con el equipo. Identifica señales de alarma, especialmente fiebre durante tratamiento, dificultad respiratoria, dolor intenso, confusión, desmayo, sangrado, vómitos persistentes o incapacidad para beber. No recomiendes medicación ni cambios de tratamiento.`,
   general: `Tema: consulta oncológica general. Limita la respuesta a educación sanitaria prudente.`,
 };
 

@@ -8,6 +8,7 @@ import WellnessHub from './pages/WellnessHub';
 import WellnessTopic from './pages/WellnessTopic';
 import Breathing from './pages/Breathing';
 import Tracking from './pages/Tracking';
+import SymptomDiary from './pages/SymptomDiary';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
       <Route path="/respiracion" element={<Breathing />} />
       <Route path="/calma" element={<Breathing />} />
       <Route path="/seguimiento" element={<Tracking />} />
+      <Route path="/seguimiento/sintomas" element={<SymptomDiary />} />
       <Route path="/camino" element={<SimplePage title="Mi Camino" />} />
       <Route path="/preparate" element={<SimplePage title="Prepárate" />} />
       <Route path="/familia" element={<SimplePage title="Familia" />} />

@@ -9,5 +9,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
+
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {
+      // La aplicación sigue funcionando aunque el navegador no permita registrar el service worker.
+    });
+  });
+}

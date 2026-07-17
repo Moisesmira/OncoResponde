@@ -1,13 +1,17 @@
-COMMIT 002.1 CORREGIDO
+ONCORESPONDE — COMMIT 003 INCREMENTAL
 
-1. Descomprime este ZIP.
-2. Sube los archivos a GitHub respetando exactamente sus carpetas.
-3. Sustituye los archivos existentes cuando GitHub lo solicite.
-4. Haz el commit con el mensaje:
-   Commit 002.1 - Restaurada pantalla Hoy estable
+Este paquete NO incluye package.json, package-lock.json, netlify.toml ni configuración de Vite.
+Por tanto, no modifica las dependencias ni la instalación que ya funciona en Netlify.
 
-Cambios incluidos:
-- Háblame no se superpone a la imagen.
-- ¿Cómo te encuentras hoy? aparece centrado.
-- Necesito apoyo aparece en rojo.
-- Mi cáncer permanece integrado.
+Sustituye o añade únicamente estos archivos, respetando sus rutas:
+
+1. src/App.tsx                         (sustituir)
+2. src/styles.css                      (sustituir)
+3. src/pages/WellnessHub.tsx           (añadir)
+4. src/pages/WellnessTopic.tsx         (añadir)
+5. src/pages/Breathing.tsx             (añadir)
+
+No borres ni sustituyas Today.tsx, CancerProfile.tsx, package.json o package-lock.json.
+
+Mensaje recomendado del commit:
+Commit 003 - Más allá del tratamiento y respiración (incremental)

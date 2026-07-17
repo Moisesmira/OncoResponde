@@ -383,3 +383,25 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
     padding: 19px;
   }
 }
+
+/* =========================================================
+   OncoResponde 2.1.4 · Revisión visual y navegación
+   ========================================================= */
+.nav-header__title{font-size:1rem;color:#24485b;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-header button{min-height:44px}
+.topic-breadcrumb{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:18px 2px 0;color:#68808c;font-size:.84rem}
+.topic-breadcrumb a{color:#2e7186;text-decoration:none;font-weight:700}
+.topic-breadcrumb a:hover{text-decoration:underline}
+.quick-question-list button.is-selected{border-color:#4a94aa;background:#eaf7fa;box-shadow:0 0 0 3px rgba(55,133,155,.12)}
+.quick-question-list button:focus-visible,.topic-pager__item:focus-visible,.topic-breadcrumb a:focus-visible,.back-to-wellness:focus-visible{outline:3px solid rgba(34,112,137,.28);outline-offset:3px}
+.topic-oncobox-anchor{scroll-margin-top:82px}
+.oncobox-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-4px 2px 12px;color:#738792;font-size:.8rem}
+.oncobox-clear{border:0!important;background:transparent!important;color:#287086!important;padding:4px 0!important;min-height:auto!important;font-size:.8rem!important;text-decoration:underline;box-shadow:none!important}
+.topic-pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:24px}
+.topic-pager__item{display:flex;flex-direction:column;gap:4px;min-height:78px;padding:15px 16px;border:1px solid rgba(35,87,110,.12);border-radius:17px;background:#fff;color:#285a6e;text-decoration:none;box-shadow:0 7px 20px rgba(29,67,84,.06)}
+.topic-pager__item--next{text-align:right;align-items:flex-end}
+.topic-pager__item small{color:#7b8f98;font-weight:700;text-transform:uppercase;letter-spacing:.05em;font-size:.68rem}
+.topic-pager__item strong{line-height:1.3}
+.topic-pager__item:hover{border-color:#a9ced9;background:#f7fcfd}
+.back-to-wellness{margin-top:18px;padding:11px 0}
+@media(max-width:520px){.nav-header__title{display:none}.topic-pager{grid-template-columns:1fr}.topic-pager>span{display:none}.topic-pager__item--next{text-align:left;align-items:flex-start}.topic-breadcrumb{margin-top:12px}.oncobox-meta{align-items:flex-start;flex-direction:column;gap:4px}}

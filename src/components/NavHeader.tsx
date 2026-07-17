@@ -1,2 +1,35 @@
 import { useNavigate } from 'react-router-dom';
-export default function NavHeader({title}:{title:string}){const nav=useNavigate();return <header className="nav-header"><button onClick={()=>nav(-1)}>← Volver</button><h1>{title}</h1><button onClick={()=>nav('/')}>⌂ Hoy</button></header>}
+
+type NavHeaderProps = {
+  title: string;
+  backTo?: string;
+  backLabel?: string;
+};
+
+export default function NavHeader({
+  title,
+  backTo = '/',
+  backLabel = 'Volver',
+}: NavHeaderProps) {
+  const navigate = useNavigate();
+
+  const goBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+    navigate(backTo);
+  };
+
+  return (
+    <header className="nav-header">
+      <button type="button" onClick={goBack} aria-label={`${backLabel}: ${title}`}>
+        <span aria-hidden="true">←</span> {backLabel}
+      </button>
+      <strong className="nav-header__title">{title}</strong>
+      <button type="button" onClick={() => navigate('/')} aria-label="Ir a la pantalla de inicio">
+        <span aria-hidden="true">⌂</span> Hoy
+      </button>
+    </header>
+  );
+}

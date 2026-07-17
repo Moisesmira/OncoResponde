@@ -15,8 +15,8 @@ const topics = [
 export default function WellnessHub() {
   return (
     <>
-      <main className="wellness-page">
-        <NavHeader title="Cuídate" />
+      <main className="wellness-page" id="main-content">
+        <NavHeader title="Cuídate" backTo="/" />
         <section className="wellness-intro">
           <span className="section-kicker">Cuidarte también forma parte del proceso</span>
           <h1>Cuídate</h1>
@@ -30,6 +30,7 @@ export default function WellnessHub() {
               key={topic.id}
               to={topic.id === 'respiracion' ? '/respiracion' : `/cuidate/${topic.id}`}
               className={`wellness-card wellness-card--${topic.id}`}
+              aria-label={`${topic.title}. ${topic.text}`}
             >
               <span className="wellness-card__icon" aria-hidden="true">{topic.icon}</span>
               <span className="wellness-card__copy">

@@ -69,6 +69,10 @@ export default function OncoBox({
         aria-label="Pregunta para OncoResponde"
         maxLength={1200}
       />
+      <div className="oncobox-meta" aria-live="polite">
+        <span>{question.length}/1200 caracteres</span>
+        {question.trim() && <button type="button" className="oncobox-clear" onClick={() => setQuestion('')}>Borrar texto</button>}
+      </div>
       <div className="row">
         <button className="secondary" type="button" onClick={dictate}>🎤 Dictar</button>
         <button type="button" disabled={!question.trim()} onClick={submit}>{buttonLabel}</button>

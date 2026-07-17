@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import OncoBox from '../components/OncoBox';
 
 type Phase = 'Preparado' | 'Inspirar' | 'Mantener' | 'Espirar';
 const cycles = [
@@ -14,6 +15,7 @@ export default function Breathing() {
   const [remaining, setRemaining] = useState(cycles[0].seconds);
   const [sound, setSound] = useState(false);
   const [pace, setPace] = useState(1);
+  const [selectedQuestion, setSelectedQuestion] = useState('');
   const audioRef = useRef<AudioContext | null>(null);
   const phase = running ? cycles[phaseIndex].phase : 'Preparado';
 
@@ -98,6 +100,32 @@ export default function Breathing() {
           </label>
         </div>
       </section>
+
+      <section className="breathing-support">
+        <span className="section-kicker">También puede ayudarte</span>
+        <h2>Respiración en momentos concretos</h2>
+        <div className="quick-question-list">
+          {['Respiración antes de una prueba', 'Respiración cuando tengo ansiedad', 'Cómo respirar cuando estoy muy tenso'].map((question) => (
+            <button
+              type="button"
+              key={question}
+              onClick={() => setSelectedQuestion(question)}
+              className={selectedQuestion === question ? 'is-selected' : ''}
+              aria-pressed={selectedQuestion === question}
+            >
+              <span>{question}</span><b aria-hidden="true">→</b>
+            </button>
+          ))}
+        </div>
+        <OncoBox
+          context="Área Cuídate: respiración y manejo de la tensión durante el proceso oncológico. Ofrece ejercicios respiratorios breves y prudentes, indica detenerse si aparece mareo o malestar y evita presentarlos como sustituto de atención médica o psicológica."
+          initialQuestion={selectedQuestion}
+          title="Preguntar sobre respiración"
+          buttonLabel="Preguntar a OncoResponde"
+        />
+      </section>
+
+      <Link className="back-to-wellness breathing-back-link" to="/cuidate">← Volver a Cuídate</Link>
     </main>
   );
 }

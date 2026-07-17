@@ -2,7 +2,8 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import NavHeader from '../components/NavHeader';
 import BottomNav from '../components/BottomNav';
-import OncoBox from '../components/OncoBox';
+import ContextChat from '../components/ContextChat';
+import type { WellnessContextId } from '../context/wellnessPrompts';
 import { wellnessTopics } from '../data/wellnessData';
 
 export default function WellnessTopic() {
@@ -60,8 +61,8 @@ export default function WellnessTopic() {
         </section>
 
         <div id="topic-oncobox" className="topic-oncobox-anchor">
-          <OncoBox
-            context={topic.context}
+          <ContextChat
+            contextId={topic.id as WellnessContextId}
             initialQuestion={selectedQuestion}
             title={topic.askLabel}
             buttonLabel="Preguntar a OncoResponde"

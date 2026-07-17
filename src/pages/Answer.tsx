@@ -1,2 +1,131 @@
-import {useLocation,useNavigate} from 'react-router-dom';import {useEffect,useState} from 'react';import NavHeader from '../components/NavHeader';
-export default function Answer(){const{state}=useLocation();const nav=useNavigate();const[loading,setLoading]=useState(true);const[data,setData]=useState<any>(null);const[error,setError]=useState('');useEffect(()=>{const c=new AbortController();const t=setTimeout(()=>c.abort(),30000);fetch('/.netlify/functions/consulta',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:state?.question,context:state?.context}),signal:c.signal}).then(async r=>{const j=await r.json();if(!r.ok)throw new Error(j.error||'No se pudo completar la consulta');setData(j)}).catch(e=>setError(e.name==='AbortError'?'La consulta ha tardado demasiado. Inténtalo de nuevo.':e.message)).finally(()=>{clearTimeout(t);setLoading(false)});return()=>{clearTimeout(t);c.abort()}},[]);return <main><NavHeader title="Respuesta"/>{loading&&<section className="card"><h2>Consultando OncoResponde…</h2><p>Revisando el Playbook y fuentes sanitarias de referencia.</p></section>}{error&&<section className="card error"><h2>No se ha completado la consulta</h2><p>{error}</p><button onClick={()=>nav(-1)}>Volver a intentarlo</button></section>}{data&&<section className="answer"><h2>Lo más importante</h2><p>{data.summary}</p><h2>Respuesta</h2><p>{data.answer}</p><h2>Qué puedes hacer</h2><ul>{data.actions?.map((x:string)=><li key={x}>{x}</li>)}</ul><h2>Cuándo consultar</h2><p>{data.whenToConsult}</p><h2>Fuentes</h2><ul>{data.sources?.map((s:any)=><li key={s.url}><a href={s.url} target="_blank" rel="noreferrer">{s.name}</a></li>)}</ul><div className="row"><button onClick={()=>speechSynthesis.speak(new SpeechSynthesisUtterance(data.answer))}>🔊 Escuchar</button><button className="secondary" onClick={()=>nav(-1)}>Cerrar y no guardar</button></div></section>}</main>}
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import NavHeader from '../components/NavHeader';
+
+type AnswerData = {
+  summary: string;
+  answer: string;
+  actions?: string[];
+  whenToConsult: string;
+  followUp?: string;
+  sources?: Array<{ name: string; url: string }>;
+};
+
+type AnswerLocationState = {
+  question?: string;
+  contextId?: string;
+  context?: string;
+  profileContext?: string;
+};
+
+export default function Answer() {
+  const { state } = useLocation();
+  const request = (state ?? {}) as AnswerLocationState;
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<AnswerData | null>(null);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!request.question?.trim()) {
+      setError('No se ha recibido ninguna pregunta.');
+      setLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 30000);
+
+    fetch('/.netlify/functions/consulta', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: request.question,
+        contextId: request.contextId,
+        context: request.context,
+        profileContext: request.profileContext,
+      }),
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || 'No se pudo completar la consulta');
+        setData(payload as AnswerData);
+      })
+      .catch((caught: Error) => {
+        setError(caught.name === 'AbortError' ? 'La consulta ha tardado demasiado. Inténtalo de nuevo.' : caught.message);
+      })
+      .finally(() => {
+        window.clearTimeout(timeout);
+        setLoading(false);
+      });
+
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [request.question, request.contextId, request.context, request.profileContext]);
+
+  const listen = () => {
+    if (!data) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(`${data.summary}. ${data.answer}`);
+    utterance.lang = 'es-ES';
+    window.speechSynthesis.speak(utterance);
+  };
+
+  return (
+    <main>
+      <NavHeader title="Respuesta" />
+      {loading && (
+        <section className="card">
+          <h2>Consultando OncoResponde…</h2>
+          <p>Adaptando la respuesta al tema de la consulta y revisando criterios de seguridad.</p>
+        </section>
+      )}
+      {error && (
+        <section className="card error">
+          <h2>No se ha completado la consulta</h2>
+          <p>{error}</p>
+          <button type="button" onClick={() => navigate(-1)}>Volver</button>
+        </section>
+      )}
+      {data && (
+        <section className="answer">
+          <h2>Lo más importante</h2>
+          <p>{data.summary}</p>
+          <h2>Respuesta</h2>
+          <p>{data.answer}</p>
+          {!!data.actions?.length && (
+            <>
+              <h2>Qué puedes hacer</h2>
+              <ul>{data.actions.map((action) => <li key={action}>{action}</li>)}</ul>
+            </>
+          )}
+          <h2>Cuándo consultar</h2>
+          <p>{data.whenToConsult}</p>
+          {data.followUp && (
+            <div className="card">
+              <strong>Para orientarte mejor</strong>
+              <p>{data.followUp}</p>
+            </div>
+          )}
+          {!!data.sources?.length && (
+            <>
+              <h2>Fuentes de referencia</h2>
+              <ul>
+                {data.sources.map((source) => (
+                  <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.name}</a></li>
+                ))}
+              </ul>
+            </>
+          )}
+          <div className="row">
+            <button type="button" onClick={listen}>🔊 Escuchar</button>
+            <button type="button" className="secondary" onClick={() => navigate(-1)}>Cerrar y no guardar</button>
+          </div>
+        </section>
+      )}
+    </main>
+  );
+}

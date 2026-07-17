@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getCancerProfileContext } from '../utils/cancerProfileContext';
 
 type OncoBoxProps = {
+  contextId?: string;
   context?: string;
   initialQuestion?: string;
   title?: string;
@@ -9,6 +11,7 @@ type OncoBoxProps = {
 };
 
 export default function OncoBox({
+  contextId = 'general',
   context = 'Consulta general de OncoResponde.',
   initialQuestion = '',
   title = 'Pregunta a OncoResponde',
@@ -45,21 +48,26 @@ export default function OncoBox({
     navigate('/respuesta', {
       state: {
         question: question.trim(),
+        contextId,
         context,
+        profileContext: getCancerProfileContext(),
       },
     });
   };
 
   return (
     <section className="oncobox wellness-oncobox" aria-labelledby="oncobox-title">
-      <span className="section-kicker">Consulta personalizada</span>
+      <span className="section-kicker">Consulta contextual</span>
       <h2 id="oncobox-title">💬 {title}</h2>
-      <p className="muted">La pregunta se enviará con el contexto de esta sección. No incluyas datos que permitan identificarte.</p>
+      <p className="muted">
+        OncoResponde tendrá en cuenta esta sección y, si lo guardaste, tu perfil opcional. No incluyas datos que permitan identificarte.
+      </p>
       <textarea
         value={question}
         onChange={(event) => setQuestion(event.target.value)}
         placeholder="Escribe aquí lo que te preocupa o necesitas saber…"
         aria-label="Pregunta para OncoResponde"
+        maxLength={1200}
       />
       <div className="row">
         <button className="secondary" type="button" onClick={dictate}>🎤 Dictar</button>

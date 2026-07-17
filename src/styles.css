@@ -405,3 +405,16 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 .topic-pager__item:hover{border-color:#a9ced9;background:#f7fcfd}
 .back-to-wellness{margin-top:18px;padding:11px 0}
 @media(max-width:520px){.nav-header__title{display:none}.topic-pager{grid-template-columns:1fr}.topic-pager>span{display:none}.topic-pager__item--next{text-align:left;align-items:flex-start}.topic-breadcrumb{margin-top:12px}.oncobox-meta{align-items:flex-start;flex-direction:column;gap:4px}}
+
+/* OncoResponde 2.2 · Personalización clínica opcional */
+.profile-personalization-badge,
+.answer-personalization {
+  margin: 12px 0 16px;
+  padding: 10px 13px;
+  border: 1px solid rgba(36, 110, 133, 0.18);
+  border-radius: 14px;
+  background: #eef8fb;
+  color: #28586a;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}

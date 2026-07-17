@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCancerProfileContext } from '../utils/cancerProfileContext';
+import { getCancerProfileContext, getCancerTypeId } from '../utils/cancerProfileContext';
 
 type OncoBoxProps = {
   contextId?: string;
@@ -51,6 +51,7 @@ export default function OncoBox({
         contextId,
         context,
         profileContext: getCancerProfileContext(),
+        cancerType: getCancerTypeId(),
       },
     });
   };

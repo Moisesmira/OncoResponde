@@ -9,6 +9,7 @@ type AnswerData = {
   whenToConsult: string;
   followUp?: string;
   sources?: Array<{ name: string; url: string }>;
+  personalizationNote?: string;
 };
 
 type AnswerLocationState = {
@@ -16,6 +17,7 @@ type AnswerLocationState = {
   contextId?: string;
   context?: string;
   profileContext?: string;
+  cancerType?: string;
 };
 
 export default function Answer() {
@@ -44,6 +46,7 @@ export default function Answer() {
         contextId: request.contextId,
         context: request.context,
         profileContext: request.profileContext,
+        cancerType: request.cancerType,
       }),
       signal: controller.signal,
     })
@@ -64,7 +67,7 @@ export default function Answer() {
       window.clearTimeout(timeout);
       controller.abort();
     };
-  }, [request.question, request.contextId, request.context, request.profileContext]);
+  }, [request.question, request.contextId, request.context, request.profileContext, request.cancerType]);
 
   const listen = () => {
     if (!data) return;
@@ -92,6 +95,7 @@ export default function Answer() {
       )}
       {data && (
         <section className="answer">
+          {data.personalizationNote && <p className="answer-personalization">{data.personalizationNote}</p>}
           <h2>Lo más importante</h2>
           <p>{data.summary}</p>
           <h2>Respuesta</h2>

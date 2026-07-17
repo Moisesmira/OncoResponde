@@ -5,6 +5,8 @@ import BottomNav from '../components/BottomNav';
 import ContextChat from '../components/ContextChat';
 import type { WellnessContextId } from '../context/wellnessPrompts';
 import { wellnessTopics } from '../data/wellnessData';
+import { tumorQuestionOverrides } from '../data/tumorQuestions';
+import { getCancerTypeId, cancerLabels } from '../utils/cancerProfileContext';
 
 const topicOrder = [
   'alimentacion',
@@ -19,6 +21,7 @@ export default function WellnessTopic() {
   const { topicId = '' } = useParams();
   const topic = wellnessTopics[topicId];
   const [selectedQuestion, setSelectedQuestion] = useState('');
+  const cancerType = getCancerTypeId();
 
   useEffect(() => {
     setSelectedQuestion('');
@@ -35,6 +38,8 @@ export default function WellnessTopic() {
   }, [topicId]);
 
   if (!topic) return <Navigate to="/cuidate" replace />;
+
+  const displayedQuestions = tumorQuestionOverrides[cancerType]?.[topic.id] ?? topic.questions;
 
   const chooseQuestion = (question: string) => {
     setSelectedQuestion(question);
@@ -77,8 +82,11 @@ export default function WellnessTopic() {
           <span className="section-kicker">Preguntas rápidas</span>
           <h2>¿Qué necesitas hoy?</h2>
           <p>Elige una opción. La pregunta aparecerá preparada para que puedas completarla antes de enviarla.</p>
+          {cancerType && tumorQuestionOverrides[cancerType]?.[topic.id] && (
+            <p className="profile-personalization-badge">Sugerencias adaptadas al perfil guardado: cáncer de {cancerLabels[cancerType] ?? cancerType}.</p>
+          )}
           <div className="quick-question-list">
-            {topic.questions.map((question) => (
+            {displayedQuestions.map((question) => (
               <button
                 type="button"
                 key={question}

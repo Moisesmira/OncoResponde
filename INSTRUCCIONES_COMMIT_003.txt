@@ -1,0 +1,10 @@
+SUBIDA RECOMENDADA A GITHUB
+
+1. Descomprime este ZIP.
+2. Sustituye el contenido del repositorio por el contenido de la carpeta OncoResponde_Commit_003.
+3. Comprueba que package.json está en la raíz del repositorio.
+4. Haz el commit con el mensaje:
+
+Commit 003 - Más allá del tratamiento y respiración
+
+5. Netlify desplegará automáticamente si el repositorio ya está conectado.

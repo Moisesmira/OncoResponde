@@ -1,24 +1,21 @@
-# OncoResponde · Commit 002.1 corregido
+# OncoResponde · Commit 003
 
-Esta entrega conserva el perfil oncológico opcional del Commit 002 y restaura la pantalla Hoy validada en el Commit 001.
+Base estable React + TypeScript + Vite para GitHub y Netlify.
 
-## Correcciones
+## Novedades
 
-- `Háblame` queda completamente separado de la imagen principal.
-- `¿Cómo te encuentras hoy?` queda centrado.
-- `Necesito apoyo` aparece en rojo, tanto en estado normal como seleccionado.
-- Se conserva íntegramente la pantalla `Mi cáncer`.
+- Nueva pantalla **Más allá del tratamiento**.
+- Siete áreas: Alimentación, Ejercicio, Respiración, Dormir mejor, Mindfulness, Bienestar emocional y Comunicación.
+- Pantallas temáticas con explicación, consejos y tres preguntas rápidas.
+- Las preguntas rápidas abren **Háblame** ya escritas para poder revisarlas antes de enviarlas.
+- Ejercicio de respiración a pantalla completa con esfera animada, ritmo configurable y sonido opcional.
+- Se conserva la pantalla **Hoy** validada del Commit 002.1 y el perfil **Mi cáncer**.
 
-## Sustitución en GitHub
+## Instalación
 
-Sustituye respetando las rutas:
+```bash
+npm install
+npm run build
+```
 
-- `src/pages/Today.tsx`
-- `src/pages/CancerProfile.tsx`
-- `src/App.tsx`
-- `src/styles.css`
-- `package.json`
-
-Mensaje recomendado:
-
-`Commit 002.1 - Restaurada pantalla Hoy estable`
+En Netlify: comando de construcción `npm run build` y directorio de publicación `dist`.

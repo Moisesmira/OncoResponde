@@ -1,17 +1,16 @@
-# OncoResponde — Commit 001.1
+# OncoResponde · Commit 002
 
-Refinamiento visual de la pantalla Hoy.
+Implementa «Cuéntame lo que sabes de tu cáncer» como formulario opcional y local.
 
-## Cambios
-- Reduce el solapamiento de la tarjeta Háblame a aproximadamente 20–24 px.
-- Aumenta la altura de la fotografía institucional.
-- Reduce la altura y el peso visual de la tarjeta Háblame.
-- Aumenta el espacio entre el saludo y el mensaje de acompañamiento.
-- Ajusta el tamaño y la separación de los botones Hablar y Escribir.
-- Añade una aparición suave de la tarjeta, respetando `prefers-reduced-motion`.
+## Archivos
+- `src/pages/CancerProfile.tsx` (nuevo)
+- `src/App.tsx` (sustituir)
+- `src/styles.css` (sustituir)
+- `package.json` (sustituir; mantiene versiones estables y actualiza la versión a 0.2.0)
 
-## Instalación en GitHub
-Sube la carpeta `src` incluida en este ZIP a la raíz del repositorio. GitHub sustituirá únicamente `src/styles.css`.
-
-Mensaje recomendado del commit:
-`Commit 001.1 - Refinamiento visual de Hoy`
+## Funciones
+- Tarjetas grandes para mama, próstata, pulmón, colorrectal, ginecológico, cabeza y cuello y otro.
+- Histología, estadio, tratamientos, edad y estado general, todo opcional.
+- Guardado exclusivo en `localStorage` del dispositivo.
+- Borrado con confirmación.
+- Diseño responsive y accesible.

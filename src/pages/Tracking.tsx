@@ -116,7 +116,11 @@ export default function Tracking() {
               <div className="tracking-timeline" aria-label="Historial reciente de estado de ánimo">
                 {summary.recent.map((entry) => (
                   <div className="tracking-day" key={entry.date} title={`${formatDay(entry.date)}: ${moodMeta[entry.mood].label}`}>
-                    <span className={`tracking-day__dot tracking-day__dot--${entry.mood}`} aria-hidden="true">
+                    <span
+                      className={`tracking-day__dot tracking-day__dot--${entry.mood}`}
+                      aria-label={moodMeta[entry.mood].label}
+                      role="img"
+                    >
                       {moodMeta[entry.mood].icon}
                     </span>
                     <small>{formatDay(entry.date)}</small>

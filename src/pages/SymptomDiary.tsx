@@ -67,7 +67,7 @@ export default function SymptomDiary() {
     const result: Array<{ title: string; text: string; to: string }> = [];
     if (ids.has('cansancio')) result.push({ title: 'Dosificar la energía', text: 'Alterna actividad suave y descansos breves.', to: '/cuidate/ejercicio' });
     if (ids.has('insomnio')) result.push({ title: 'Dormir mejor', text: 'Revisa una rutina sencilla para favorecer el descanso.', to: '/cuidate/dormir' });
-    if (ids.has('ansiedad')) result.push({ title: 'Encontrar calma', text: 'Prueba una pausa breve de respiración o mindfulness.', to: '/respiracion' });
+    if (ids.has('ansiedad')) result.push({ title: 'Escucha y relájate', text: 'Prueba una guía breve o un sonido suave para bajar el ritmo.', to: '/relajate' });
     if (['apetito', 'nauseas', 'estrenimiento', 'diarrea'].some((id) => ids.has(id as SymptomId))) {
       result.push({ title: 'Alimentación', text: 'Consulta recomendaciones generales y sigue las indicaciones de tu equipo.', to: '/cuidate/alimentacion' });
     }

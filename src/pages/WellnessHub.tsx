@@ -10,6 +10,7 @@ const topics = [
   { id: 'mindfulness', icon: '🌿', title: 'Mindfulness', text: 'Ejercicios breves para volver al presente sin exigirte dejar la mente en blanco.' },
   { id: 'bienestar-emocional', icon: '❤️', title: 'Bienestar emocional', text: 'Comprender y acompañar miedo, tristeza, enfado o incertidumbre.' },
   { id: 'comunicacion', icon: '👨‍👩‍👧', title: 'Comunicación', text: 'Hablar con tu familia, amistades y equipo sanitario con mayor claridad.' },
+  { id: 'relajate', icon: '🎧', title: 'Escucha y relájate', text: 'Audios guiados, micro-podcasts y sonidos suaves para acompañarte.' },
 ];
 
 export default function WellnessHub() {
@@ -28,7 +29,7 @@ export default function WellnessHub() {
           {topics.map((topic) => (
             <Link
               key={topic.id}
-              to={topic.id === 'respiracion' ? '/respiracion' : `/cuidate/${topic.id}`}
+              to={topic.id === 'respiracion' ? '/respiracion' : topic.id === 'relajate' ? '/relajate' : `/cuidate/${topic.id}`}
               className={`wellness-card wellness-card--${topic.id}`}
               aria-label={`${topic.title}. ${topic.text}`}
             >

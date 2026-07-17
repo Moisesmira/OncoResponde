@@ -10,6 +10,7 @@ import Breathing from './pages/Breathing';
 import Tracking from './pages/Tracking';
 import SymptomDiary from './pages/SymptomDiary';
 import Relaxation from './pages/Relaxation';
+import Prepare from './pages/Prepare';
 
 export default function App() {
   return (
@@ -27,7 +28,7 @@ export default function App() {
       <Route path="/seguimiento" element={<Tracking />} />
       <Route path="/seguimiento/sintomas" element={<SymptomDiary />} />
       <Route path="/camino" element={<SimplePage title="Mi Camino" />} />
-      <Route path="/preparate" element={<SimplePage title="Prepárate" />} />
+      <Route path="/preparate" element={<Prepare />} />
       <Route path="/familia" element={<SimplePage title="Familia" />} />
       <Route path="/fuentes" element={<SimplePage title="Fuentes fiables" />} />
       <Route path="/ajustes" element={<SimplePage title="Ajustes" />} />

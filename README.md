@@ -1,5 +1,21 @@
-# OncoResponde · Commit 003 incremental
+# OncoResponde · Commit 003
 
-Añade el módulo **Más allá del tratamiento** y la pantalla de respiración sobre el Commit 002.1 estable.
+Base estable React + TypeScript + Vite para GitHub y Netlify.
 
-Este ZIP no contiene dependencias ni archivos de configuración de Netlify. Está pensado para aplicarse como actualización incremental al repositorio actual.
+## Novedades
+
+- Nueva pantalla **Más allá del tratamiento**.
+- Siete áreas: Alimentación, Ejercicio, Respiración, Dormir mejor, Mindfulness, Bienestar emocional y Comunicación.
+- Pantallas temáticas con explicación, consejos y tres preguntas rápidas.
+- Las preguntas rápidas abren **Háblame** ya escritas para poder revisarlas antes de enviarlas.
+- Ejercicio de respiración a pantalla completa con esfera animada, ritmo configurable y sonido opcional.
+- Se conserva la pantalla **Hoy** validada del Commit 002.1 y el perfil **Mi cáncer**.
+
+## Instalación
+
+```bash
+npm install
+npm run build
+```
+
+En Netlify: comando de construcción `npm run build` y directorio de publicación `dist`.

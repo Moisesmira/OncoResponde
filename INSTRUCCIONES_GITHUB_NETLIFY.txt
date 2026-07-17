@@ -1,0 +1,15 @@
+ONCORESPONDE 3.0 — INSTALACIÓN LIMPIA
+
+1. Haz una copia de seguridad del repositorio actual.
+2. Borra el contenido del repositorio, excepto la carpeta .git si trabajas localmente.
+3. Copia TODO el contenido interior de este ZIP a la raíz del repositorio.
+4. Comprueba que package.json y package-lock.json estén directamente en la raíz.
+5. Sube todos los archivos a GitHub con el mensaje:
+   OncoResponde 3.0 - Reconstrucción limpia y estable
+6. En Netlify usa:
+   Base directory: vacío
+   Build command: npm run build
+   Publish directory: dist
+7. Ejecuta: Clear cache and deploy site.
+
+No mezcles estos archivos con versiones parciales anteriores.

@@ -1,7 +1,7 @@
 {
-  "name": "oncoresponde-3",
+  "name": "oncoresponde-core",
   "private": true,
-  "version": "3.0.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -19,11 +19,7 @@
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "4.3.4",
     "typescript": "5.7.3",
-    "vite": "6.1.0"
-  },
-  "description": "PWA de información y acompañamiento para pacientes oncológicos y familiares.",
-  "engines": {
-    "node": ">=20 <23"
-  },
-  "packageManager": "npm@10.9.2"
+    "vite": "6.1.0",
+    "vite-plugin-pwa": "0.21.1"
+  }
 }

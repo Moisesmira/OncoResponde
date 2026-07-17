@@ -180,6 +180,33 @@ export default function Relaxation() {
         </section>
 
         <section className="relax-section card">
+          <div className="section-heading"><div><span className="section-kicker">Música relajante</span><h2>Escuchar en YouTube</h2></div></div>
+          <article className="audio-card external-audio-card">
+            <span className="audio-card__icon" aria-hidden="true">🎼</span>
+            <div>
+              <small>Recurso externo · 3 h</small>
+              <h3>Piano y naturaleza</h3>
+              <p>Música tranquila para relajarte, descansar, leer o favorecer el sueño.</p>
+              <p className="external-resource-note">Se abrirá YouTube en una pestaña nueva. El contenido y la publicidad dependen de YouTube.</p>
+            </div>
+            <a
+              className="primary-button external-link-button"
+              href="https://www.youtube.com/watch?v=MTrBYHZNF7k"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Abrir Piano y naturaleza en YouTube, se abre en una pestaña nueva"
+            >
+              ▶ Abrir en YouTube
+            </a>
+          </article>
+          <div className="future-music-grid" aria-label="Próximos recursos de música relajante">
+            <span>🌧️ Lluvia suave · Próximamente</span>
+            <span>🌊 Mar · Próximamente</span>
+            <span>🌲 Bosque · Próximamente</span>
+          </div>
+        </section>
+
+        <section className="relax-section card">
           <div className="section-heading"><div><span className="section-kicker">Sonidos relajantes</span><h2>Ambiente continuo</h2></div><p>Se generan localmente</p></div>
           <div className="ambient-grid">
             {([

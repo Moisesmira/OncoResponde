@@ -16,9 +16,9 @@ export default function WellnessHub() {
   return (
     <>
       <main className="wellness-page">
-        <NavHeader title="Más allá del tratamiento" />
+        <NavHeader title="Cuídate" />
         <section className="wellness-intro">
-          <span className="section-kicker">Cuidarte también forma parte del proceso</span>
+          <span className="section-kicker">Pequeñas acciones para sentirte mejor durante y después del tratamiento.</span>
           <h1>Más allá del tratamiento</h1>
           <p>Elige aquello que pueda ayudarte hoy. No necesitas hacerlo todo ni hacerlo perfecto.</p>
         </section>

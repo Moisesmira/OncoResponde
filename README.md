@@ -1,16 +1,24 @@
-# OncoResponde · Commit 002
+# OncoResponde · Commit 002.1 corregido
 
-Implementa «Cuéntame lo que sabes de tu cáncer» como formulario opcional y local.
+Esta entrega conserva el perfil oncológico opcional del Commit 002 y restaura la pantalla Hoy validada en el Commit 001.
 
-## Archivos
-- `src/pages/CancerProfile.tsx` (nuevo)
-- `src/App.tsx` (sustituir)
-- `src/styles.css` (sustituir)
-- `package.json` (sustituir; mantiene versiones estables y actualiza la versión a 0.2.0)
+## Correcciones
 
-## Funciones
-- Tarjetas grandes para mama, próstata, pulmón, colorrectal, ginecológico, cabeza y cuello y otro.
-- Histología, estadio, tratamientos, edad y estado general, todo opcional.
-- Guardado exclusivo en `localStorage` del dispositivo.
-- Borrado con confirmación.
-- Diseño responsive y accesible.
+- `Háblame` queda completamente separado de la imagen principal.
+- `¿Cómo te encuentras hoy?` queda centrado.
+- `Necesito apoyo` aparece en rojo, tanto en estado normal como seleccionado.
+- Se conserva íntegramente la pantalla `Mi cáncer`.
+
+## Sustitución en GitHub
+
+Sustituye respetando las rutas:
+
+- `src/pages/Today.tsx`
+- `src/pages/CancerProfile.tsx`
+- `src/App.tsx`
+- `src/styles.css`
+- `package.json`
+
+Mensaje recomendado:
+
+`Commit 002.1 - Restaurada pantalla Hoy estable`

@@ -1,0 +1,13 @@
+COMMIT 002.1 CORREGIDO
+
+1. Descomprime este ZIP.
+2. Sube los archivos a GitHub respetando exactamente sus carpetas.
+3. Sustituye los archivos existentes cuando GitHub lo solicite.
+4. Haz el commit con el mensaje:
+   Commit 002.1 - Restaurada pantalla Hoy estable
+
+Cambios incluidos:
+- Háblame no se superpone a la imagen.
+- ¿Cómo te encuentras hoy? aparece centrado.
+- Necesito apoyo aparece en rojo.
+- Mi cáncer permanece integrado.

@@ -17,7 +17,7 @@ import { getCancerProfileContext, getCancerTypeId } from '../utils/cancerProfile
 
 const symptomOrder: SymptomId[] = [
   'dolor', 'cansancio', 'nauseas', 'vomitos', 'apetito', 'insomnio',
-  'ansiedad', 'estrenimiento', 'diarrea', 'fiebre', 'otro',
+  'ansiedad', 'estrenimiento', 'diarrea', 'disnea', 'tos', 'hormigueos', 'fiebre', 'otro',
 ];
 
 function formatDate(date: string) {
@@ -31,6 +31,7 @@ export default function SymptomDiary() {
   const today = history.find((entry) => entry.date === localDateKey());
   const [selected, setSelected] = useState<SymptomValue[]>(today?.symptoms ?? []);
   const [temperature, setTemperature] = useState(today?.temperature?.toString() ?? '');
+  const [painScore, setPainScore] = useState(today?.painScore ?? 0);
   const [note, setNote] = useState(today?.note ?? '');
   const [message, setMessage] = useState('');
 
@@ -39,16 +40,16 @@ export default function SymptomDiary() {
     const temp = Number.parseFloat(temperature.replace(',', '.'));
     const hasFever = selected.some((item) => item.id === 'fiebre');
     if (hasFever || (!Number.isNaN(temp) && temp >= 38)) {
-      result.push('Si tienes 38 °C o más, escalofríos o mal estado general durante un tratamiento oncológico, contacta de inmediato con el teléfono indicado por tu equipo sanitario.');
+      result.push('Si tienes una temperatura de 38 °C o superior durante algunos tratamientos, puede tratarse de una urgencia médica. Sigue las indicaciones de tu equipo sanitario. Si te han facilitado un teléfono de contacto, llama lo antes posible. Si no puedes contactar o te encuentras mal, acude al Servicio de Urgencias de tu hospital.');
     }
-    if (selected.some((item) => item.id === 'dolor' && item.intensity === 3)) {
+    if (painScore >= 7 || selected.some((item) => item.id === 'dolor' && item.intensity === 3)) {
       result.push('El dolor intenso, nuevo o que no mejora debe ser valorado por tu equipo sanitario.');
     }
     if (selected.some((item) => ['vomitos', 'diarrea'].includes(item.id) && item.intensity === 3)) {
       result.push('Los vómitos o la diarrea intensos pueden provocar deshidratación. Contacta con tu equipo, especialmente si no puedes beber.');
     }
     return result;
-  }, [selected, temperature]);
+  }, [selected, temperature, painScore]);
 
   const trends = useMemo(() => {
     const recent = history.slice(0, 30);
@@ -88,7 +89,7 @@ export default function SymptomDiary() {
   function save() {
     const parsed = temperature.trim() ? Number.parseFloat(temperature.replace(',', '.')) : undefined;
     const safeTemperature = parsed !== undefined && Number.isFinite(parsed) ? parsed : undefined;
-    const next = saveSymptomsForToday(selected, safeTemperature, note);
+    const next = saveSymptomsForToday(selected, safeTemperature, note, selected.some((item) => item.id === 'dolor') ? painScore : undefined);
     setHistory(next);
     setMessage('Registro guardado en este dispositivo.');
   }
@@ -98,11 +99,12 @@ export default function SymptomDiary() {
     const symptomText = selected
       .map((item) => `${symptomMeta[item.id].label}: ${intensityLabels[item.intensity].toLowerCase()}`)
       .join(', ');
+    const painText = selected.some((item) => item.id === 'dolor') ? ` Dolor valorado en ${painScore}/10.` : '';
     const tempText = temperature.trim() ? ` Temperatura registrada: ${temperature.trim()} °C.` : '';
     const noteText = note.trim() ? ` Nota de la persona: ${note.trim().slice(0, 280)}.` : '';
     navigate('/respuesta', {
       state: {
-        question: `He registrado hoy estos síntomas: ${symptomText}.${tempText}${noteText} ¿Qué medidas generales de autocuidado pueden ayudarme y qué señales deberían hacerme contactar con mi equipo sanitario?`,
+        question: `He registrado hoy estos síntomas: ${symptomText}.${painText}${tempText}${noteText} ¿Qué medidas generales de autocuidado pueden ayudarme y qué señales deberían hacerme contactar con mi equipo sanitario?`,
         contextId: 'sintomas',
         context: 'Consulta generada desde el diario de síntomas. Los datos son declarados por la persona, no están verificados y no deben interpretarse como diagnóstico.',
         profileContext: getCancerProfileContext(),
@@ -150,6 +152,14 @@ export default function SymptomDiary() {
             })}
           </div>
 
+          {selected.some((item) => item.id === 'dolor') && (
+            <div className="pain-scale">
+              <div><span>Intensidad del dolor</span><strong>{painScore}/10</strong></div>
+              <input type="range" min="0" max="10" step="1" value={painScore} onChange={(event) => setPainScore(Number(event.target.value))} aria-label="Dolor de 0 a 10" />
+              <div className="pain-scale__labels"><small>0 · Sin dolor</small><small>10 · Máximo dolor imaginable</small></div>
+            </div>
+          )}
+
           {selected.some((item) => item.id === 'fiebre') && (
             <label className="temperature-field"><span>Temperatura medida (°C), si la conoces</span><input inputMode="decimal" value={temperature} onChange={(event) => setTemperature(event.target.value)} placeholder="Ej. 38,0" /></label>
           )}
@@ -181,7 +191,7 @@ export default function SymptomDiary() {
             <div className="symptom-history-list">
               {history.slice(0, 14).map((entry) => (
                 <article key={entry.date}>
-                  <div><strong>{formatDate(entry.date)}</strong>{entry.temperature !== undefined && <span>{entry.temperature} °C</span>}</div>
+                  <div><strong>{formatDate(entry.date)}</strong><span>{entry.painScore !== undefined ? `Dolor ${entry.painScore}/10` : entry.temperature !== undefined ? `${entry.temperature} °C` : ''}</span></div>
                   <p>{entry.symptoms.length ? entry.symptoms.map((symptom) => `${symptomMeta[symptom.id].label} (${intensityLabels[symptom.intensity].toLowerCase()})`).join(' · ') : 'Sin síntomas seleccionados'}</p>
                   {entry.note && <small>{entry.note}</small>}
                 </article>

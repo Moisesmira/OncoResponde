@@ -10,6 +10,9 @@ export type SymptomId =
   | 'ansiedad'
   | 'estrenimiento'
   | 'diarrea'
+  | 'disnea'
+  | 'tos'
+  | 'hormigueos'
   | 'fiebre'
   | 'otro';
 
@@ -23,6 +26,7 @@ export type SymptomValue = {
 export type SymptomEntry = {
   date: string;
   symptoms: SymptomValue[];
+  painScore?: number;
   temperature?: number;
   note?: string;
   createdAt: string;
@@ -38,6 +42,9 @@ export const symptomMeta: Record<SymptomId, { label: string; icon: string }> = {
   ansiedad: { label: 'Ansiedad', icon: '◌' },
   estrenimiento: { label: 'Estreñimiento', icon: '◇' },
   diarrea: { label: 'Diarrea', icon: '≋' },
+  disnea: { label: 'Falta de aire', icon: '⌁' },
+  tos: { label: 'Tos', icon: '≀' },
+  hormigueos: { label: 'Hormigueos', icon: '✦' },
   fiebre: { label: 'Fiebre', icon: '°' },
   otro: { label: 'Otro', icon: '+' },
 };
@@ -62,6 +69,12 @@ export function readSymptomHistory(): SymptomEntry[] {
         const candidate = entry as Partial<SymptomEntry>;
         return typeof candidate.date === 'string' && Array.isArray(candidate.symptoms);
       })
+      .map((entry) => ({
+        ...entry,
+        painScore: typeof entry.painScore === 'number' && entry.painScore >= 0 && entry.painScore <= 10
+          ? entry.painScore
+          : undefined,
+      }))
       .sort((a, b) => b.date.localeCompare(a.date));
   } catch {
     return [];
@@ -72,12 +85,14 @@ export function saveSymptomsForToday(
   symptoms: SymptomValue[],
   temperature?: number,
   note?: string,
+  painScore?: number,
 ): SymptomEntry[] {
   const history = readSymptomHistory();
   const today = localDateKey();
   const entry: SymptomEntry = {
     date: today,
     symptoms,
+    painScore: typeof painScore === 'number' && painScore >= 0 && painScore <= 10 ? painScore : undefined,
     temperature,
     note: note?.trim() || undefined,
     createdAt: new Date().toISOString(),

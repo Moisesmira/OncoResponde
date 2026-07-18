@@ -14,6 +14,7 @@ import Prepare from './pages/Prepare';
 import Treatment from './pages/Treatment';
 import Reports from './pages/Reports';
 import Medication from './pages/Medication';
+import Consultation from './pages/Consultation';
 
 export default function App() {
   return (
@@ -45,6 +46,7 @@ export default function App() {
       <Route path="/preparate" element={<Prepare />} />
       <Route path="/tratamiento" element={<Treatment />} />
       <Route path="/medicacion" element={<Medication />} />
+      <Route path="/consulta" element={<Consultation />} />
       <Route path="/informes" element={<Reports />} />
       <Route path="/familia" element={<SimplePage title="Familia y cuidadores" />} />
       <Route path="/fuentes" element={<SimplePage title="Fuentes fiables" />} />

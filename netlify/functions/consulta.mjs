@@ -1,5 +1,6 @@
 const baseSources = [
   { name: 'Sociedad Española de Oncología Médica (SEOM)', url: 'https://seom.org/' },
+  { name: 'Sociedad Española de Oncología Radioterápica (SEOR)', url: 'https://seor.es/guias-de-pacientes/' },
   { name: 'National Cancer Institute (NCI)', url: 'https://www.cancer.gov/' },
   { name: 'NCCN Guidelines for Patients', url: 'https://www.nccn.org/patientresources/patient-resources/guidelines-for-patients' },
   { name: 'MedlinePlus en español', url: 'https://medlineplus.gov/spanish/cancer.html' },
@@ -103,8 +104,23 @@ const parseModelJson = (text) => {
     if (extracted) return extracted;
   }
 
-  throw new Error('OpenAI no devolvió una respuesta con el formato esperado. Inténtalo de nuevo.');
+  return null;
 };
+
+const fallbackPayloadFromText = (text, profileContext) => ({
+  summary: 'Orientación general',
+  answer: cleanText(text, 2200) || 'No se ha podido generar una respuesta completa. Inténtalo de nuevo.',
+  actions: [
+    'Anota la duda principal para comentarla con tu equipo sanitario.',
+    'Sigue las indicaciones que ya te hayan dado para tu situación concreta.',
+    'Solicita valoración si el síntoma es nuevo, intenso o está empeorando.',
+  ],
+  whenToConsult: 'Contacta con tu equipo sanitario si tienes síntomas nuevos, persistentes o que empeoran. Ante dificultad respiratoria intensa, dolor torácico, confusión, desmayo, sangrado importante o mal estado general, solicita atención urgente.',
+  followUp: '¿Qué aspecto te preocupa más ahora mismo?',
+  personalizationNote: profileContext
+    ? 'Respuesta adaptada al perfil opcional guardado en este dispositivo.'
+    : 'Respuesta general; no se ha utilizado un perfil clínico guardado.',
+});
 
 const responseSchema = {
   type: 'object',
@@ -168,7 +184,8 @@ Pregunta de la persona: ${question}`;
         body: JSON.stringify({
           model: process.env.OPENAI_MODEL?.trim() || 'gpt-5-mini',
           input: prompt,
-          max_output_tokens: 1100,
+          max_output_tokens: 1800,
+          reasoning: { effort: 'low' },
           text: {
             format: {
               type: 'json_schema',
@@ -202,22 +219,35 @@ Pregunta de la persona: ${question}`;
     const parsed = parseModelJson(text);
     const contextualSources = sourceByContext[contextId] ?? [];
 
-    const payload = {
-      summary: cleanText(parsed.summary, 350),
-      answer: cleanText(parsed.answer, 2200),
-      actions: Array.isArray(parsed.actions)
-        ? parsed.actions.map((item) => cleanText(item, 320)).filter(Boolean).slice(0, 3)
-        : [],
-      whenToConsult: cleanText(parsed.whenToConsult, 900),
-      followUp: cleanText(parsed.followUp, 300),
-      personalizationNote: cleanText(parsed.personalizationNote, 220)
-        || (profileContext
-          ? 'Respuesta adaptada al perfil opcional guardado en este dispositivo.'
-          : 'Respuesta general; no se ha utilizado un perfil clínico guardado.'),
-      sources: [...contextualSources, ...baseSources].slice(0, 5),
-    };
+    const normalized = parsed && typeof parsed === 'object'
+      ? {
+          summary: cleanText(parsed.summary, 350) || 'Orientación general',
+          answer: cleanText(parsed.answer, 2200) || cleanText(text, 2200),
+          actions: Array.isArray(parsed.actions)
+            ? parsed.actions.map((item) => cleanText(item, 320)).filter(Boolean).slice(0, 3)
+            : [],
+          whenToConsult: cleanText(parsed.whenToConsult, 900),
+          followUp: cleanText(parsed.followUp, 300),
+          personalizationNote: cleanText(parsed.personalizationNote, 220)
+            || (profileContext
+              ? 'Respuesta adaptada al perfil opcional guardado en este dispositivo.'
+              : 'Respuesta general; no se ha utilizado un perfil clínico guardado.'),
+        }
+      : fallbackPayloadFromText(text, profileContext);
 
-    return jsonResponse(payload);
+    while (normalized.actions.length < 3) {
+      normalized.actions.push([
+        'Anota la duda principal para comentarla con tu equipo sanitario.',
+        'Sigue las indicaciones que ya te hayan dado para tu situación concreta.',
+        'Solicita valoración si el síntoma es nuevo, intenso o está empeorando.',
+      ][normalized.actions.length]);
+    }
+
+    return jsonResponse({
+      ...normalized,
+      actions: normalized.actions.slice(0, 3),
+      sources: [...contextualSources, ...baseSources].slice(0, 5),
+    });
   } catch (error) {
     const message = error?.name === 'AbortError'
       ? 'La consulta ha tardado demasiado. Inténtalo de nuevo.'

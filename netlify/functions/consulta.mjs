@@ -55,6 +55,29 @@ const tumorPrompts = {
 
 const cleanText = (value, maxLength) => typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
 
+const MAX_ATTACHMENT_BYTES = 4 * 1024 * 1024;
+const ALLOWED_ATTACHMENT_TYPES = new Set(['application/pdf', 'image/jpeg', 'image/png', 'image/webp']);
+
+const parseAttachment = (value) => {
+  if (!value || typeof value !== 'object') return null;
+  const name = cleanText(value.name, 160);
+  const mimeType = cleanText(value.mimeType, 80);
+  const dataUrl = typeof value.dataUrl === 'string' ? value.dataUrl.trim() : '';
+  const size = Number(value.size);
+
+  if (!name || !ALLOWED_ATTACHMENT_TYPES.has(mimeType)) {
+    throw new Error('El archivo adjunto no tiene un formato compatible. Utiliza PDF, JPG, PNG o WEBP.');
+  }
+  if (!Number.isFinite(size) || size <= 0 || size > MAX_ATTACHMENT_BYTES) {
+    throw new Error('El archivo adjunto supera el límite de 4 MB o no tiene un tamaño válido.');
+  }
+  const expectedPrefix = `data:${mimeType};base64,`;
+  if (!dataUrl.startsWith(expectedPrefix)) {
+    throw new Error('No se ha podido validar el archivo adjunto. Vuelve a seleccionarlo.');
+  }
+  return { name, mimeType, dataUrl, size };
+};
+
 const jsonResponse = (payload, status = 200) => new Response(JSON.stringify(payload), {
   status,
   headers: {
@@ -157,6 +180,8 @@ export default async (req) => {
     const clientContext = cleanText(body.context, contextId === 'informes' ? 8000 : 900);
     const profileContext = cleanText(body.profileContext, 700);
     const cancerType = cleanText(body.cancerType, 40);
+    const attachment = parseAttachment(body.attachment);
+    if (attachment && contextId !== 'informes') return jsonResponse({ error: 'Los archivos solo se admiten en Comprende mejor tu informe.' }, 400);
     if (!question) return jsonResponse({ error: 'La pregunta está vacía.' }, 400);
 
     const clinicalContext = contextPrompts[contextId] ?? contextPrompts.general;
@@ -171,7 +196,7 @@ Responde respetando el formato solicitado. La explicación debe tener un máximo
 Pregunta de la persona: ${question}`;
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000);
+    const timeout = setTimeout(() => controller.abort(), attachment ? 45000 : 20000);
     let response;
 
     try {
@@ -183,7 +208,17 @@ Pregunta de la persona: ${question}`;
         },
         body: JSON.stringify({
           model: process.env.OPENAI_MODEL?.trim() || 'gpt-5-mini',
-          input: prompt,
+          input: attachment
+            ? [{
+                role: 'user',
+                content: [
+                  { type: 'input_text', text: prompt },
+                  attachment.mimeType === 'application/pdf'
+                    ? { type: 'input_file', filename: attachment.name, file_data: attachment.dataUrl }
+                    : { type: 'input_image', image_url: attachment.dataUrl, detail: 'high' },
+                ],
+              }]
+            : prompt,
           max_output_tokens: 1800,
           reasoning: { effort: 'low' },
           text: {

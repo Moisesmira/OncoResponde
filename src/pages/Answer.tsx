@@ -18,6 +18,7 @@ type AnswerLocationState = {
   context?: string;
   profileContext?: string;
   cancerType?: string;
+  attachment?: { name: string; mimeType: string; dataUrl: string; size: number } | null;
 };
 
 export default function Answer() {
@@ -47,6 +48,7 @@ export default function Answer() {
         context: request.context,
         profileContext: request.profileContext,
         cancerType: request.cancerType,
+        attachment: request.attachment,
       }),
       signal: controller.signal,
     })
@@ -84,7 +86,7 @@ export default function Answer() {
       window.clearTimeout(timeout);
       controller.abort();
     };
-  }, [request.question, request.contextId, request.context, request.profileContext, request.cancerType]);
+  }, [request.question, request.contextId, request.context, request.profileContext, request.cancerType, request.attachment]);
 
   const listen = () => {
     if (!data) return;
@@ -100,7 +102,7 @@ export default function Answer() {
       {loading && (
         <section className="card">
           <h2>Consultando OncoResponde…</h2>
-          <p>Adaptando la respuesta al tema de la consulta y revisando criterios de seguridad.</p>
+          <p>{request.attachment ? 'Leyendo el documento y preparando una explicación clara. Puede tardar unos segundos.' : 'Adaptando la respuesta al tema de la consulta y revisando criterios de seguridad.'}</p>
         </section>
       )}
       {error && (

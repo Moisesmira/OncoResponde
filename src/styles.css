@@ -999,3 +999,19 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 
 /* OncoResponde 1.0 · pie de página unificado */
 .app-shell{min-height:100vh;display:flex;flex-direction:column}.app-shell>.app-footer{margin-top:auto}.app-footer{max-width:920px;width:calc(100% - 36px);margin:0 auto 96px;padding:24px 20px;text-align:center;border-top:1px solid rgba(116,151,173,.28);color:#587181}.app-footer strong{display:block;margin-bottom:8px;color:#173f5b;font-size:1rem}.app-footer p{max-width:720px;margin:0 auto 8px;font-size:.9rem;line-height:1.55}.app-footer small{display:block;color:#6d8290;font-weight:700}.today-footer{display:none}@media(max-width:720px){.app-footer{width:calc(100% - 28px);margin-bottom:92px;padding:20px 12px}.app-footer p{font-size:.85rem}}@media print{.app-footer{display:none!important}}
+
+/* Informe: carga de PDF o imagen */
+.reports-upload-block { margin-top: 20px; }
+.reports-step { display:block; margin-bottom:10px; color:#365368; font-weight:700; }
+.reports-file-drop { display:flex; min-height:150px; padding:22px; border:2px dashed #a9c5d5; border-radius:20px; background:#f7fbfd; align-items:center; justify-content:center; flex-direction:column; gap:6px; text-align:center; color:#31556d; cursor:pointer; transition:border-color .2s ease,background .2s ease,transform .2s ease; }
+.reports-file-drop:hover { border-color:#6fa0bb; background:#eef7fa; transform:translateY(-1px); }
+.reports-file-drop input { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+.reports-file-icon { font-size:2rem; }
+.reports-file-drop small { color:#647784; font-weight:500; }
+.reports-file-preview { display:flex; justify-content:space-between; align-items:center; gap:14px; margin-top:12px; padding:13px 15px; border-radius:14px; border:1px solid #cfe0e8; background:#edf7fa; }
+.reports-file-preview > div { display:grid; gap:3px; min-width:0; }
+.reports-file-preview strong { overflow-wrap:anywhere; color:#31556d; }
+.reports-file-preview small { color:#647784; }
+.reports-divider { display:flex; align-items:center; gap:12px; margin:20px 0 2px; color:#71818b; font-size:.86rem; }
+.reports-divider::before,.reports-divider::after { content:""; height:1px; background:#dce7ec; flex:1; }
+@media (max-width:600px){.reports-file-preview{align-items:flex-start}.reports-file-preview .oncobox-clear{flex:0 0 auto}}

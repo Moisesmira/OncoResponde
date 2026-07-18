@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import BottomNav from '../components/BottomNav';
 import { useAppStore } from '../store/useAppStore';
 import { saveMoodForToday } from '../utils/moodTracking';
+import { getHomeInsights } from '../utils/personalAssistantContext';
 
 type MoodId = 'bien' | 'regular' | 'preocupado' | 'apoyo';
 
@@ -96,6 +97,7 @@ function getGreeting() {
 export default function Today() {
   const { mood, setMood } = useAppStore();
   const selected = mood ? recommendations[mood] : null;
+  const homeInsights = getHomeInsights();
 
   return (
     <>
@@ -107,6 +109,25 @@ export default function Today() {
             <span className="brand-pill">OncoResponde · Información que acompaña</span>
             <h1 id="today-title">{getGreeting()}</h1>
             <p>Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.</p>
+          </div>
+        </section>
+
+        <section className="smart-summary" aria-labelledby="smart-summary-title">
+          <div className="section-heading section-heading--compact">
+            <div>
+              <span className="section-kicker">Tu día, de un vistazo</span>
+              <h2 id="smart-summary-title">Lo más relevante ahora</h2>
+            </div>
+            <p>La información procede de lo que has guardado en este dispositivo.</p>
+          </div>
+          <div className="smart-summary__grid">
+            {homeInsights.map((item) => (
+              <Link to={item.to} className="smart-insight" key={item.id}>
+                <span className="smart-insight__icon" aria-hidden="true">{item.icon}</span>
+                <span><strong>{item.title}</strong><small>{item.detail}</small></span>
+                <b aria-hidden="true">→</b>
+              </Link>
+            ))}
           </div>
         </section>
 
@@ -215,7 +236,7 @@ export default function Today() {
         <footer className="today-footer">
           <strong>OncoResponde</strong>
           <p>Orientación, no diagnóstico. La IA puede cometer errores. Contrasta siempre la información con tu equipo sanitario.</p>
-          <small>OncoResponde 3.3 · Información orientativa. No sustituye la atención médica ni los servicios de urgencias.</small>
+          <small>OncoResponde 4.0 · Información orientativa. No sustituye la atención médica ni los servicios de urgencias.</small>
         </footer>
       </main>
       <BottomNav />

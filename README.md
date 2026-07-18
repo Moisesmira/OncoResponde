@@ -1,23 +1,21 @@
-# OncoResponde 3.0
+# OncoResponde 4.0.0
 
-Reconstrucción limpia de la aplicación React + TypeScript + Vite para GitHub y Netlify.
+PWA de información y acompañamiento para pacientes oncológicos y familiares.
 
-## Incluye
+## Novedades de la versión 4.0
 
-- Pantalla Hoy estable.
-- Perfil oncológico opcional («Cuéntame lo que sabes de tu cáncer»).
-- Más allá del tratamiento: alimentación, ejercicio, respiración, sueño, mindfulness, bienestar emocional y comunicación.
-- Ejercicio de respiración guiada.
-- Consulta mediante Netlify Function y OpenAI.
-- PWA instalable sin depender de plugins pesados.
-- Configuración de Node 20 y registro público de npm.
+- Inicio inteligente con resumen de próximas citas, medicación, seguimiento y consulta.
+- Háblame contextual: usa únicamente la información local guardada para adaptar la orientación cuando sea relevante.
+- Los datos permanecen en el dispositivo y pueden estar incompletos; nunca se utilizan para diagnosticar ni modificar tratamientos.
 
-## Despliegue en Netlify
+## Desarrollo
 
-- Base directory: vacío.
-- Build command: `npm run build`.
-- Publish directory: `dist`.
-- Functions directory: `netlify/functions`.
-- Variable necesaria para la IA: `OPENAI_API_KEY`.
+```bash
+npm install
+npm run dev
+npm run build
+```
 
-El proyecto incluye `package-lock.json` con enlaces al registro público de npm y `.npmrc` para evitar registros privados.
+## Seguridad
+
+OncoResponde ofrece orientación general. No sustituye la valoración del equipo sanitario ni los servicios de urgencias.

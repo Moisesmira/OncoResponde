@@ -233,11 +233,6 @@ export default function Today() {
           </div>
         </section>
 
-        <footer className="today-footer">
-          <strong>OncoResponde</strong>
-          <p>Orientación, no diagnóstico. La IA puede cometer errores. Contrasta siempre la información con tu equipo sanitario.</p>
-          <small>OncoResponde 4.0 · Información orientativa. No sustituye la atención médica ni los servicios de urgencias.</small>
-        </footer>
       </main>
       <BottomNav />
     </>

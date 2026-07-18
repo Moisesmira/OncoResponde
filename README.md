@@ -1,4 +1,4 @@
-# OncoResponde 4.1.0
+# OncoResponde 1.0 4.1.0
 
 Aplicación web progresiva de educación sanitaria y acompañamiento para pacientes oncológicos y familiares.
 

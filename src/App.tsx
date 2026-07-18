@@ -18,10 +18,12 @@ import Consultation from './pages/Consultation';
 import Camino from './pages/Camino';
 import Family from './pages/Family';
 import Sources from './pages/Sources';
+import AppFooter from './components/AppFooter';
 
 export default function App() {
   return (
-    <Routes>
+    <div className="app-shell">
+      <Routes>
       <Route path="/" element={<Today />} />
       <Route path="/hablame" element={<Voice />} />
       <Route path="/respuesta" element={<Answer />} />
@@ -54,6 +56,8 @@ export default function App() {
       <Route path="/familia" element={<Family />} />
       <Route path="/fuentes" element={<Sources />} />
       <Route path="/ajustes" element={<SimplePage title="Ajustes y privacidad" />} />
-    </Routes>
+      </Routes>
+      <AppFooter />
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 {
-  "name": "oncoresponde-3",
+  "name": "oncoresponde",
   "private": true,
-  "version": "4.1.2",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

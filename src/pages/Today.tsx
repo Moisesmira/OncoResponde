@@ -60,6 +60,7 @@ const recommendations: Record<MoodId, { intro: string; energy: number; actions: 
 const accessCards = [
   { to: '/perfil', title: 'Cuéntame sobre tu cáncer', text: 'Información opcional para adaptar mejor la ayuda.', icon: '○', tone: 'blue', size: 'primary' },
   { to: '/tratamiento', title: 'Mi tratamiento', text: 'Organiza citas, sesiones y próximas pruebas.', icon: '▣', tone: 'blue', size: 'primary' },
+  { to: '/medicacion', title: 'Mi medicación', text: 'Guarda tu pauta anotada y consulta qué te toca hoy.', icon: '💊', tone: 'blue', size: 'secondary' },
   { to: '/informes', title: 'Comprende tus informes', text: 'Aclara términos y prepara preguntas para tu consulta.', icon: '▤', tone: 'purple', size: 'secondary' },
   { to: '/seguimiento', title: 'Mi seguimiento', text: 'Registra en 20 segundos cómo te encuentras hoy.', icon: '◷', tone: 'teal', size: 'secondary' },
   { to: '/cuidate', title: 'Cuídate', text: 'Alimentación, movimiento, descanso y bienestar.', icon: '♧', tone: 'green', size: 'secondary' },

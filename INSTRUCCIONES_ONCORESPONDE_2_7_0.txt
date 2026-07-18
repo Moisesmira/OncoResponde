@@ -1,0 +1,15 @@
+ONCORESPONDE 2.7.0 · MI TRATAMIENTO
+
+1. Descomprime el ZIP.
+2. Sube todos los archivos y carpetas a la raíz del repositorio de GitHub, sustituyendo la versión anterior.
+3. Netlify ejecutará npm run build y publicará la carpeta dist.
+
+NOVEDADES
+- Agenda local de citas, sesiones, pruebas y tratamientos.
+- Próxima cita destacada.
+- Recomendaciones prácticas según el tipo de evento.
+- Enlace al módulo Prepárate cuando existe una guía relacionada.
+- Consulta contextual con IA, solo por acción explícita del usuario.
+- Datos almacenados localmente en el dispositivo.
+
+Compilación verificada con npm ci y npm run build.

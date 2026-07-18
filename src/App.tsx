@@ -11,6 +11,7 @@ import Tracking from './pages/Tracking';
 import SymptomDiary from './pages/SymptomDiary';
 import Relaxation from './pages/Relaxation';
 import Prepare from './pages/Prepare';
+import Treatment from './pages/Treatment';
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
       <Route path="/seguimiento/sintomas" element={<SymptomDiary />} />
       <Route path="/camino" element={<SimplePage title="Mi Camino" />} />
       <Route path="/preparate" element={<Prepare />} />
+      <Route path="/tratamiento" element={<Treatment />} />
       <Route path="/familia" element={<SimplePage title="Familia" />} />
       <Route path="/fuentes" element={<SimplePage title="Fuentes fiables" />} />
       <Route path="/ajustes" element={<SimplePage title="Ajustes" />} />

@@ -734,3 +734,36 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
   .prepare-detail__icon { width: 50px; height: 50px; flex-basis: 50px; }
   .prepare-columns { grid-template-columns: 1fr; }
 }
+
+/* OncoResponde 2.7 · Mi tratamiento */
+.treatment-page { max-width: 1040px; margin: 0 auto; padding: 0 22px 110px; }
+.treatment-hero { margin: 18px 0; padding: 28px; border-radius: 28px; background: linear-gradient(135deg,#edf7fb,#f8fbfd); border: 1px solid #dceaf1; }
+.treatment-hero h1 { margin: 6px 0 8px; color: #174e6b; }
+.treatment-hero p { margin: 0; max-width: 720px; color: #486575; line-height: 1.6; }
+.treatment-active { margin: 18px 0; }
+.treatment-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.treatment-chips span { padding: 8px 12px; border-radius: 999px; background: #eaf5f9; color: #1c5e7c; font-weight: 700; }
+.treatment-profile-link { display:flex; justify-content:space-between; gap:12px; margin:18px 0; padding:16px 18px; border-radius:18px; background:#f2f7fa; color:#1d607f; text-decoration:none; font-weight:700; }
+.treatment-next { display:grid; grid-template-columns:auto 1fr auto; gap:16px; align-items:center; margin:18px 0; }
+.treatment-next__icon,.treatment-event__icon { display:grid; place-items:center; width:54px; height:54px; border-radius:17px; background:#e9f5fa; color:#1d6687; font-size:1.4rem; }
+.treatment-next h2 { margin:3px 0; color:#194f6b; }
+.treatment-next p { margin:0; color:#56707e; }
+.treatment-next a { padding:10px 13px; border-radius:13px; background:#1d6687; color:white; text-decoration:none; font-weight:700; }
+.treatment-form-card,.treatment-list-card,.treatment-advice { margin:18px 0; }
+.treatment-form-card h2,.treatment-list-card h2,.treatment-advice h2 { color:#194f6b; }
+.treatment-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.treatment-form label { display:grid; gap:7px; color:#385b6c; font-weight:700; }
+.treatment-form input,.treatment-form select,.treatment-form textarea { width:100%; box-sizing:border-box; padding:12px 13px; border:1px solid #cddde5; border-radius:13px; background:white; font:inherit; color:#203e4c; }
+.treatment-form textarea { min-height:90px; resize:vertical; }
+.treatment-form__wide,.treatment-form button { grid-column:1/-1; }
+.treatment-list { display:grid; gap:11px; }
+.treatment-event { display:grid; grid-template-columns:auto 1fr auto; gap:13px; align-items:center; padding:14px; border-radius:18px; background:#f7fafc; border:1px solid #e2ebf0; }
+.treatment-event strong { color:#214f67; }
+.treatment-event p { margin:3px 0; color:#56707e; }
+.treatment-event small { display:block; color:#667d89; line-height:1.4; }
+.treatment-delete { background:transparent; border:0; color:#a34242; padding:8px; font-weight:700; }
+.treatment-advice { background:#fff9ef; border-color:#f0dfbd; }
+.treatment-advice ul { padding-left:20px; color:#445f6d; }
+.treatment-advice p { color:#795b2c; font-size:.92rem; }
+.treatment-privacy { padding:14px 16px; border-radius:16px; background:#eff6f8; color:#476676; }
+@media (max-width:680px){.treatment-page{padding-inline:14px}.treatment-hero{padding:22px 19px}.treatment-form{grid-template-columns:1fr}.treatment-form__wide,.treatment-form button{grid-column:1}.treatment-next{grid-template-columns:auto 1fr}.treatment-next a{grid-column:1/-1;text-align:center}.treatment-event{grid-template-columns:auto 1fr}.treatment-delete{grid-column:2;justify-self:start;padding-left:0}}

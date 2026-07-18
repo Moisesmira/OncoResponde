@@ -58,6 +58,7 @@ const recommendations: Record<MoodId, { intro: string; energy: number; actions: 
 };
 
 const accessCards = [
+  { to: '/tratamiento', title: 'Mi tratamiento', text: 'Organiza citas, sesiones y próximas pruebas.', icon: '▣', tone: 'blue' },
   { to: '/seguimiento', title: 'Mi seguimiento', text: 'Registra en 20 segundos cómo te encuentras hoy.', icon: '◷', tone: 'teal' },
   { to: '/perfil', title: 'Cuéntame sobre tu cáncer', text: 'Información opcional para adaptar mejor la ayuda.', icon: '○', tone: 'blue' },
   { to: '/oncoayuda', title: 'OncoAyuda', text: 'Haz una pregunta escrita y recibe orientación.', icon: '◌', tone: 'blue' },
@@ -199,7 +200,7 @@ export default function Today() {
         <footer className="today-footer">
           <strong>OncoResponde</strong>
           <p>Orientación, no diagnóstico. La IA puede cometer errores. Contrasta siempre la información con tu equipo sanitario.</p>
-          <small>OncoResponde 2.6 · Información orientativa. No sustituye la atención médica ni los servicios de urgencias.</small>
+          <small>OncoResponde 2.7 · Información orientativa. No sustituye la atención médica ni los servicios de urgencias.</small>
         </footer>
       </main>
       <BottomNav />

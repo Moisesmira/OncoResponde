@@ -4,6 +4,7 @@ import NavHeader from '../components/NavHeader';
 import BottomNav from '../components/BottomNav';
 import OncoBox from '../components/OncoBox';
 import { getCancerProfileData } from '../utils/cancerProfileContext';
+import { prepareItems } from './Prepare';
 import { deleteTreatmentEvent, readTreatmentEvents, saveTreatmentEvent, treatmentEventMeta, type TreatmentEventType } from '../utils/treatmentTracking';
 
 const types = Object.keys(treatmentEventMeta) as TreatmentEventType[];
@@ -96,6 +97,27 @@ export default function Treatment() {
       </section>
 
       {next && advice[next.type]?.length && <section className="card treatment-advice"><span className="section-kicker">Para tu próxima cita</span><h2>Recomendaciones prácticas</h2><ul>{advice[next.type]?.map((item) => <li key={item}>{item}</li>)}</ul><p>Las instrucciones concretas de tu centro sanitario tienen prioridad.</p></section>}
+
+      <section className="card treatment-prepare" aria-labelledby="treatment-prepare-title">
+        <div className="section-heading section-heading--compact">
+          <div>
+            <span className="section-kicker">Guías vinculadas a tu agenda</span>
+            <h2 id="treatment-prepare-title">Prepárate para una prueba o tratamiento</h2>
+          </div>
+          <p>Consulta la guía cuando la necesites.</p>
+        </div>
+        <div className="treatment-guide-grid">
+          {prepareItems.map((item) => (
+            <Link className="treatment-guide-card" to={`/preparate?guia=${item.id}`} key={item.id}>
+              <span aria-hidden="true">{item.icon}</span>
+              <strong>{item.title}</strong>
+              <small>{item.subtitle}</small>
+              <b aria-hidden="true">→</b>
+            </Link>
+          ))}
+        </div>
+        <p className="treatment-guide-note">Prepárate ya no es un apartado independiente: forma parte de Mi tratamiento y se abre directamente desde tu próxima cita o desde estas guías.</p>
+      </section>
 
       <OncoBox contextId="tratamiento-agenda" context={context} title="Pregunta sobre tu próxima cita" initialQuestion={next ? `¿Cómo puedo prepararme para mi próxima ${treatmentEventMeta[next.type].label.toLowerCase()}?` : ''} />
 

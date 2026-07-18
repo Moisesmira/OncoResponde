@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import NavHeader from '../components/NavHeader';
 import BottomNav from '../components/BottomNav';
 import OncoBox from '../components/OncoBox';
 
-type PrepareItem = {
+export type PrepareItem = {
   id: string;
   icon: string;
   title: string;
@@ -17,7 +18,7 @@ type PrepareItem = {
   sourceUrl: string;
 };
 
-const prepareItems: PrepareItem[] = [
+export const prepareItems: PrepareItem[] = [
   {
     id: 'consulta',
     icon: '🗣️',
@@ -184,7 +185,17 @@ const prepareItems: PrepareItem[] = [
 ];
 
 export default function Prepare() {
-  const [selectedId, setSelectedId] = useState(prepareItems[0].id);
+  const [searchParams] = useSearchParams();
+  const requestedGuide = searchParams.get('guia');
+  const initialGuide = prepareItems.some((item) => item.id === requestedGuide) ? requestedGuide! : prepareItems[0].id;
+  const [selectedId, setSelectedId] = useState(initialGuide);
+
+  useEffect(() => {
+    if (requestedGuide && prepareItems.some((item) => item.id === requestedGuide)) {
+      setSelectedId(requestedGuide);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [requestedGuide]);
   const selected = useMemo(
     () => prepareItems.find((item) => item.id === selectedId) ?? prepareItems[0],
     [selectedId],
@@ -195,12 +206,12 @@ export default function Prepare() {
   return (
     <>
       <main className="prepare-page" id="main-content">
-        <NavHeader title="Prepárate" backTo="/" />
+        <NavHeader title="Guía para prepararte" backTo="/tratamiento" backLabel="Mi tratamiento" />
 
         <section className="prepare-hero">
           <span className="section-kicker">Antes de una prueba o tratamiento</span>
           <h1>Prepárate con más tranquilidad</h1>
-          <p>Información práctica para saber qué puede ocurrir, qué llevar y qué preguntas hacer. Las indicaciones de tu centro siempre tienen prioridad.</p>
+          <p>Esta guía forma parte de Mi tratamiento. Te ayuda a saber qué puede ocurrir, qué llevar y qué preguntas hacer. Las indicaciones de tu centro siempre tienen prioridad.</p>
         </section>
 
         <section className="prepare-selector" aria-label="Elige una prueba o tratamiento">

@@ -64,7 +64,6 @@ const accessCards = [
   { to: '/oncoayuda', title: 'OncoAyuda', text: 'Haz una pregunta escrita y recibe orientación.', icon: '◌', tone: 'blue' },
   { to: '/cuidate', title: 'Cuídate', text: 'Alimentación, movimiento, descanso y bienestar.', icon: '♧', tone: 'green' },
   { to: '/calma', title: 'Encuentra calma', text: 'Respiración, música, audios y reflexiones.', icon: '≈', tone: 'teal' },
-  { to: '/preparate', title: 'Prepárate', text: 'Información práctica antes de pruebas y tratamientos.', icon: '▣', tone: 'orange' },
   { to: '/camino', title: 'Mi Camino', text: 'Tu diario personal durante el proceso.', icon: '▤', tone: 'purple' },
   { to: '/familia', title: 'Familia y cuidadores', text: 'Acompañar y cuidarse también importa.', icon: '◎', tone: 'rose' },
   { to: '/fuentes', title: 'Fuentes fiables', text: 'Información sanitaria de referencia.', icon: '◇', tone: 'slate' },
@@ -200,7 +199,7 @@ export default function Today() {
         <footer className="today-footer">
           <strong>OncoResponde</strong>
           <p>Orientación, no diagnóstico. La IA puede cometer errores. Contrasta siempre la información con tu equipo sanitario.</p>
-          <small>OncoResponde 2.7 · Información orientativa. No sustituye la atención médica ni los servicios de urgencias.</small>
+          <small>OncoResponde 2.8 · Información orientativa. No sustituye la atención médica ni los servicios de urgencias.</small>
         </footer>
       </main>
       <BottomNav />

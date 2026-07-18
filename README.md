@@ -28,3 +28,7 @@ La clave se utiliza únicamente en la función de servidor `netlify/functions/co
 ## Seguridad
 
 OncoResponde ofrece orientación general. No diagnostica, no sustituye al equipo sanitario y no recomienda iniciar, suspender o modificar tratamientos o medicación.
+
+## Corrección 4.1.2 de la consulta con OpenAI
+
+La función de Netlify valida las respuestas vacías o no JSON, utiliza salida estructurada y devuelve mensajes claros para errores de clave, saldo/límite, tiempo de espera y despliegue. Tras actualizar, realiza un nuevo despliegue en Netlify y verifica que `OPENAI_API_KEY` esté disponible para producción.

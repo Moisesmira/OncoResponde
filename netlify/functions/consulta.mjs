@@ -53,21 +53,95 @@ const tumorPrompts = {
 };
 
 const cleanText = (value, maxLength) => typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
-const parseModelJson = (text) => JSON.parse(text.replace(/^```json\s*|\s*```$/g, '').trim());
+
+const jsonResponse = (payload, status = 200) => new Response(JSON.stringify(payload), {
+  status,
+  headers: {
+    'Content-Type': 'application/json; charset=utf-8',
+    'Cache-Control': 'no-store',
+  },
+});
+
+const safeJsonParse = (text) => {
+  if (!text || !text.trim()) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+};
+
+const extractOutputText = (raw) => {
+  if (typeof raw?.output_text === 'string' && raw.output_text.trim()) return raw.output_text.trim();
+  if (!Array.isArray(raw?.output)) return '';
+
+  return raw.output
+    .flatMap((item) => Array.isArray(item?.content) ? item.content : [])
+    .map((content) => {
+      if (typeof content?.text === 'string') return content.text;
+      if (typeof content?.text?.value === 'string') return content.text.value;
+      return '';
+    })
+    .filter(Boolean)
+    .join('')
+    .trim();
+};
+
+const parseModelJson = (text) => {
+  const cleaned = text
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```$/i, '')
+    .trim();
+
+  const direct = safeJsonParse(cleaned);
+  if (direct) return direct;
+
+  const firstBrace = cleaned.indexOf('{');
+  const lastBrace = cleaned.lastIndexOf('}');
+  if (firstBrace >= 0 && lastBrace > firstBrace) {
+    const extracted = safeJsonParse(cleaned.slice(firstBrace, lastBrace + 1));
+    if (extracted) return extracted;
+  }
+
+  throw new Error('OpenAI no devolvió una respuesta con el formato esperado. Inténtalo de nuevo.');
+};
+
+const responseSchema = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    summary: { type: 'string' },
+    answer: { type: 'string' },
+    actions: {
+      type: 'array',
+      minItems: 3,
+      maxItems: 3,
+      items: { type: 'string' },
+    },
+    whenToConsult: { type: 'string' },
+    followUp: { type: 'string' },
+    personalizationNote: { type: 'string' },
+  },
+  required: ['summary', 'answer', 'actions', 'whenToConsult', 'followUp', 'personalizationNote'],
+};
 
 export default async (req) => {
-  if (req.method !== 'POST') return new Response(JSON.stringify({ error: 'Método no permitido' }), { status: 405, headers: { 'Content-Type': 'application/json' } });
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) return new Response(JSON.stringify({ error: 'OPENAI_API_KEY no está configurada en Netlify' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  if (req.method !== 'POST') return jsonResponse({ error: 'Método no permitido' }, 405);
+
+  const key = process.env.OPENAI_API_KEY?.trim();
+  if (!key) return jsonResponse({ error: 'OPENAI_API_KEY no está configurada en Netlify.' }, 500);
 
   try {
-    const body = await req.json();
+    const requestText = await req.text();
+    const body = safeJsonParse(requestText);
+    if (!body) return jsonResponse({ error: 'La solicitud recibida no es válida.' }, 400);
+
     const question = cleanText(body.question, 1200);
     const contextId = cleanText(body.contextId, 60);
     const clientContext = cleanText(body.context, contextId === 'informes' ? 8000 : 900);
     const profileContext = cleanText(body.profileContext, 700);
     const cancerType = cleanText(body.cancerType, 40);
-    if (!question) return new Response(JSON.stringify({ error: 'La pregunta está vacía' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    if (!question) return jsonResponse({ error: 'La pregunta está vacía.' }, 400);
 
     const clinicalContext = contextPrompts[contextId] ?? contextPrompts.general;
     const tumorContext = tumorPrompts[cancerType] ?? 'No hay un tipo tumoral guardado o no debe asumirse ninguno.';
@@ -76,43 +150,78 @@ export default async (req) => {
       : 'No hay perfil clínico opcional disponible.';
 
     const prompt = `${basePrompt}\n${clinicalContext}\n${tumorContext}\n${optionalProfile}\nContexto adicional de la interfaz: ${clientContext || 'ninguno'}.\n
-Devuelve exclusivamente JSON válido con estas claves:
-- summary: una frase con la idea principal.
-- answer: explicación clara de máximo 180 palabras, personalizada solo cuando los datos aportados sean relevantes.
-- actions: exactamente 3 recomendaciones prácticas y prudentes.
-- whenToConsult: señales para consultar al equipo o pedir ayuda urgente.
-- followUp: una única pregunta breve y opcional, sin pedir datos identificativos.
-- personalizationNote: una frase breve indicando si se ha usado el perfil opcional; no repetir datos sensibles.
+Responde respetando el formato solicitado. La explicación debe tener un máximo aproximado de 180 palabras. Incluye exactamente tres recomendaciones prácticas y prudentes.
 
 Pregunta de la persona: ${question}`;
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 24000);
-    const response = await fetch('https://api.openai.com/v1/responses', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: process.env.OPENAI_MODEL || 'gpt-5-mini', input: prompt, max_output_tokens: 750 }),
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
-    const raw = await response.json();
-    if (!response.ok) throw new Error(raw?.error?.message || 'Error de OpenAI');
-    const text = raw.output_text || raw.output?.flatMap((item) => item.content || []).map((item) => item.text || '').join('') || '';
+    const timeout = setTimeout(() => controller.abort(), 20000);
+    let response;
+
+    try {
+      response = await fetch('https://api.openai.com/v1/responses', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${key}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: process.env.OPENAI_MODEL?.trim() || 'gpt-5-mini',
+          input: prompt,
+          max_output_tokens: 1100,
+          text: {
+            format: {
+              type: 'json_schema',
+              name: 'oncoresponde_answer',
+              strict: true,
+              schema: responseSchema,
+            },
+          },
+        }),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    const openAiText = await response.text();
+    const raw = safeJsonParse(openAiText);
+
+    if (!response.ok) {
+      const openAiMessage = cleanText(raw?.error?.message, 600);
+      if (response.status === 401) throw new Error('La clave de OpenAI no es válida o no tiene acceso. Revisa OPENAI_API_KEY en Netlify.');
+      if (response.status === 429) throw new Error('OpenAI ha rechazado temporalmente la consulta por límite de uso o saldo. Revisa la facturación y vuelve a intentarlo.');
+      throw new Error(openAiMessage || `OpenAI devolvió un error (${response.status}).`);
+    }
+
+    if (!raw) throw new Error('OpenAI devolvió una respuesta vacía o no válida. Inténtalo de nuevo.');
+
+    const text = extractOutputText(raw);
+    if (!text) throw new Error('OpenAI no devolvió contenido. Inténtalo de nuevo.');
+
     const parsed = parseModelJson(text);
     const contextualSources = sourceByContext[contextId] ?? [];
 
     const payload = {
       summary: cleanText(parsed.summary, 350),
       answer: cleanText(parsed.answer, 2200),
-      actions: Array.isArray(parsed.actions) ? parsed.actions.map((item) => cleanText(item, 320)).filter(Boolean).slice(0, 3) : [],
+      actions: Array.isArray(parsed.actions)
+        ? parsed.actions.map((item) => cleanText(item, 320)).filter(Boolean).slice(0, 3)
+        : [],
       whenToConsult: cleanText(parsed.whenToConsult, 900),
       followUp: cleanText(parsed.followUp, 300),
-      personalizationNote: cleanText(parsed.personalizationNote, 220) || (profileContext ? 'Respuesta adaptada al perfil opcional guardado en este dispositivo.' : 'Respuesta general; no se ha utilizado un perfil clínico guardado.'),
+      personalizationNote: cleanText(parsed.personalizationNote, 220)
+        || (profileContext
+          ? 'Respuesta adaptada al perfil opcional guardado en este dispositivo.'
+          : 'Respuesta general; no se ha utilizado un perfil clínico guardado.'),
       sources: [...contextualSources, ...baseSources].slice(0, 5),
     };
-    return new Response(JSON.stringify(payload), { headers: { 'Content-Type': 'application/json' } });
+
+    return jsonResponse(payload);
   } catch (error) {
-    const message = error?.name === 'AbortError' ? 'La consulta ha tardado demasiado.' : error?.message || 'Error inesperado';
-    return new Response(JSON.stringify({ error: message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    const message = error?.name === 'AbortError'
+      ? 'La consulta ha tardado demasiado. Inténtalo de nuevo.'
+      : cleanText(error?.message, 700) || 'Se ha producido un error inesperado.';
+    return jsonResponse({ error: message }, 500);
   }
 };

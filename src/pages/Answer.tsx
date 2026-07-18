@@ -51,8 +51,25 @@ export default function Answer() {
       signal: controller.signal,
     })
       .then(async (response) => {
-        const payload = await response.json();
-        if (!response.ok) throw new Error(payload.error || 'No se pudo completar la consulta');
+        const responseText = await response.text();
+        let payload: (AnswerData & { error?: string }) | null = null;
+
+        if (responseText.trim()) {
+          try {
+            payload = JSON.parse(responseText) as AnswerData & { error?: string };
+          } catch {
+            throw new Error('El servidor devolvió una respuesta no válida. Vuelve a desplegar la aplicación en Netlify e inténtalo de nuevo.');
+          }
+        }
+
+        if (!payload) {
+          throw new Error('El servidor no devolvió respuesta. Comprueba el despliegue de la función en Netlify.');
+        }
+
+        if (!response.ok) {
+          throw new Error(payload.error || `No se pudo completar la consulta (error ${response.status}).`);
+        }
+
         setData(payload as AnswerData);
       })
       .catch((caught: Error) => {

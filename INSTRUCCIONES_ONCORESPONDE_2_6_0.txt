@@ -1,0 +1,14 @@
+ONCORESPONDE 2.6.0 · PREPÁRATE
+
+Novedades:
+- Sustituye la pantalla vacía de Prepárate por un módulo completo.
+- Guías para consulta, analítica, TAC, resonancia, PET/CT, quimioterapia, radioterapia y cirugía.
+- Apartados Antes, Durante, Qué llevar y Preguntas útiles.
+- Avisos de seguridad y fuentes oficiales enlazadas.
+- Consulta contextual con IA para cada prueba o tratamiento.
+- Diseño adaptable a móvil, tableta y ordenador.
+
+Para desplegar:
+1. Sustituye el contenido del repositorio por los archivos de este ZIP.
+2. Mantén OPENAI_API_KEY en las variables de entorno de Netlify.
+3. Netlify ejecutará npm run build y publicará dist.

@@ -1,0 +1,8 @@
+OncoResponde 2.8.0 · Prepárate integrado en Mi tratamiento
+
+Cambios:
+- Se elimina la tarjeta independiente Prepárate de la pantalla de inicio.
+- Mi tratamiento incorpora todas las guías de preparación.
+- La próxima cita abre directamente la guía correspondiente.
+- Las guías respetan el parámetro ?guia= y vuelven a Mi tratamiento.
+- Se mantiene /preparate para compatibilidad con enlaces existentes.

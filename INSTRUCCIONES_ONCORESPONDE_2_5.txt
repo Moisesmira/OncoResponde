@@ -1,0 +1,13 @@
+ONCORESPONDE 2.5.0 · ESCUCHA Y RELÁJATE
+
+Novedades:
+- Nueva tarjeta visible en Cuídate: Escucha y relájate.
+- Relajaciones guiadas mediante voz local del dispositivo.
+- Micro-podcasts breves de acompañamiento oncológico.
+- Control de pausa, detención y velocidad de reproducción.
+- Sonidos ambientales de lluvia, mar y naturaleza generados en el dispositivo.
+- Recomendación directa desde el diario cuando se registra ansiedad.
+- Sin envío de datos personales ni dependencia de archivos de audio externos.
+
+Ruta: /relajate
+Versión: 2.5.0

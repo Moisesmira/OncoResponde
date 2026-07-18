@@ -1,0 +1,16 @@
+ONCORESPONDE 2.1.4 — REVISIÓN VISUAL Y NAVEGACIÓN
+
+Cambios principales:
+- Navegación superior más robusta con destino alternativo.
+- Migas de navegación en los módulos de Cuídate.
+- Enlaces Anterior/Siguiente entre áreas.
+- Mejor foco al seleccionar una pregunta rápida.
+- Estado visual claro para la pregunta seleccionada.
+- Contador de caracteres y opción Borrar texto en OncoBox.
+- Mejoras de accesibilidad, foco de teclado y adaptación móvil.
+
+Subida:
+1. Descomprime el ZIP.
+2. Sube todo su contenido a la raíz del repositorio GitHub.
+3. Commit recomendado: OncoResponde 2.1.4: revisión UX y navegación
+4. Netlify desplegará automáticamente.

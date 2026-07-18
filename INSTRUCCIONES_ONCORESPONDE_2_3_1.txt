@@ -1,0 +1,12 @@
+ONCORESPONDE 2.3.1 — AJUSTE VISUAL DEL SEGUIMIENTO
+
+Cambios incluidos:
+- El estado «Necesito apoyo» se muestra en rojo sanitario (#D32F2F).
+- El cambio se aplica a la selección diaria, la evolución reciente y el resumen de recuentos.
+- Se mantiene un fondo rojo suave para evitar una presentación alarmista.
+- Los iconos de la evolución reciente incluyen una etiqueta accesible para lectores de pantalla.
+- Versión actualizada a 2.3.1.
+
+Verificación:
+- Ejecutar: npm ci
+- Ejecutar: npm run build

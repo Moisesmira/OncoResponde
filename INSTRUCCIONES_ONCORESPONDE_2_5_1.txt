@@ -1,8 +1,0 @@
-ONCORESPONDE 2.5.1 — MÚSICA RELAJANTE
-
-Cambios:
-- Nueva sección "Música relajante" en Cuídate > Escucha y relájate.
-- Tarjeta "Piano y naturaleza" con apertura segura en YouTube.
-- Aviso de recurso externo y apertura en nueva pestaña.
-- Marcadores para lluvia, mar y bosque.
-- Versión actualizada a 2.5.1.

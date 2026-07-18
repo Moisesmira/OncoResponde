@@ -15,6 +15,9 @@ import Treatment from './pages/Treatment';
 import Reports from './pages/Reports';
 import Medication from './pages/Medication';
 import Consultation from './pages/Consultation';
+import Camino from './pages/Camino';
+import Family from './pages/Family';
+import Sources from './pages/Sources';
 
 export default function App() {
   return (
@@ -42,14 +45,14 @@ export default function App() {
       <Route path="/calma" element={<Breathing />} />
       <Route path="/seguimiento" element={<Tracking />} />
       <Route path="/seguimiento/sintomas" element={<SymptomDiary />} />
-      <Route path="/camino" element={<SimplePage title="Mi camino" />} />
+      <Route path="/camino" element={<Camino />} />
       <Route path="/preparate" element={<Prepare />} />
       <Route path="/tratamiento" element={<Treatment />} />
       <Route path="/medicacion" element={<Medication />} />
       <Route path="/consulta" element={<Consultation />} />
       <Route path="/informes" element={<Reports />} />
-      <Route path="/familia" element={<SimplePage title="Familia y cuidadores" />} />
-      <Route path="/fuentes" element={<SimplePage title="Fuentes fiables" />} />
+      <Route path="/familia" element={<Family />} />
+      <Route path="/fuentes" element={<Sources />} />
       <Route path="/ajustes" element={<SimplePage title="Ajustes y privacidad" />} />
     </Routes>
   );

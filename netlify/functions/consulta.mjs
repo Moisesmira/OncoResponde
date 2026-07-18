@@ -14,6 +14,8 @@ const sourceByContext = {
     { name: 'NCI: Side Effects of Cancer Treatment', url: 'https://www.cancer.gov/about-cancer/treatment/side-effects' },
     { name: 'NCI: Infection and Neutropenia', url: 'https://www.cancer.gov/about-cancer/treatment/side-effects/infection' },
   ],
+  familia: [{ name: 'AECC: apoyo a pacientes y familiares', url: 'https://www.contraelcancer.es/es/te-ayudamos' }],
+  camino: [{ name: 'NCI: Coping with Cancer', url: 'https://www.cancer.gov/about-cancer/coping' }],
   informes: [
     { name: 'MedlinePlus: Cómo entender la información médica', url: 'https://medlineplus.gov/spanish/understandingmedicalresearch.html' },
     { name: 'NCI: Understanding Cancer Prognosis', url: 'https://www.cancer.gov/about-cancer/diagnosis-staging/prognosis' },
@@ -35,6 +37,8 @@ const contextPrompts = {
   respiracion: `Tema: respiración y regulación de la tensión. Propón ejercicios suaves. Si hay dificultad respiratoria nueva o intensa, dolor torácico, coloración azulada, confusión o desmayo, indica atención urgente.`,
   sintomas: `Tema: síntomas declarados en un diario personal. No diagnostiques ni atribuyas causalidad. Prioriza autocuidado prudente, hidratación, descanso y comunicación con el equipo. Identifica señales de alarma, especialmente fiebre durante tratamiento, dificultad respiratoria, dolor intenso, confusión, desmayo, sangrado, vómitos persistentes o incapacidad para beber. No recomiendes medicación ni cambios de tratamiento.`,
   informes: `Tema: explicación educativa de un informe clínico aportado por la persona. Resume únicamente lo que consta en el texto, traduce términos médicos a lenguaje claro y diferencia hechos escritos de explicaciones generales. No completes datos ausentes, no diagnostiques, no establezcas pronóstico, no concluyas respuesta al tratamiento y no sugieras iniciar, suspender o cambiar tratamientos. Propón preguntas concretas para comentar con el equipo sanitario. Si el fragmento es incompleto o ambiguo, dilo expresamente.`,
+  familia: `Tema: familiares y cuidadores. Valida la carga emocional, ofrece comunicación práctica, reparto de tareas y autocuidado. No atribuyas responsabilidades ni sustituyas apoyo profesional.`,
+  camino: `Tema: diario personal y acompañamiento emocional. Responde con escucha y validación, sin interpretar psicológicamente ni diagnosticar. Sugiere un paso breve y realista.`,
   general: `Tema: consulta oncológica general. Limita la respuesta a educación sanitaria prudente.`,
 };
 

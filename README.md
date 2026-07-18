@@ -1,21 +1,30 @@
-# OncoResponde 4.0.0
+# OncoResponde 4.1.0
 
-PWA de información y acompañamiento para pacientes oncológicos y familiares.
+Aplicación web progresiva de educación sanitaria y acompañamiento para pacientes oncológicos y familiares.
 
-## Novedades de la versión 4.0
-
-- Inicio inteligente con resumen de próximas citas, medicación, seguimiento y consulta.
-- Háblame contextual: usa únicamente la información local guardada para adaptar la orientación cuando sea relevante.
-- Los datos permanecen en el dispositivo y pueden estar incompletos; nunca se utilizan para diagnosticar ni modificar tratamientos.
-
-## Desarrollo
+## Desarrollo local
 
 ```bash
 npm install
 npm run dev
+```
+
+## Compilación
+
+```bash
 npm run build
 ```
 
+## Activar la IA en Netlify
+
+1. Abre el sitio en Netlify.
+2. Entra en **Site configuration → Environment variables**.
+3. Crea `OPENAI_API_KEY` con tu clave privada de OpenAI.
+4. Opcionalmente crea `OPENAI_MODEL` con el valor `gpt-5-mini`.
+5. Ejecuta un nuevo despliegue.
+
+La clave se utiliza únicamente en la función de servidor `netlify/functions/consulta.mjs`; nunca debe añadirse al código del navegador ni al repositorio.
+
 ## Seguridad
 
-OncoResponde ofrece orientación general. No sustituye la valoración del equipo sanitario ni los servicios de urgencias.
+OncoResponde ofrece orientación general. No diagnostica, no sustituye al equipo sanitario y no recomienda iniciar, suspender o modificar tratamientos o medicación.

@@ -1,0 +1,11 @@
+ONCORESPONDE 3.0.0
+
+Cambios:
+- Nuevo orden lógico de los apartados en la pantalla principal.
+- Jerarquía visual entre módulos principales, secundarios y de apoyo.
+- OncoAyuda sustituye el robot por un icono de dos manos entrelazadas.
+- Nuevo texto de presentación de OncoAyuda.
+- Háblame se mantiene como acceso principal.
+- Versión actualizada a 3.0.0.
+
+Compilación: npm ci && npm run build

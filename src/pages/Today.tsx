@@ -58,18 +58,31 @@ const recommendations: Record<MoodId, { intro: string; energy: number; actions: 
 };
 
 const accessCards = [
-  { to: '/tratamiento', title: 'Mi tratamiento', text: 'Organiza citas, sesiones y próximas pruebas.', icon: '▣', tone: 'blue' },
-  { to: '/informes', title: 'Comprende tus informes', text: 'Aclara términos y prepara preguntas para tu consulta.', icon: '▤', tone: 'purple' },
-  { to: '/seguimiento', title: 'Mi seguimiento', text: 'Registra en 20 segundos cómo te encuentras hoy.', icon: '◷', tone: 'teal' },
-  { to: '/perfil', title: 'Cuéntame sobre tu cáncer', text: 'Información opcional para adaptar mejor la ayuda.', icon: '○', tone: 'blue' },
-  { to: '/oncoayuda', title: 'OncoAyuda', text: 'Haz una pregunta escrita y recibe orientación.', icon: '◌', tone: 'blue' },
-  { to: '/cuidate', title: 'Cuídate', text: 'Alimentación, movimiento, descanso y bienestar.', icon: '♧', tone: 'green' },
-  { to: '/calma', title: 'Encuentra calma', text: 'Respiración, música, audios y reflexiones.', icon: '≈', tone: 'teal' },
-  { to: '/camino', title: 'Mi Camino', text: 'Tu diario personal durante el proceso.', icon: '▤', tone: 'purple' },
-  { to: '/familia', title: 'Familia y cuidadores', text: 'Acompañar y cuidarse también importa.', icon: '◎', tone: 'rose' },
-  { to: '/fuentes', title: 'Fuentes fiables', text: 'Información sanitaria de referencia.', icon: '◇', tone: 'slate' },
-  { to: '/ajustes', title: 'Ajustes y privacidad', text: 'Accesibilidad, datos locales y transparencia.', icon: '⚙', tone: 'slate' },
+  { to: '/perfil', title: 'Cuéntame sobre tu cáncer', text: 'Información opcional para adaptar mejor la ayuda.', icon: '○', tone: 'blue', size: 'primary' },
+  { to: '/tratamiento', title: 'Mi tratamiento', text: 'Organiza citas, sesiones y próximas pruebas.', icon: '▣', tone: 'blue', size: 'primary' },
+  { to: '/informes', title: 'Comprende tus informes', text: 'Aclara términos y prepara preguntas para tu consulta.', icon: '▤', tone: 'purple', size: 'secondary' },
+  { to: '/seguimiento', title: 'Mi seguimiento', text: 'Registra en 20 segundos cómo te encuentras hoy.', icon: '◷', tone: 'teal', size: 'secondary' },
+  { to: '/cuidate', title: 'Cuídate', text: 'Alimentación, movimiento, descanso y bienestar.', icon: '♧', tone: 'green', size: 'secondary' },
+  { to: '/calma', title: 'Encuentra calma', text: 'Respiración, música, audios y reflexiones.', icon: '≈', tone: 'teal', size: 'secondary' },
+  { to: '/oncoayuda', title: 'OncoAyuda', text: 'Recursos para comprender, prepararte y resolver dudas frecuentes.', icon: 'handshake', tone: 'blue', size: 'support' },
+  { to: '/camino', title: 'Mi camino', text: 'Tu diario personal durante el proceso.', icon: '▤', tone: 'purple', size: 'support' },
+  { to: '/familia', title: 'Familia y cuidadores', text: 'Acompañar y cuidarse también importa.', icon: '◎', tone: 'rose', size: 'support' },
+  { to: '/fuentes', title: 'Fuentes fiables', text: 'Información sanitaria de referencia.', icon: '◇', tone: 'slate', size: 'support' },
+  { to: '/ajustes', title: 'Ajustes y privacidad', text: 'Accesibilidad, datos locales y transparencia.', icon: '⚙', tone: 'slate', size: 'support' },
 ];
+
+function HandshakeIcon() {
+  return (
+    <svg className="handshake-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M8.7 6.2 6.9 4.4a1.6 1.6 0 0 0-2.3 0L2.8 6.2a1.6 1.6 0 0 0 0 2.3l3.6 3.6" />
+      <path d="m15.3 6.2 1.8-1.8a1.6 1.6 0 0 1 2.3 0l1.8 1.8a1.6 1.6 0 0 1 0 2.3l-3.6 3.6" />
+      <path d="m7.2 10.8 4.1-4.1a2 2 0 0 1 2.8 0l1.2 1.2a1.7 1.7 0 0 1 0 2.4l-1.1 1.1" />
+      <path d="m9.1 9 6.5 6.5a1.45 1.45 0 0 1-2.05 2.05l-.75-.75" />
+      <path d="m7.8 10.3 5 5a1.45 1.45 0 0 1-2.05 2.05l-4.3-4.3" />
+      <path d="m6.5 12 3.1 3.1a1.45 1.45 0 0 1-2.05 2.05L5.8 15.4" />
+    </svg>
+  );
+}
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -185,8 +198,8 @@ export default function Today() {
           </div>
           <div className="access-grid">
             {accessCards.map((card) => (
-              <Link className={`access-card access-card--${card.tone}`} to={card.to} key={card.to}>
-                <span className="access-card__icon" aria-hidden="true">{card.icon}</span>
+              <Link className={`access-card access-card--${card.tone} access-card--${card.size}`} to={card.to} key={card.to}>
+                <span className="access-card__icon" aria-hidden="true">{card.icon === 'handshake' ? <HandshakeIcon /> : card.icon}</span>
                 <span className="access-card__body">
                   <strong>{card.title}</strong>
                   <small>{card.text}</small>
@@ -200,7 +213,7 @@ export default function Today() {
         <footer className="today-footer">
           <strong>OncoResponde</strong>
           <p>Orientación, no diagnóstico. La IA puede cometer errores. Contrasta siempre la información con tu equipo sanitario.</p>
-          <small>OncoResponde 2.9 · Información orientativa. No sustituye la atención médica ni los servicios de urgencias.</small>
+          <small>OncoResponde 3.0 · Información orientativa. No sustituye la atención médica ni los servicios de urgencias.</small>
         </footer>
       </main>
       <BottomNav />

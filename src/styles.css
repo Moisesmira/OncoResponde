@@ -814,3 +814,112 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 .reports-guardrail-grid strong { color:#31556d; }
 .reports-guardrail-grid p { margin:7px 0 0; color:#5b707d; line-height:1.5; }
 @media (max-width:760px){.reports-page{padding-inline:14px}.reports-hero{padding:22px 19px}.report-type-grid{grid-template-columns:1fr}.reports-file-row{align-items:flex-start;flex-direction:column}.reports-file-button{width:100%;box-sizing:border-box}.reports-guardrail-grid{grid-template-columns:1fr}}
+
+
+/* =========================================================
+   OncoResponde 3.0 · nueva jerarquía y humanización
+   ========================================================= */
+.access-grid {
+  align-items: stretch;
+}
+
+.access-card--primary {
+  grid-column: span 1;
+  min-height: 190px;
+  padding: 24px;
+  border-width: 2px;
+  box-shadow: 0 14px 34px rgba(27, 77, 108, .12);
+}
+
+.access-card--primary .access-card__icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  font-size: 1.7rem;
+}
+
+.access-card--primary .access-card__body strong {
+  font-size: 1.2rem;
+}
+
+.access-card--secondary {
+  min-height: 164px;
+}
+
+.access-card--support {
+  min-height: 138px;
+  padding: 17px;
+}
+
+.access-card--support .access-card__icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 14px;
+  font-size: 1.25rem;
+}
+
+.access-card--support .access-card__body strong {
+  font-size: 1rem;
+}
+
+.access-card--support .access-card__body small {
+  margin-top: 6px;
+  font-size: .88rem;
+}
+
+.handshake-icon {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.oncoayuda-intro {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.oncoayuda-intro__icon {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: 22px;
+  background: #eaf4fb;
+  font-size: 2.15rem;
+}
+
+.oncoayuda-intro h2 {
+  margin: 0 0 10px;
+  color: #183b55;
+}
+
+.oncoayuda-intro p {
+  margin: 8px 0;
+  color: #425f74;
+  line-height: 1.65;
+}
+
+@media (min-width: 980px) {
+  .access-card--primary {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 760px) {
+  .access-card--primary,
+  .access-card--secondary,
+  .access-card--support {
+    min-height: 132px;
+    padding: 18px;
+  }
+
+  .oncoayuda-intro {
+    grid-template-columns: 1fr;
+  }
+}

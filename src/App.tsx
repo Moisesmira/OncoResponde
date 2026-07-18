@@ -20,7 +20,18 @@ export default function App() {
       <Route path="/" element={<Today />} />
       <Route path="/hablame" element={<Voice />} />
       <Route path="/respuesta" element={<Answer />} />
-      <Route path="/oncoayuda" element={<SimplePage title="OncoAyuda" />} />
+      <Route path="/oncoayuda" element={
+        <SimplePage title="OncoAyuda">
+          <div className="oncoayuda-intro">
+            <div className="oncoayuda-intro__icon" aria-hidden="true">🤝</div>
+            <div>
+              <h2>Apoyo para comprender y avanzar</h2>
+              <p>OncoAyuda reúne recursos para ayudarte a comprender mejor tu enfermedad, prepararte para los tratamientos y resolver dudas frecuentes.</p>
+              <p>Siempre que lo necesites, utiliza <strong>Háblame</strong> para realizar una consulta personalizada.</p>
+            </div>
+          </div>
+        </SimplePage>
+      } />
       <Route path="/perfil" element={<CancerProfile />} />
       <Route path="/cuidate" element={<WellnessHub />} />
       <Route path="/cuidate/:topicId" element={<WellnessTopic />} />
@@ -29,13 +40,13 @@ export default function App() {
       <Route path="/calma" element={<Breathing />} />
       <Route path="/seguimiento" element={<Tracking />} />
       <Route path="/seguimiento/sintomas" element={<SymptomDiary />} />
-      <Route path="/camino" element={<SimplePage title="Mi Camino" />} />
+      <Route path="/camino" element={<SimplePage title="Mi camino" />} />
       <Route path="/preparate" element={<Prepare />} />
       <Route path="/tratamiento" element={<Treatment />} />
       <Route path="/informes" element={<Reports />} />
-      <Route path="/familia" element={<SimplePage title="Familia" />} />
+      <Route path="/familia" element={<SimplePage title="Familia y cuidadores" />} />
       <Route path="/fuentes" element={<SimplePage title="Fuentes fiables" />} />
-      <Route path="/ajustes" element={<SimplePage title="Ajustes" />} />
+      <Route path="/ajustes" element={<SimplePage title="Ajustes y privacidad" />} />
     </Routes>
   );
 }

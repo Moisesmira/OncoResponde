@@ -780,3 +780,37 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 .treatment-guide-card b { grid-column: 3; grid-row: 1 / 3; font-size: 1.2rem; color: #245b7b; }
 .treatment-guide-note { margin: .9rem 0 0; color: var(--muted, #5f6f78); font-size: .92rem; }
 @media (max-width: 720px) { .treatment-guide-grid { grid-template-columns: 1fr; } }
+
+/* OncoResponde 2.9 · Comprende tus informes */
+.reports-page { max-width: 1040px; margin: 0 auto; padding: 0 22px 110px; }
+.reports-hero { margin: 18px 0; padding: 28px; border-radius: 28px; background: linear-gradient(135deg,#f1f0ff,#ffffff 58%,#edf7fb); border: 1px solid #dedcf1; box-shadow: 0 18px 42px rgba(45,53,92,.07); }
+.reports-hero h1 { margin: 6px 0 9px; color: #37446f; font-size: clamp(2rem,5vw,3rem); }
+.reports-hero p { margin: 0; max-width: 790px; color: #56647b; line-height: 1.62; }
+.reports-privacy { margin: 18px 0; padding: 17px 19px; border-radius: 18px; background: #fff6ed; border: 1px solid #f0d8bd; color: #704a28; }
+.reports-privacy strong { display:block; margin-bottom:4px; }
+.reports-privacy p { margin:0; line-height:1.55; }
+.reports-form { margin: 18px 0; }
+.report-type-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:11px; margin:14px 0 22px; }
+.report-type { display:grid; grid-template-columns:auto 1fr; gap:3px 10px; align-items:center; padding:14px; text-align:left; border:1px solid #d8e1e8; border-radius:16px; background:#fff; color:#334f61; box-shadow:none; }
+.report-type > span { grid-row:1/3; font-size:1.45rem; }
+.report-type strong { font-size:.98rem; }
+.report-type small { color:#687b87; line-height:1.3; }
+.report-type.is-selected { border-color:#5a668f; background:#f1f2fa; box-shadow:0 8px 20px rgba(55,68,111,.10); }
+.reports-label { display:grid; gap:8px; margin-top:17px; color:#365368; font-weight:700; }
+.reports-label textarea { box-sizing:border-box; width:100%; min-height:240px; padding:15px; border:1px solid #cbd9e2; border-radius:15px; background:#fff; color:#233e4d; font:inherit; line-height:1.55; resize:vertical; }
+.reports-label .reports-question { min-height:100px; }
+.reports-meta { display:flex; justify-content:space-between; gap:12px; align-items:center; margin-top:7px; color:#6a7c87; font-size:.85rem; }
+.reports-file-row { display:flex; align-items:center; gap:14px; margin-top:14px; }
+.reports-file-button { display:inline-flex; align-items:center; justify-content:center; cursor:pointer; }
+.reports-file-button input { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
+.reports-file-row small { color:#647784; }
+.reports-file-message { margin:9px 0 0; padding:10px 12px; border-radius:12px; background:#edf6f9; color:#466776; }
+.reports-submit { width:100%; margin-top:18px; padding:14px 18px; }
+.reports-submit:disabled { opacity:.5; cursor:not-allowed; }
+.reports-guardrails { margin:18px 0; }
+.reports-guardrails h2 { color:#314f67; }
+.reports-guardrail-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.reports-guardrail-grid article { padding:18px; border-radius:18px; background:#f4f8fa; border:1px solid #dce7ec; }
+.reports-guardrail-grid strong { color:#31556d; }
+.reports-guardrail-grid p { margin:7px 0 0; color:#5b707d; line-height:1.5; }
+@media (max-width:760px){.reports-page{padding-inline:14px}.reports-hero{padding:22px 19px}.report-type-grid{grid-template-columns:1fr}.reports-file-row{align-items:flex-start;flex-direction:column}.reports-file-button{width:100%;box-sizing:border-box}.reports-guardrail-grid{grid-template-columns:1fr}}

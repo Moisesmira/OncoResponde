@@ -138,7 +138,7 @@ export const prepareItems: PrepareItem[] = [
     ],
     bring: ['Agua y algo ligero si el centro lo permite.', 'Ropa cómoda y una prenda de abrigo.', 'Entretenimiento y teléfono de contacto del equipo.'],
     ask: ['¿Qué efectos son más probables con mi pauta?', '¿Qué medicación debo tomar en casa?', '¿A qué temperatura debo llamar?'],
-    safety: 'Una fiebre de 38 °C o más durante algunos tratamientos puede requerir atención urgente. Sigue el umbral y teléfono indicados por tu equipo.',
+    safety: 'Si tienes una temperatura de 38 °C o superior durante algunos tratamientos, puede tratarse de una urgencia médica. Sigue las indicaciones de tu equipo sanitario. Si te han facilitado un teléfono de contacto, llama lo antes posible. Si no puedes contactar o te encuentras mal, acude al Servicio de Urgencias de tu hospital.',
     sourceName: 'National Cancer Institute · Chemotherapy and You',
     sourceUrl: 'https://www.cancer.gov/publications/patient-education/chemo-and-you',
   },

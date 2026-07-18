@@ -12,6 +12,7 @@ import SymptomDiary from './pages/SymptomDiary';
 import Relaxation from './pages/Relaxation';
 import Prepare from './pages/Prepare';
 import Treatment from './pages/Treatment';
+import Reports from './pages/Reports';
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
       <Route path="/camino" element={<SimplePage title="Mi Camino" />} />
       <Route path="/preparate" element={<Prepare />} />
       <Route path="/tratamiento" element={<Treatment />} />
+      <Route path="/informes" element={<Reports />} />
       <Route path="/familia" element={<SimplePage title="Familia" />} />
       <Route path="/fuentes" element={<SimplePage title="Fuentes fiables" />} />
       <Route path="/ajustes" element={<SimplePage title="Ajustes" />} />

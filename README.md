@@ -32,3 +32,9 @@ OncoResponde ofrece orientación general. No diagnostica, no sustituye al equipo
 ## Corrección 4.1.2 de la consulta con OpenAI
 
 La función de Netlify valida las respuestas vacías o no JSON, utiliza salida estructurada y devuelve mensajes claros para errores de clave, saldo/límite, tiempo de espera y despliegue. Tras actualizar, realiza un nuevo despliegue en Netlify y verifica que `OPENAI_API_KEY` esté disponible para producción.
+
+## Versión 2.0 — Biblioteca de audio
+
+Incluye una nueva sección «Escuchar y relajarte» con 32 cápsulas de apoyo, buscador, filtros por categoría, favoritos, historial local, recomendación según el estado de ánimo, controles de voz, valoración y enlace contextual a Háblame.
+
+Los favoritos, el historial y las valoraciones se guardan únicamente en el dispositivo mediante almacenamiento local.

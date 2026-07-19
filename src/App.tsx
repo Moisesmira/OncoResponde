@@ -59,6 +59,7 @@ export default function App() {
       <Route path="/fuentes" element={<Sources />} />
       <Route path="/valora" element={<Feedback />} />
       <Route path="/un-minuto" element={<OneMinute />} />
+      <Route path="/escuchar" element={<OneMinute />} />
       <Route path="/ajustes" element={<SimplePage title="Ajustes y privacidad" />} />
       </Routes>
       <AppFooter />

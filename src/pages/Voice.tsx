@@ -66,21 +66,21 @@ const questionBank: Record<AppLanguage, string[]> = {
 const labels: Record<AppLanguage, { intro: string; trigger: string; heading: string; refresh: string; selected: string }> = {
   es: {
     intro: 'No hace falta que hagas una pregunta perfecta. Puedes escribir una duda, una preocupación o simplemente decirme cómo te encuentras.',
-    trigger: 'Ahora no sé qué preguntar',
+    trigger: 'Ahora no sé qué preguntar. Ayúdame a empezar',
     heading: 'Puedes empezar por alguna de estas preguntas:',
     refresh: 'Mostrar otras preguntas',
     selected: 'La sugerencia se ha colocado en el cuadro de texto. Puedes modificarla antes de enviarla.'
   },
   ca: {
     intro: 'No cal que facis una pregunta perfecta. Pots escriure un dubte, una preocupació o simplement dir-me com et trobes.',
-    trigger: 'Ara no sé què preguntar',
+    trigger: 'Ara no sé què preguntar. Ajuda’m a començar',
     heading: 'Pots començar per alguna d’aquestes preguntes:',
     refresh: 'Mostrar altres preguntes',
     selected: 'El suggeriment s’ha col·locat al quadre de text. El pots modificar abans d’enviar-lo.'
   },
   en: {
     intro: 'You do not need to ask a perfect question. You can write a doubt, a worry, or simply tell me how you feel.',
-    trigger: 'I do not know what to ask right now',
+    trigger: 'I do not know what to ask. Help me get started',
     heading: 'You can start with one of these questions:',
     refresh: 'Show other questions',
     selected: 'The suggestion has been placed in the text box. You can edit it before sending.'
@@ -95,7 +95,7 @@ export default function Voice() {
   const location = useLocation();
   const initial = (location.state as VoiceLocationState)?.prefill ?? '';
   const [text, setText] = useState(initial);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(true);
   const [suggestionSeed, setSuggestionSeed] = useState(0);
   const [selectionNotice, setSelectionNotice] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);

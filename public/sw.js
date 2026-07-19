@@ -1,4 +1,4 @@
-const CACHE = 'oncoresponde-3.1.3-hablame';
+const CACHE = 'oncoresponde-3.1.4-hablame-visible';
 const APP_SHELL = ['/', '/manifest.webmanifest', '/assets/camino.png'];
 
 self.addEventListener('install', (event) => {

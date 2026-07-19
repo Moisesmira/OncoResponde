@@ -41,3 +41,11 @@ Este archivo documenta las modificaciones incorporadas en cada versión. El form
 
 ### Añadido
 - Versión multilingüe de OncoResponde 3.1.
+
+## 3.1.4 — Ayuda visible en «Háblame»
+- El bloque «Ahora no sé qué preguntar. Ayúdame a empezar» aparece abierto por defecto.
+- Se muestran cinco sugerencias generales nada más entrar en «Háblame».
+- Se mantiene el botón para plegar/desplegar el bloque.
+- «Mostrar otras preguntas» genera cinco alternativas nuevas.
+- Al pulsar una sugerencia, se copia al cuadro de texto para editarla o enviarla.
+- Actualización de la caché PWA para evitar que se muestre una versión anterior.

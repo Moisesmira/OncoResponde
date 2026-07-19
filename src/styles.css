@@ -1138,3 +1138,8 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 .question-starter__refresh{margin-top:12px;background:transparent;color:#176b92;border:1px solid #bcd6e2;box-shadow:none}
 .question-starter__notice{margin:12px 0 0!important;padding:10px 12px;border-radius:12px;background:#eaf7ef;color:#246946!important;font-size:.9rem;font-weight:650!important}
 @media(max-width:520px){.question-starter__panel{padding:12px}.question-starter__list button{font-size:.94rem}.question-starter__refresh{width:100%}}
+
+/* Háblame: acceso visible para pacientes que no saben cómo empezar */
+.question-starter{width:100%;margin:18px 0 16px;text-align:left}
+.question-starter__trigger{display:flex!important;width:100%!important;min-height:62px!important;padding:15px 17px!important;align-items:center!important;justify-content:space-between!important;background:#e8f4fb!important;color:#075985!important;border:2px solid #8fc5df!important;border-radius:16px!important;box-shadow:0 8px 22px rgba(13,91,132,.12)!important;font-size:1rem!important;font-weight:800!important;visibility:visible!important;opacity:1!important}
+.question-starter__trigger:focus-visible{outline:3px solid rgba(14,116,144,.28);outline-offset:3px}

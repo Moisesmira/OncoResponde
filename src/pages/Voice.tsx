@@ -132,10 +132,6 @@ export default function Voice() {
         <h2>{t('Puedes hablar con tranquilidad')}</h2>
         <p>{t('Tómate el tiempo que necesites. La conversación no se guarda automáticamente.')}</p>
         <p className="voice-start-note">{copy.intro}</p>
-        <div className="context-aware-note"><strong>Respuesta contextual</strong><span>Podrá tener en cuenta, solo cuando sea útil, tus citas, medicación y registros guardados en este dispositivo.</span></div>
-        <button className="mic" type="button" onClick={listen}>🎤 {t('Comenzar a hablar')}</button>
-        <textarea ref={textareaRef} value={text} onChange={(event) => { setText(event.target.value); setSelectionNotice(false); }} placeholder={t('También puedes escribir…')} />
-
         <div className="question-starter">
           <button
             className="question-starter__trigger"
@@ -164,6 +160,12 @@ export default function Voice() {
             </div>
           )}
         </div>
+
+        <div className="context-aware-note"><strong>Respuesta contextual</strong><span>Podrá tener en cuenta, solo cuando sea útil, tus citas, medicación y registros guardados en este dispositivo.</span></div>
+        <button className="mic" type="button" onClick={listen}>🎤 {t('Comenzar a hablar')}</button>
+        <textarea ref={textareaRef} value={text} onChange={(event) => { setText(event.target.value); setSelectionNotice(false); }} placeholder={t('También puedes escribir…')} />
+
+
 
         <p className="voice-privacy">No incluyas nombres, direcciones ni otros datos que permitan identificarte.</p>
         <button disabled={!text.trim()} type="button" onClick={() => navigate('/respuesta', { state: { question: text, contextId: 'general', context: `${personalContext.context} Responde siempre en ${language === 'ca' ? 'catalán' : language === 'en' ? 'inglés' : 'español'}.`, profileContext: personalContext.profileContext, cancerType: personalContext.cancerType } })}> {t('Enviar')}</button>

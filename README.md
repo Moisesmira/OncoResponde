@@ -1,50 +1,61 @@
-# OncoResponde 1.0 4.1.0
+# OncoResponde 3.1.3
 
-Aplicación web progresiva de educación sanitaria y acompañamiento para pacientes oncológicos y familiares.
+Aplicación web progresiva de información, educación sanitaria y acompañamiento para pacientes oncológicos y familiares.
+
+## Versión actual
+
+**3.1.3 — Sugerencias para iniciar una conversación en «Háblame».**
+
+Consulta [`CHANGELOG.md`](CHANGELOG.md) para revisar todas las modificaciones.
+
+## Actualización mediante GitHub Desktop
+
+1. Descomprime este proyecto en la carpeta local vinculada al repositorio de OncoResponde.
+2. Sustituye los archivos anteriores por los de esta versión, conservando la carpeta oculta `.git` de tu repositorio local.
+3. Abre **GitHub Desktop** y selecciona el repositorio de OncoResponde.
+4. Revisa los archivos modificados.
+5. En **Summary**, escribe por ejemplo: `OncoResponde 3.1.3 - sugerencias en Háblame`.
+6. Pulsa **Commit to main**.
+7. Pulsa **Push origin**.
+8. Netlify detectará el cambio y realizará un nuevo despliegue automáticamente.
+
+No subas a Netlify el ZIP de despliegue si tu sitio ya está conectado a GitHub. En ese caso, el repositorio debe ser la fuente única de publicación.
 
 ## Desarrollo local
+
+Requisitos: Node.js 20 o 22 y npm.
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Compilación
+## Compilación de producción
 
 ```bash
 npm run build
 ```
+
+La salida se genera en la carpeta `dist`.
+
+## Configuración de Netlify
+
+- Comando de construcción: `npm run build`
+- Directorio de publicación: `dist`
+- Funciones: `netlify/functions`
+
+El archivo `netlify.toml` ya contiene la configuración necesaria.
 
 ## Activar la IA en Netlify
 
 1. Abre el sitio en Netlify.
 2. Entra en **Site configuration → Environment variables**.
 3. Crea `OPENAI_API_KEY` con tu clave privada de OpenAI.
-4. Opcionalmente crea `OPENAI_MODEL` con el valor `gpt-5-mini`.
+4. Opcionalmente, configura `OPENAI_MODEL` con el modelo que utilice el proyecto.
 5. Ejecuta un nuevo despliegue.
 
 La clave se utiliza únicamente en la función de servidor `netlify/functions/consulta.mjs`; nunca debe añadirse al código del navegador ni al repositorio.
 
-## Seguridad
+## Seguridad clínica
 
 OncoResponde ofrece orientación general. No diagnostica, no sustituye al equipo sanitario y no recomienda iniciar, suspender o modificar tratamientos o medicación.
-
-## Corrección 4.1.2 de la consulta con OpenAI
-
-La función de Netlify valida las respuestas vacías o no JSON, utiliza salida estructurada y devuelve mensajes claros para errores de clave, saldo/límite, tiempo de espera y despliegue. Tras actualizar, realiza un nuevo despliegue en Netlify y verifica que `OPENAI_API_KEY` esté disponible para producción.
-
-## Versión 2.0 — Biblioteca de audio
-
-Incluye una nueva sección «Escuchar y relajarte» con 32 cápsulas de apoyo, buscador, filtros por categoría, favoritos, historial local, recomendación según el estado de ánimo, controles de voz, valoración y enlace contextual a Háblame.
-
-Los favoritos, el historial y las valoraciones se guardan únicamente en el dispositivo mediante almacenamiento local.
-
-## OncoResponde 3.0
-
-Esta versión incorpora:
-- programa de acompañamiento de 30 días;
-- objetivo diario sin gamificación competitiva;
-- resumen emocional local de los últimos siete días;
-- recomendaciones adaptadas al estado de ánimo;
-- continuidad de la conversación con el último audio escuchado;
-- persistencia exclusivamente local en el dispositivo.

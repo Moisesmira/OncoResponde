@@ -1120,3 +1120,21 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 /* Selector de idioma */
 .language-selector{position:fixed;top:12px;right:14px;z-index:1000;display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:14px;background:rgba(255,255,255,.94);border:1px solid rgba(190,211,224,.9);box-shadow:0 8px 22px rgba(24,66,91,.12);backdrop-filter:blur(8px);font-size:.72rem;font-weight:850;color:#365e75}.language-selector select{min-height:34px;border:0;border-radius:9px;background:#eef6fb;color:#173f5c;padding:0 8px;font:inherit;font-weight:850}.language-selector select:focus{outline:2px solid #4f9bc8;outline-offset:2px}@media(max-width:620px){.language-selector{top:8px;right:8px;padding:5px}.language-selector>span{display:none}.language-selector select{min-height:32px;font-size:.7rem}}
 .external-resource-warning{margin:14px 0 18px;padding:14px 16px;border:1px solid #d7e6ea;border-radius:16px;background:#f7fbfc;color:#496774;line-height:1.55}.external-resource-warning strong{color:#214b5e}.external-audio-grid{margin-top:0}.external-audio-grid .external-audio-card{height:100%}
+
+/* Háblame: ayuda para pacientes que no saben qué preguntar */
+.voice-card textarea{width:100%;min-height:128px;margin-top:16px;resize:vertical}
+.voice-start-note{margin:12px auto 18px;max-width:680px;padding:13px 15px;border-radius:16px;background:#eef7fb;color:#315c72;font-weight:650;text-align:left}
+.question-starter{width:100%;margin:14px 0 4px;text-align:left}
+.question-starter__trigger{width:100%;justify-content:space-between;background:#edf6fb;color:#0b578e;border:1px solid #c8deea;box-shadow:none}
+.question-starter__trigger:hover{background:#e4f1f8}
+.question-starter__trigger>span{font-size:1.35rem;line-height:1}
+.question-starter__panel{margin-top:10px;padding:16px;border:1px solid #d7e6ed;border-radius:18px;background:#f9fcfd}
+.question-starter__panel>p{margin:0 0 11px;color:#416575;font-weight:750}
+.question-starter__list{display:grid;gap:9px}
+.question-starter__list button{width:100%;min-height:54px;padding:12px 14px;justify-content:space-between;text-align:left;background:#fff;color:#214f67;border:1px solid #d7e5ec;box-shadow:none;font-weight:700}
+.question-starter__list button:hover{background:#eef8fb;border-color:#9fc9da}
+.question-starter__list button span:first-child{flex:1}
+.question-starter__list button span:last-child{font-size:1.35rem;color:#3982a2}
+.question-starter__refresh{margin-top:12px;background:transparent;color:#176b92;border:1px solid #bcd6e2;box-shadow:none}
+.question-starter__notice{margin:12px 0 0!important;padding:10px 12px;border-radius:12px;background:#eaf7ef;color:#246946!important;font-size:.9rem;font-weight:650!important}
+@media(max-width:520px){.question-starter__panel{padding:12px}.question-starter__list button{font-size:.94rem}.question-starter__refresh{width:100%}}

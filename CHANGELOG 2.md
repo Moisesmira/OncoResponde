@@ -1,23 +1,3 @@
-## 3.2.1 — Sugerencias de Háblame siempre visibles
-
-- El bloque “Ahora no sé qué preguntar. Ayúdame a empezar” deja de ser desplegable y aparece siempre abierto.
-- Se muestran cinco preguntas sugeridas de forma inmediata.
-- Al pulsar una sugerencia, se copia al cuadro de texto para editarla o enviarla.
-- Se mantiene “Mostrar otras preguntas”.
-- Se refuerza la visibilidad en móvil y escritorio.
-- Se actualiza la caché de la PWA.
-
-# Changelog
-
-## 3.2.0 — Base estable
-
-- El bloque «Ahora no sé qué preguntar. Ayúdame a empezar» aparece abierto por defecto en «Háblame».
-- Cinco sugerencias iniciales visibles, selección editable y botón «Mostrar otras preguntas».
-- Se mantienen separados podcasts, sonidos ambientales y recursos externos de YouTube.
-- Compilación de producción desacoplada del chequeo TypeScript para evitar fallos de despliegue por cachés incompletas de `tsc` en Netlify.
-- Se añade `npm run typecheck` y `npm run verify` para validación local completa.
-- Configuración de Netlify y caché PWA actualizadas a la versión 3.2.0.
-
 # Registro de cambios de OncoResponde
 
 Este archivo documenta las modificaciones incorporadas en cada versión. El formato sigue una estructura sencilla basada en versiones semánticas: `mayor.menor.corrección`.
@@ -61,3 +41,11 @@ Este archivo documenta las modificaciones incorporadas en cada versión. El form
 
 ### Añadido
 - Versión multilingüe de OncoResponde 3.1.
+
+## 3.1.4 — Ayuda visible en «Háblame»
+- El bloque «Ahora no sé qué preguntar. Ayúdame a empezar» aparece abierto por defecto.
+- Se muestran cinco sugerencias generales nada más entrar en «Háblame».
+- Se mantiene el botón para plegar/desplegar el bloque.
+- «Mostrar otras preguntas» genera cinco alternativas nuevas.
+- Al pulsar una sugerencia, se copia al cuadro de texto para editarla o enviarla.
+- Actualización de la caché PWA para evitar que se muestre una versión anterior.

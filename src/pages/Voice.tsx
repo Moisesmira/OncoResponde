@@ -95,7 +95,6 @@ export default function Voice() {
   const location = useLocation();
   const initial = (location.state as VoiceLocationState)?.prefill ?? '';
   const [text, setText] = useState(initial);
-  const [showSuggestions, setShowSuggestions] = useState(true);
   const [suggestionSeed, setSuggestionSeed] = useState(0);
   const [selectionNotice, setSelectionNotice] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -132,34 +131,26 @@ export default function Voice() {
         <h2>{t('Puedes hablar con tranquilidad')}</h2>
         <p>{t('Tómate el tiempo que necesites. La conversación no se guarda automáticamente.')}</p>
         <p className="voice-start-note">{copy.intro}</p>
-        <div className="question-starter">
-          <button
-            className="question-starter__trigger"
-            type="button"
-            aria-expanded={showSuggestions}
-            onClick={() => setShowSuggestions((current) => !current)}
-          >
-            💬 {copy.trigger}
-            <span aria-hidden="true">{showSuggestions ? '−' : '+'}</span>
-          </button>
-
-          {showSuggestions && (
-            <div className="question-starter__panel">
-              <p>{copy.heading}</p>
-              <div className="question-starter__list">
-                {suggestions.map((suggestion) => (
-                  <button type="button" key={suggestion} onClick={() => chooseSuggestion(suggestion)}>
-                    <span>{suggestion}</span><span aria-hidden="true">›</span>
-                  </button>
-                ))}
-              </div>
-              <button className="question-starter__refresh" type="button" onClick={() => { setSuggestionSeed((seed) => seed + 1); setSelectionNotice(false); }}>
-                🔄 {copy.refresh}
-              </button>
-              {selectionNotice && <p className="question-starter__notice" role="status">{copy.selected}</p>}
+        <section className="question-starter question-starter--always-open" aria-labelledby="question-starter-title">
+          <div className="question-starter__title" id="question-starter-title">
+            <span className="question-starter__icon" aria-hidden="true">💬</span>
+            <strong>{copy.trigger}</strong>
+          </div>
+          <div className="question-starter__panel">
+            <p>{copy.heading}</p>
+            <div className="question-starter__list">
+              {suggestions.map((suggestion) => (
+                <button type="button" key={suggestion} onClick={() => chooseSuggestion(suggestion)}>
+                  <span>{suggestion}</span><span aria-hidden="true">›</span>
+                </button>
+              ))}
             </div>
-          )}
-        </div>
+            <button className="question-starter__refresh" type="button" onClick={() => { setSuggestionSeed((seed) => seed + 1); setSelectionNotice(false); }}>
+              🔄 {copy.refresh}
+            </button>
+            {selectionNotice && <p className="question-starter__notice" role="status">{copy.selected}</p>}
+          </div>
+        </section>
 
         <div className="context-aware-note"><strong>Respuesta contextual</strong><span>Podrá tener en cuenta, solo cuando sea útil, tus citas, medicación y registros guardados en este dispositivo.</span></div>
         <button className="mic" type="button" onClick={listen}>🎤 {t('Comenzar a hablar')}</button>

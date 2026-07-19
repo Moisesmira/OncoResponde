@@ -1143,3 +1143,12 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 .question-starter{width:100%;margin:18px 0 16px;text-align:left}
 .question-starter__trigger{display:flex!important;width:100%!important;min-height:62px!important;padding:15px 17px!important;align-items:center!important;justify-content:space-between!important;background:#e8f4fb!important;color:#075985!important;border:2px solid #8fc5df!important;border-radius:16px!important;box-shadow:0 8px 22px rgba(13,91,132,.12)!important;font-size:1rem!important;font-weight:800!important;visibility:visible!important;opacity:1!important}
 .question-starter__trigger:focus-visible{outline:3px solid rgba(14,116,144,.28);outline-offset:3px}
+
+/* OncoResponde 3.2.1: inicio de conversación siempre visible */
+.question-starter--always-open{display:block!important;width:100%!important;margin:18px 0 16px!important;padding:0!important;border:2px solid #70b6d8!important;border-radius:20px!important;background:#f4fbff!important;box-shadow:0 12px 30px rgba(13,91,132,.16)!important;visibility:visible!important;opacity:1!important;overflow:hidden!important}
+.question-starter__title{display:flex!important;align-items:center!important;gap:11px!important;min-height:68px!important;padding:16px 18px!important;background:linear-gradient(135deg,#dff2fc,#edf8fd)!important;color:#064f79!important;font-size:1.06rem!important;line-height:1.35!important;text-align:left!important;visibility:visible!important;opacity:1!important}
+.question-starter__title strong{display:block!important;color:#064f79!important;font-weight:850!important}
+.question-starter__icon{font-size:1.45rem!important;flex:0 0 auto!important}
+.question-starter--always-open .question-starter__panel{display:block!important;margin:0!important;padding:16px!important;border:0!important;border-top:1px solid #cce5f1!important;border-radius:0!important;background:#fff!important;visibility:visible!important;opacity:1!important}
+.question-starter--always-open .question-starter__list{display:grid!important;gap:9px!important}
+@media(max-width:520px){.question-starter__title{padding:15px!important;font-size:1rem!important}.question-starter--always-open .question-starter__panel{padding:12px!important}}

@@ -80,7 +80,7 @@ const labels: Record<AppLanguage, { intro: string; trigger: string; heading: str
   },
   en: {
     intro: 'You do not need to ask a perfect question. You can write a doubt, a worry, or simply tell me how you feel.',
-    trigger: 'I do not know what to ask. Help me get started',
+    trigger: 'I do not know what to ask right now. Help me get started',
     heading: 'You can start with one of these questions:',
     refresh: 'Show other questions',
     selected: 'The suggestion has been placed in the text box. You can edit it before sending.'

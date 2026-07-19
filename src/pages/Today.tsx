@@ -246,6 +246,15 @@ export default function Today() {
             <Link className="button talk-card__primary" to="/hablame">🎤 {t("Hablar")}</Link>
             <Link className="button talk-card__secondary" to="/oncoayuda">✎ {t("Escribir")}</Link>
             <div className="talk-card__prompts" aria-label="Sugerencias para empezar">
+              <Link
+                className="talk-card__starter"
+                to="/hablame"
+                state={{ prefill: '' }}
+              >
+                <span aria-hidden="true">💬</span>
+                <strong>{t("Ahora no sé qué preguntar. Ayúdame a empezar")}</strong>
+                <small>{t("Ver preguntas que pueden ayudarte a comenzar")}</small>
+              </Link>
               <Link to="/hablame" state={{ prefill: 'Tengo una duda sobre mi tratamiento: ' }}> {t("Tengo una duda sobre mi tratamiento")}</Link>
               <Link to="/hablame" state={{ prefill: 'Me encuentro cansado y quisiera saber: ' }}> {t("Me encuentro cansado")}</Link>
               <Link to="/hablame" state={{ prefill: 'Ayúdame a comprender este informe: ' }}> {t("Explícame mi informe")}</Link>

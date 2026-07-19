@@ -1,3 +1,10 @@
+## 3.2.3
+
+- Añadido en la tarjeta principal «Háblame» un acceso siempre visible: «Ahora no sé qué preguntar. Ayúdame a empezar».
+- El acceso abre la pantalla de Háblame, donde se muestran cinco sugerencias generales editables.
+- Diseño destacado y traducciones al catalán y al inglés.
+- Actualizada la caché PWA.
+
 ## 3.2.1 — Sugerencias de Háblame siempre visibles
 
 - El bloque “Ahora no sé qué preguntar. Ayúdame a empezar” deja de ser desplegable y aparece siempre abierto.

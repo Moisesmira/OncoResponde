@@ -1152,3 +1152,27 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 .question-starter--always-open .question-starter__panel{display:block!important;margin:0!important;padding:16px!important;border:0!important;border-top:1px solid #cce5f1!important;border-radius:0!important;background:#fff!important;visibility:visible!important;opacity:1!important}
 .question-starter--always-open .question-starter__list{display:grid!important;gap:9px!important}
 @media(max-width:520px){.question-starter__title{padding:15px!important;font-size:1rem!important}.question-starter--always-open .question-starter__panel{padding:12px!important}}
+
+
+/* v3.2.3: acceso visible a las sugerencias de Háblame */
+.talk-card__prompts .talk-card__starter{
+  flex:1 0 100%;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  column-gap:.65rem;
+  align-items:center;
+  padding:.85rem 1rem;
+  border:2px solid rgba(255,255,255,.92);
+  border-radius:16px;
+  background:#fff;
+  color:#125b95;
+  box-shadow:0 8px 20px rgba(3,35,64,.20);
+  text-align:left;
+}
+.talk-card__prompts .talk-card__starter span{grid-row:1/3;font-size:1.35rem}
+.talk-card__prompts .talk-card__starter strong{display:block;font-size:.95rem;line-height:1.25}
+.talk-card__prompts .talk-card__starter small{display:block;margin-top:.14rem;color:#52758e;font-size:.76rem;font-weight:700}
+.talk-card__prompts .talk-card__starter:hover{background:#eef8ff;color:#0b4e83}
+@media(max-width:720px){
+  .talk-card__prompts .talk-card__starter{border-radius:14px;text-align:left}
+}

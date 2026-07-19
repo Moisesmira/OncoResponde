@@ -103,8 +103,17 @@ export default function Today() {
   const homeInsights = getHomeInsights();
   const dailyEpisode = getDailyEpisode();
   const [minutePlaying, setMinutePlaying] = useState(false);
+  const [minuteFeedback, setMinuteFeedback] = useState<'yes' | 'no' | null>(() => {
+    const saved = window.localStorage.getItem(`oncoresponde-minute-feedback-${dailyEpisode.id}`);
+    return saved === 'yes' || saved === 'no' ? saved : null;
+  });
 
   useEffect(() => () => window.speechSynthesis?.cancel(), []);
+
+  function saveMinuteFeedback(value: 'yes' | 'no') {
+    setMinuteFeedback(value);
+    window.localStorage.setItem(`oncoresponde-minute-feedback-${dailyEpisode.id}`, value);
+  }
 
   function playDailyMinute() {
     if (!('speechSynthesis' in window)) return;
@@ -142,6 +151,20 @@ export default function Today() {
           <div className="daily-minute__actions">
             <button type="button" onClick={playDailyMinute}>{minutePlaying ? '↻ Reiniciar' : '▶ Escuchar'}</button>
             <Link className="button secondary" to="/un-minuto">Ver todos</Link>
+          </div>
+          <div className="minute-followup">
+            <div className="minute-feedback" aria-label="Valoración del episodio">
+              <strong>¿Te ha resultado útil?</strong>
+              <div className="minute-feedback__buttons">
+                <button type="button" className={minuteFeedback === 'yes' ? 'is-selected' : ''} onClick={() => saveMinuteFeedback('yes')} aria-pressed={minuteFeedback === 'yes'}>👍 Sí</button>
+                <button type="button" className={minuteFeedback === 'no' ? 'is-selected' : ''} onClick={() => saveMinuteFeedback('no')} aria-pressed={minuteFeedback === 'no'}>👎 No</button>
+              </div>
+              {minuteFeedback && <small>Gracias. Tu valoración se guarda únicamente en este dispositivo.</small>}
+            </div>
+            <div className="minute-conversation">
+              <p>¿Quieres preguntarme algo relacionado con este tema?</p>
+              <Link className="button" to="/hablame" state={{ prefill: `He escuchado el episodio «${dailyEpisode.title}» y quisiera preguntar: ` }}>💬 Continuar la conversación</Link>
+            </div>
           </div>
         </section>
 

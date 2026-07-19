@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../i18n/LanguageContext';
 
 type NavHeaderProps = {
   title: string;
@@ -12,6 +13,7 @@ export default function NavHeader({
   backLabel = 'Volver',
 }: NavHeaderProps) {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const goBack = () => {
     if (window.history.length > 1) {
@@ -23,11 +25,11 @@ export default function NavHeader({
 
   return (
     <header className="nav-header">
-      <button type="button" onClick={goBack} aria-label={`${backLabel}: ${title}`}>
-        <span aria-hidden="true">←</span> {backLabel}
+      <button type="button" onClick={goBack} aria-label={`${t(backLabel)}: ${t(title)}`}>
+        <span aria-hidden="true">←</span> {t(backLabel)}
       </button>
-      <strong className="nav-header__title">{title}</strong>
-      <button type="button" onClick={() => navigate('/')} aria-label="Ir a la pantalla de inicio">
+      <strong className="nav-header__title">{t(title)}</strong>
+      <button type="button" onClick={() => navigate('/')} aria-label={t("Ir a la pantalla de inicio")}>
         <span aria-hidden="true">⌂</span> Hoy
       </button>
     </header>

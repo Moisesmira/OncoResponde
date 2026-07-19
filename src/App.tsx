@@ -22,10 +22,14 @@ import AppFooter from './components/AppFooter';
 import Feedback from './pages/Feedback';
 import OneMinute from './pages/OneMinute';
 import Program30 from './pages/Program30';
+import LanguageSelector from './components/LanguageSelector';
+import { useLanguage } from './i18n/LanguageContext';
 
 export default function App() {
+  const { t } = useLanguage();
   return (
     <div className="app-shell">
+      <LanguageSelector />
       <Routes>
       <Route path="/" element={<Today />} />
       <Route path="/hablame" element={<Voice />} />
@@ -62,7 +66,7 @@ export default function App() {
       <Route path="/un-minuto" element={<OneMinute />} />
       <Route path="/escuchar" element={<OneMinute />} />
       <Route path="/programa-30-dias" element={<Program30 />} />
-      <Route path="/ajustes" element={<SimplePage title="Ajustes y privacidad" />} />
+      <Route path="/ajustes" element={<SimplePage title={t("Ajustes y privacidad")} />} />
       </Routes>
       <AppFooter />
     </div>

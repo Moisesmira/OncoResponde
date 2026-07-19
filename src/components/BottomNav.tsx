@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const items = [
   { to: '/', label: 'Hoy', icon: '⌂' },
@@ -9,8 +10,9 @@ const items = [
 ];
 
 export default function BottomNav() {
+  const { t } = useLanguage();
   return (
-    <nav className="bottom-nav" aria-label="Navegación principal">
+    <nav className="bottom-nav" aria-label={t("Navegación principal")}>
       {items.map((item) => (
         <NavLink
           key={item.to}
@@ -19,7 +21,7 @@ export default function BottomNav() {
           className={({ isActive }) => `bottom-nav__item${isActive ? ' is-active' : ''}`}
         >
           <span className="bottom-nav__icon" aria-hidden="true">{item.icon}</span>
-          <span>{item.label}</span>
+          <span>{t(item.label)}</span>
         </NavLink>
       ))}
     </nav>

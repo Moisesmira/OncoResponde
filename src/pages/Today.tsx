@@ -5,6 +5,7 @@ import { saveMoodForToday, readMoodHistory, moodMeta } from '../utils/moodTracki
 import { getHomeInsights } from '../utils/personalAssistantContext';
 import { getDailyEpisode } from '../data/oneMinuteEpisodes';
 import { useEffect, useState } from 'react';
+import { useLanguage } from '../i18n/LanguageContext';
 
 type MoodId = 'bien' | 'regular' | 'preocupado' | 'apoyo';
 
@@ -90,14 +91,15 @@ function HandshakeIcon() {
   );
 }
 
-function getGreeting() {
+function getGreeting(t: (text:string)=>string) {
   const hour = new Date().getHours();
-  if (hour < 12) return 'Buenos días';
-  if (hour < 20) return 'Buenas tardes';
-  return 'Buenas noches';
+  if (hour < 12) return t('Buenos días');
+  if (hour < 20) return t('Buenas tardes');
+  return t('Buenas noches');
 }
 
 export default function Today() {
+  const { t } = useLanguage();
   const { mood, setMood } = useAppStore();
   const selected = mood ? recommendations[mood] : null;
   const homeInsights = getHomeInsights();
@@ -159,9 +161,9 @@ export default function Today() {
           <img src="/assets/camino.png" alt="Persona recorriendo un sendero hacia la luz" />
           <div className="today-hero__shade" />
           <div className="today-hero__content">
-            <span className="brand-pill">OncoResponde · Información que acompaña</span>
-            <h1 id="today-title">{getGreeting()}</h1>
-            <p>Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.</p>
+            <span className="brand-pill">OncoResponde · {t("Información que acompaña")}</span>
+            <h1 id="today-title">{getGreeting(t)}</h1>
+            <p>{t("Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.")}</p>
           </div>
         </section>
 
@@ -169,9 +171,9 @@ export default function Today() {
           <div className="section-heading">
             <div>
               <span className="section-kicker">Hoy</span>
-              <h2 id="mood-title">¿Cómo te encuentras hoy?</h2>
+              <h2 id="mood-title">{t("¿Cómo te encuentras hoy?")}</h2>
             </div>
-            <p>Elige la opción que más se acerque a este momento.</p>
+            <p>{t("Elige la opción que más se acerque a este momento.")}</p>
           </div>
 
           <div className="mood-grid">
@@ -184,8 +186,8 @@ export default function Today() {
                 aria-pressed={mood === option.id}
               >
                 <span className="mood-option__icon" aria-hidden="true">{option.icon}</span>
-                <strong>{option.label}</strong>
-                <small>{option.detail}</small>
+                <strong>{t(option.label)}</strong>
+                <small>{t(option.detail)}</small>
               </button>
             ))}
           </div>
@@ -194,8 +196,8 @@ export default function Today() {
             <div className="daily-plan" aria-live="polite">
               <div className="daily-plan__header">
                 <div>
-                  <span className="section-kicker">Tu plan para hoy</span>
-                  <h3>Una propuesta sencilla para este momento</h3>
+                  <span className="section-kicker">{t("Tu plan para hoy")}</span>
+                  <h3>{t("Una propuesta sencilla para este momento")}</h3>
                 </div>
                 <div className="energy-meter" aria-label={`Nivel orientativo de energía: ${selected.energy} de 5`}>
                   {[1, 2, 3, 4, 5].map((level) => (
@@ -203,13 +205,13 @@ export default function Today() {
                   ))}
                 </div>
               </div>
-              <p>{selected.intro}</p>
+              <p>{t(selected.intro)}</p>
               <div className="recommendation-list">
                 {selected.actions.map((action) => (
-                  <Link to={action.to} className="recommendation-item" key={action.label}>
+                  <Link to={action.to} className="recommendation-item" key={t(action.label)}>
                     <span>
-                      <strong>{action.label}</strong>
-                      <small>{action.detail}</small>
+                      <strong>{t(action.label)}</strong>
+                      <small>{t(action.detail)}</small>
                     </span>
                     <b aria-hidden="true">→</b>
                   </Link>
@@ -236,17 +238,17 @@ export default function Today() {
 
         <section className="talk-card" aria-labelledby="talk-title">
           <div className="talk-card__copy">
-            <span className="talk-card__eyebrow">El corazón de OncoResponde</span>
-            <h2 id="talk-title">Háblame <span aria-hidden="true">♥</span></h2>
-            <p>Cuéntame qué necesitas o qué te preocupa. Puedes hablar con tranquilidad o escribir; empezaremos por lo que hoy sea más importante para ti.</p>
+            <span className="talk-card__eyebrow">{t("El corazón de OncoResponde")}</span>
+            <h2 id="talk-title">{t("Háblame")} <span aria-hidden="true">♥</span></h2>
+            <p>{t("Cuéntame qué necesitas o qué te preocupa. Puedes hablar con tranquilidad o escribir; empezaremos por lo que hoy sea más importante para ti.")}</p>
           </div>
           <div className="talk-card__actions">
-            <Link className="button talk-card__primary" to="/hablame">🎤 Hablar</Link>
-            <Link className="button talk-card__secondary" to="/oncoayuda">✎ Escribir</Link>
+            <Link className="button talk-card__primary" to="/hablame">🎤 {t("Hablar")}</Link>
+            <Link className="button talk-card__secondary" to="/oncoayuda">✎ {t("Escribir")}</Link>
             <div className="talk-card__prompts" aria-label="Sugerencias para empezar">
-              <Link to="/hablame" state={{ prefill: 'Tengo una duda sobre mi tratamiento: ' }}>Tengo una duda sobre mi tratamiento</Link>
-              <Link to="/hablame" state={{ prefill: 'Me encuentro cansado y quisiera saber: ' }}>Me encuentro cansado</Link>
-              <Link to="/hablame" state={{ prefill: 'Ayúdame a comprender este informe: ' }}>Explícame mi informe</Link>
+              <Link to="/hablame" state={{ prefill: 'Tengo una duda sobre mi tratamiento: ' }}> {t("Tengo una duda sobre mi tratamiento")}</Link>
+              <Link to="/hablame" state={{ prefill: 'Me encuentro cansado y quisiera saber: ' }}> {t("Me encuentro cansado")}</Link>
+              <Link to="/hablame" state={{ prefill: 'Ayúdame a comprender este informe: ' }}> {t("Explícame mi informe")}</Link>
             </div>
           </div>
         </section>
@@ -255,14 +257,14 @@ export default function Today() {
         <section className="daily-minute" aria-labelledby="daily-minute-title">
           <div className="daily-minute__icon" aria-hidden="true">🎙️</div>
           <div className="daily-minute__copy">
-            <span className="daily-minute__eyebrow">Tu minuto de hoy</span>
+            <span className="daily-minute__eyebrow">{t("Tu minuto de hoy")}</span>
             <h2 id="daily-minute-title">{dailyEpisode.title}</h2>
             <p>{dailyEpisode.description}</p>
             <small>{dailyEpisode.category} · {dailyEpisode.duration}</small>
           </div>
           <div className="daily-minute__actions">
-            <button type="button" onClick={() => playDailyMinute()}>{minutePlaying ? '↻ Reiniciar' : '▶ Escuchar'}</button>
-            <Link className="button secondary" to="/un-minuto">Ver todos</Link>
+            <button type="button" onClick={() => playDailyMinute()}>{minutePlaying ? `↻ ${t('Reiniciar')}` : `▶ ${t('Escuchar')}`}</button>
+            <Link className="button secondary" to="/un-minuto"> {t("Ver todos")}</Link>
             <div className="daily-minute__voice-controls" aria-label="Controles de voz">
               <button type="button" onClick={toggleDailyMinutePause} disabled={!minutePlaying} title={minutePaused ? 'Reanudar' : 'Pausar'}>{minutePaused ? '▶ Reanudar' : '⏸ Pausa'}</button>
               <button type="button" onClick={stopDailyMinute} disabled={!minutePlaying} title="Detener">■ Detener</button>
@@ -271,16 +273,16 @@ export default function Today() {
           </div>
           <div className="minute-followup">
             <div className="minute-feedback" aria-label="Valoración del episodio">
-              <strong>¿Te ha resultado útil?</strong>
+              <strong>{t("¿Te ha resultado útil?")}</strong>
               <div className="minute-feedback__buttons">
-                <button type="button" className={minuteFeedback === 'yes' ? 'is-selected' : ''} onClick={() => saveMinuteFeedback('yes')} aria-pressed={minuteFeedback === 'yes'}>👍 Sí</button>
-                <button type="button" className={minuteFeedback === 'no' ? 'is-selected' : ''} onClick={() => saveMinuteFeedback('no')} aria-pressed={minuteFeedback === 'no'}>👎 No</button>
+                <button type="button" className={minuteFeedback === 'yes' ? 'is-selected' : ''} onClick={() => saveMinuteFeedback('yes')} aria-pressed={minuteFeedback === 'yes'}>👍 {t("Sí")}</button>
+                <button type="button" className={minuteFeedback === 'no' ? 'is-selected' : ''} onClick={() => saveMinuteFeedback('no')} aria-pressed={minuteFeedback === 'no'}>👎 {t("No")}</button>
               </div>
-              {minuteFeedback && <small>Gracias. Tu valoración se guarda únicamente en este dispositivo.</small>}
+              {minuteFeedback && <small>{t("Gracias. Tu valoración se guarda únicamente en este dispositivo.")}</small>}
             </div>
             <div className="minute-conversation">
-              <p>¿Quieres preguntarme algo relacionado con este tema?</p>
-              <Link className="button" to="/hablame" state={{ prefill: `He escuchado el episodio «${dailyEpisode.title}» y quisiera preguntar: ` }}>💬 Continuar la conversación</Link>
+              <p>{t("¿Quieres preguntarme algo relacionado con este tema?")}</p>
+              <Link className="button" to="/hablame" state={{ prefill: `He escuchado el episodio «${dailyEpisode.title}» y quisiera preguntar: ` }}>💬 {t("Continuar la conversación")}</Link>
             </div>
           </div>
         </section>
@@ -289,32 +291,32 @@ export default function Today() {
         <section className="v3-dashboard accompaniment-card" aria-labelledby="v3-dashboard-title">
           <div className="section-heading section-heading--compact">
             <div>
-              <span className="section-kicker">Programa de 30 días</span>
-              <h2 id="v3-dashboard-title">Tu acompañamiento diario</h2>
+              <span className="section-kicker">{t("Programa de 30 días")}</span>
+              <h2 id="v3-dashboard-title">{t("Tu acompañamiento diario")}</h2>
             </div>
-            <Link to="/programa-30-dias">Ver programa completo →</Link>
+            <Link to="/programa-30-dias"> {t("Ver programa completo")} →</Link>
           </div>
           <div className="accompaniment-card__content">
             <div>
-              <h3>Un paso cada día, a tu ritmo</h3>
-              <p>Encuentra una propuesta breve de escucha, calma o cuidado para acompañarte durante los próximos 30 días.</p>
+              <h3>{t("Un paso cada día, a tu ritmo")}</h3>
+              <p>{t("Encuentra una propuesta breve de escucha, calma o cuidado para acompañarte durante los próximos 30 días.")}</p>
             </div>
-            <Link className="button" to="/programa-30-dias">Continuar mi acompañamiento</Link>
+            <Link className="button" to="/programa-30-dias"> {t("Continuar mi acompañamiento")}</Link>
           </div>
         </section>
 
         <section className="v3-dashboard tu-dia-dashboard" aria-labelledby="tu-dia-title">
           <div className="section-heading section-heading--compact">
             <div>
-              <span className="section-kicker">Tu día</span>
-              <h2 id="tu-dia-title">Lo más relevante ahora</h2>
+              <span className="section-kicker">{t("Tu día")}</span>
+              <h2 id="tu-dia-title">{t("Lo más relevante ahora")}</h2>
             </div>
-            <p>La información procede de lo que has guardado en este dispositivo.</p>
+            <p>{t("La información procede de lo que has guardado en este dispositivo.")}</p>
           </div>
           <div className="v3-dashboard__grid">
             <article className="daily-goal-card"><span className="section-kicker">Objetivo de hoy</span><h3>Un gesto sencillo</h3><p>{mood === 'preocupado' || mood === 'apoyo' ? 'Haz tres respiraciones lentas y deja caer los hombros.' : mood === 'regular' ? 'Dedica diez minutos a descansar sin sentir culpa.' : 'Camina cinco minutos o toma un poco de aire si te apetece.'}</p><button type="button" className={dailyGoalDone ? 'is-complete' : ''} onClick={() => { const next=!dailyGoalDone; setDailyGoalDone(next); localStorage.setItem('oncoresponde:daily-goal:'+new Date().toISOString().slice(0,10), next?'1':'0'); }}>{dailyGoalDone ? '✓ Conseguido' : 'Marcar como realizado'}</button></article>
             <article className="mood-mini-card"><span className="section-kicker">Últimos 7 días</span><h3>Cómo te has encontrado</h3><div className="mood-mini-chart">{moodHistory.length ? moodHistory.slice().reverse().map((entry) => <span key={entry.date} title={`${entry.date}: ${moodMeta[entry.mood].label}`}><i style={{height: `${moodMeta[entry.mood].score*18}px`}} /><small>{moodMeta[entry.mood].icon}</small></span>) : <p>Aún no hay registros. Elige cómo te encuentras más abajo.</p>}</div><small>Este gráfico es orientativo y no realiza diagnósticos.</small></article>
-            <article className="context-card"><span className="section-kicker">Conversación contextual</span><h3>{lastAudioTitle ? 'Continúa donde lo dejaste' : 'Habla sobre lo que necesites'}</h3><p>{lastAudioTitle ? `Has escuchado «${lastAudioTitle}». Puedes preguntar sobre ese tema.` : 'La IA puede tener en cuenta el audio que acabas de escuchar.'}</p><Link className="button" to="/hablame" state={{ prefill: lastAudioTitle ? `He escuchado «${lastAudioTitle}» y quisiera preguntar: ` : '' }}>💬 Continuar la conversación</Link></article>
+            <article className="context-card"><span className="section-kicker">Conversación contextual</span><h3>{lastAudioTitle ? 'Continúa donde lo dejaste' : 'Habla sobre lo que necesites'}</h3><p>{lastAudioTitle ? `Has escuchado «${lastAudioTitle}». Puedes preguntar sobre ese tema.` : 'La IA puede tener en cuenta el audio que acabas de escuchar.'}</p><Link className="button" to="/hablame" state={{ prefill: lastAudioTitle ? `He escuchado «${lastAudioTitle}» y quisiera preguntar: ` : '' }}>💬 {t("Continuar la conversación")}</Link></article>
           </div>
           <div className="tu-dia-dashboard__insights">
           <div className="smart-summary__grid">
@@ -332,18 +334,18 @@ export default function Today() {
         <section className="access-section" aria-labelledby="access-title">
           <div className="section-heading section-heading--compact">
             <div>
-              <span className="section-kicker">Explora a tu ritmo</span>
-              <h2 id="access-title">Todo lo que puede ayudarte</h2>
+              <span className="section-kicker">{t("Explora a tu ritmo")}</span>
+              <h2 id="access-title">{t("Todo lo que puede ayudarte")}</h2>
             </div>
-            <p>No necesitas descubrirlo todo hoy.</p>
+            <p>{t("No necesitas descubrirlo todo hoy.")}</p>
           </div>
           <div className="access-grid">
             {accessCards.map((card) => (
               <Link className={`access-card access-card--${card.tone} access-card--${card.size}`} to={card.to} key={card.to}>
                 <span className="access-card__icon" aria-hidden="true">{card.icon === 'handshake' ? <HandshakeIcon /> : card.icon}</span>
                 <span className="access-card__body">
-                  <strong>{card.title}</strong>
-                  <small>{card.text}</small>
+                  <strong>{t(card.title)}</strong>
+                  <small>{t(card.text)}</small>
                 </span>
                 <b aria-hidden="true">→</b>
               </Link>

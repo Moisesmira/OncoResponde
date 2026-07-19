@@ -20,6 +20,7 @@ import Family from './pages/Family';
 import Sources from './pages/Sources';
 import AppFooter from './components/AppFooter';
 import Feedback from './pages/Feedback';
+import OneMinute from './pages/OneMinute';
 
 export default function App() {
   return (
@@ -57,6 +58,7 @@ export default function App() {
       <Route path="/familia" element={<Family />} />
       <Route path="/fuentes" element={<Sources />} />
       <Route path="/valora" element={<Feedback />} />
+      <Route path="/un-minuto" element={<OneMinute />} />
       <Route path="/ajustes" element={<SimplePage title="Ajustes y privacidad" />} />
       </Routes>
       <AppFooter />

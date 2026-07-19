@@ -3,6 +3,8 @@ import BottomNav from '../components/BottomNav';
 import { useAppStore } from '../store/useAppStore';
 import { saveMoodForToday } from '../utils/moodTracking';
 import { getHomeInsights } from '../utils/personalAssistantContext';
+import { getDailyEpisode } from '../data/oneMinuteEpisodes';
+import { useEffect, useState } from 'react';
 
 type MoodId = 'bien' | 'regular' | 'preocupado' | 'apoyo';
 
@@ -99,6 +101,22 @@ export default function Today() {
   const { mood, setMood } = useAppStore();
   const selected = mood ? recommendations[mood] : null;
   const homeInsights = getHomeInsights();
+  const dailyEpisode = getDailyEpisode();
+  const [minutePlaying, setMinutePlaying] = useState(false);
+
+  useEffect(() => () => window.speechSynthesis?.cancel(), []);
+
+  function playDailyMinute() {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const speech = new SpeechSynthesisUtterance(dailyEpisode.script);
+    speech.lang = 'es-ES';
+    speech.rate = 0.85;
+    speech.onend = () => setMinutePlaying(false);
+    speech.onerror = () => setMinutePlaying(false);
+    setMinutePlaying(true);
+    window.speechSynthesis.speak(speech);
+  }
 
   return (
     <>
@@ -110,6 +128,20 @@ export default function Today() {
             <span className="brand-pill">OncoResponde · Información que acompaña</span>
             <h1 id="today-title">{getGreeting()}</h1>
             <p>Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.</p>
+          </div>
+        </section>
+
+        <section className="daily-minute" aria-labelledby="daily-minute-title">
+          <div className="daily-minute__icon" aria-hidden="true">🎙️</div>
+          <div className="daily-minute__copy">
+            <span className="daily-minute__eyebrow">Tu minuto de hoy</span>
+            <h2 id="daily-minute-title">{dailyEpisode.title}</h2>
+            <p>{dailyEpisode.description}</p>
+            <small>{dailyEpisode.category} · {dailyEpisode.duration}</small>
+          </div>
+          <div className="daily-minute__actions">
+            <button type="button" onClick={playDailyMinute}>{minutePlaying ? '↻ Reiniciar' : '▶ Escuchar'}</button>
+            <Link className="button secondary" to="/un-minuto">Ver todos</Link>
           </div>
         </section>
 

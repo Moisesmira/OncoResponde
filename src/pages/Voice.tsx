@@ -126,31 +126,54 @@ export default function Voice() {
   return (
     <main>
       <NavHeader title={t('Háblame')} />
+      <section
+        aria-labelledby="question-starter-title"
+        data-oncoresponde-feature="question-starter-v3.2.2"
+        style={{
+          display: 'block', width: '100%', boxSizing: 'border-box', margin: '16px auto 18px',
+          padding: 0, border: '3px solid #1683b4', borderRadius: 22, overflow: 'hidden',
+          background: '#ffffff', boxShadow: '0 14px 34px rgba(11, 91, 132, 0.20)'
+        }}
+      >
+        <div
+          id="question-starter-title"
+          style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '18px 20px', background: '#dff3fc', color: '#073f5d', textAlign: 'left' }}
+        >
+          <span aria-hidden="true" style={{ fontSize: 28 }}>💬</span>
+          <div>
+            <strong style={{ display: 'block', fontSize: '1.15rem', lineHeight: 1.35 }}>{copy.trigger}</strong>
+            <span style={{ display: 'block', marginTop: 4, fontSize: '.92rem', color: '#315f73' }}>{copy.intro}</span>
+          </div>
+        </div>
+        <div style={{ display: 'block', padding: 16, background: '#fff' }}>
+          <p style={{ margin: '0 0 12px', color: '#315f73', fontWeight: 800, textAlign: 'left' }}>{copy.heading}</p>
+          <div style={{ display: 'grid', gap: 10 }}>
+            {suggestions.map((suggestion) => (
+              <button
+                type="button"
+                key={suggestion}
+                onClick={() => chooseSuggestion(suggestion)}
+                style={{ width: '100%', minHeight: 54, padding: '12px 14px', border: '1px solid #bfd9e5', borderRadius: 14, background: '#f8fcfe', color: '#174b64', textAlign: 'left', font: 'inherit', fontWeight: 750, cursor: 'pointer' }}
+              >
+                {suggestion} <span aria-hidden="true">›</span>
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => { setSuggestionSeed((seed) => seed + 1); setSelectionNotice(false); }}
+            style={{ marginTop: 13, minHeight: 46, padding: '10px 15px', border: '1px solid #8fc4da', borderRadius: 13, background: '#eaf6fb', color: '#075985', font: 'inherit', fontWeight: 800, cursor: 'pointer' }}
+          >
+            🔄 {copy.refresh}
+          </button>
+          {selectionNotice && <p role="status" style={{ margin: '12px 0 0', padding: '10px 12px', borderRadius: 12, background: '#eaf7ef', color: '#246946', fontWeight: 700 }}>{copy.selected}</p>}
+        </div>
+      </section>
+
       <section className="card centered voice-card">
         <img className="voice-image" src="/assets/camino.png" alt="Camino hacia la luz" />
         <h2>{t('Puedes hablar con tranquilidad')}</h2>
         <p>{t('Tómate el tiempo que necesites. La conversación no se guarda automáticamente.')}</p>
-        <p className="voice-start-note">{copy.intro}</p>
-        <section className="question-starter question-starter--always-open" aria-labelledby="question-starter-title">
-          <div className="question-starter__title" id="question-starter-title">
-            <span className="question-starter__icon" aria-hidden="true">💬</span>
-            <strong>{copy.trigger}</strong>
-          </div>
-          <div className="question-starter__panel">
-            <p>{copy.heading}</p>
-            <div className="question-starter__list">
-              {suggestions.map((suggestion) => (
-                <button type="button" key={suggestion} onClick={() => chooseSuggestion(suggestion)}>
-                  <span>{suggestion}</span><span aria-hidden="true">›</span>
-                </button>
-              ))}
-            </div>
-            <button className="question-starter__refresh" type="button" onClick={() => { setSuggestionSeed((seed) => seed + 1); setSelectionNotice(false); }}>
-              🔄 {copy.refresh}
-            </button>
-            {selectionNotice && <p className="question-starter__notice" role="status">{copy.selected}</p>}
-          </div>
-        </section>
 
         <div className="context-aware-note"><strong>Respuesta contextual</strong><span>Podrá tener en cuenta, solo cuando sea útil, tus citas, medicación y registros guardados en este dispositivo.</span></div>
         <button className="mic" type="button" onClick={listen}>🎤 {t('Comenzar a hablar')}</button>

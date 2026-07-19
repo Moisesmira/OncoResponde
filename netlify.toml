@@ -11,3 +11,13 @@ NPM_FLAGS = "--no-audit --no-fund --progress=false"
 from = "/*"
 to = "/index.html"
 status = 200
+
+[[headers]]
+for = "/index.html"
+  [headers.values]
+  Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+for = "/sw.js"
+  [headers.values]
+  Cache-Control = "no-cache, no-store, must-revalidate"

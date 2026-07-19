@@ -61,3 +61,9 @@ Este archivo documenta las modificaciones incorporadas en cada versión. El form
 
 ### Añadido
 - Versión multilingüe de OncoResponde 3.1.
+
+## 3.2.2
+- Reubicado el bloque de inicio de conversación fuera de la tarjeta principal de Háblame.
+- Bloque siempre visible, sin desplegable y con estilos en línea para evitar que cualquier CSS lo oculte.
+- Cinco sugerencias visibles, selección editable y botón «Mostrar otras preguntas».
+- Actualización forzada del service worker y cabeceras sin caché para `index.html` y `sw.js`.

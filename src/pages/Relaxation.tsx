@@ -177,6 +177,30 @@ export default function Relaxation() {
               </article>
             ))}
           </div>
+          <div className="external-podcast-block">
+            <h3>🎵 Música y naturaleza</h3>
+            <p className="external-resource-warning" role="note"><strong>Antes de escuchar:</strong> YouTube puede mostrar anuncios de publicidad. Cuando aparezcan, pulsa «Omitir anuncio». La publicidad depende exclusivamente de YouTube y no de OncoResponde.</p>
+            <div className="audio-card-grid external-audio-grid">
+              <article className="audio-card external-audio-card">
+                <span className="audio-card__icon" aria-hidden="true">🌊</span>
+                <div>
+                  <small>Recurso externo · YouTube</small>
+                  <h3>Sonidos del mar y música relajante</h3>
+                  <p>Para descansar, leer, meditar o acompañar momentos de calma.</p>
+                </div>
+                <a className="primary-button external-link-button" href="https://www.youtube.com/watch?v=263Vb6xiifo&list=RD263Vb6xiifo&start_radio=1" target="_blank" rel="noopener noreferrer">▶ Abrir en YouTube</a>
+              </article>
+              <article className="audio-card external-audio-card">
+                <span className="audio-card__icon" aria-hidden="true">🌿</span>
+                <div>
+                  <small>Recurso externo · YouTube</small>
+                  <h3>Naturaleza y relajación</h3>
+                  <p>Música y sonidos de naturaleza para favorecer una pausa tranquila.</p>
+                </div>
+                <a className="primary-button external-link-button" href="https://www.youtube.com/watch?v=FBd2YJKk15I&list=RDFBd2YJKk15I&start_radio=1" target="_blank" rel="noopener noreferrer">▶ Abrir en YouTube</a>
+              </article>
+            </div>
+          </div>
         </section>
 
         <section className="relax-section card">

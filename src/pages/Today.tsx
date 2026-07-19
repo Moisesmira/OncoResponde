@@ -165,79 +165,6 @@ export default function Today() {
           </div>
         </section>
 
-        <section className="daily-minute" aria-labelledby="daily-minute-title">
-          <div className="daily-minute__icon" aria-hidden="true">🎙️</div>
-          <div className="daily-minute__copy">
-            <span className="daily-minute__eyebrow">Tu minuto de hoy</span>
-            <h2 id="daily-minute-title">{dailyEpisode.title}</h2>
-            <p>{dailyEpisode.description}</p>
-            <small>{dailyEpisode.category} · {dailyEpisode.duration}</small>
-          </div>
-          <div className="daily-minute__actions">
-            <button type="button" onClick={() => playDailyMinute()}>{minutePlaying ? '↻ Reiniciar' : '▶ Escuchar'}</button>
-            <Link className="button secondary" to="/un-minuto">Ver todos</Link>
-            <div className="daily-minute__voice-controls" aria-label="Controles de voz">
-              <button type="button" onClick={toggleDailyMinutePause} disabled={!minutePlaying} title={minutePaused ? 'Reanudar' : 'Pausar'}>{minutePaused ? '▶ Reanudar' : '⏸ Pausa'}</button>
-              <button type="button" onClick={stopDailyMinute} disabled={!minutePlaying} title="Detener">■ Detener</button>
-              <button type="button" onClick={increaseDailyMinuteRate} title="Cambiar velocidad">⏩ {minuteRate.toFixed(2)}×</button>
-            </div>
-          </div>
-          <div className="minute-followup">
-            <div className="minute-feedback" aria-label="Valoración del episodio">
-              <strong>¿Te ha resultado útil?</strong>
-              <div className="minute-feedback__buttons">
-                <button type="button" className={minuteFeedback === 'yes' ? 'is-selected' : ''} onClick={() => saveMinuteFeedback('yes')} aria-pressed={minuteFeedback === 'yes'}>👍 Sí</button>
-                <button type="button" className={minuteFeedback === 'no' ? 'is-selected' : ''} onClick={() => saveMinuteFeedback('no')} aria-pressed={minuteFeedback === 'no'}>👎 No</button>
-              </div>
-              {minuteFeedback && <small>Gracias. Tu valoración se guarda únicamente en este dispositivo.</small>}
-            </div>
-            <div className="minute-conversation">
-              <p>¿Quieres preguntarme algo relacionado con este tema?</p>
-              <Link className="button" to="/hablame" state={{ prefill: `He escuchado el episodio «${dailyEpisode.title}» y quisiera preguntar: ` }}>💬 Continuar la conversación</Link>
-            </div>
-          </div>
-        </section>
-
-        <section className="v3-dashboard" aria-labelledby="v3-dashboard-title">
-          <div className="section-heading section-heading--compact"><div><span className="section-kicker">OncoResponde 3.0</span><h2 id="v3-dashboard-title">Tu acompañamiento diario</h2></div><Link to="/programa-30-dias">Ver programa de 30 días →</Link></div>
-          <div className="v3-dashboard__grid">
-            <article className="daily-goal-card"><span className="section-kicker">Objetivo de hoy</span><h3>Un gesto sencillo</h3><p>{mood === 'preocupado' || mood === 'apoyo' ? 'Haz tres respiraciones lentas y deja caer los hombros.' : mood === 'regular' ? 'Dedica diez minutos a descansar sin sentir culpa.' : 'Camina cinco minutos o toma un poco de aire si te apetece.'}</p><button type="button" className={dailyGoalDone ? 'is-complete' : ''} onClick={() => { const next=!dailyGoalDone; setDailyGoalDone(next); localStorage.setItem('oncoresponde:daily-goal:'+new Date().toISOString().slice(0,10), next?'1':'0'); }}>{dailyGoalDone ? '✓ Conseguido' : 'Marcar como realizado'}</button></article>
-            <article className="mood-mini-card"><span className="section-kicker">Últimos 7 días</span><h3>Cómo te has encontrado</h3><div className="mood-mini-chart">{moodHistory.length ? moodHistory.slice().reverse().map((entry) => <span key={entry.date} title={`${entry.date}: ${moodMeta[entry.mood].label}`}><i style={{height: `${moodMeta[entry.mood].score*18}px`}} /><small>{moodMeta[entry.mood].icon}</small></span>) : <p>Aún no hay registros. Elige cómo te encuentras más abajo.</p>}</div><small>Este gráfico es orientativo y no realiza diagnósticos.</small></article>
-            <article className="context-card"><span className="section-kicker">Conversación contextual</span><h3>{lastAudioTitle ? 'Continúa donde lo dejaste' : 'Habla sobre lo que necesites'}</h3><p>{lastAudioTitle ? `Has escuchado «${lastAudioTitle}». Puedes preguntar sobre ese tema.` : 'La IA puede tener en cuenta el audio que acabas de escuchar.'}</p><Link className="button" to="/hablame" state={{ prefill: lastAudioTitle ? `He escuchado «${lastAudioTitle}» y quisiera preguntar: ` : '' }}>💬 Continuar la conversación</Link></article>
-          </div>
-        </section>
-
-        <section className="smart-summary" aria-labelledby="smart-summary-title">
-          <div className="section-heading section-heading--compact">
-            <div>
-              <span className="section-kicker">Tu día, de un vistazo</span>
-              <h2 id="smart-summary-title">Lo más relevante ahora</h2>
-            </div>
-            <p>La información procede de lo que has guardado en este dispositivo.</p>
-          </div>
-          <div className="smart-summary__grid">
-            {homeInsights.map((item) => (
-              <Link to={item.to} className="smart-insight" key={item.id}>
-                <span className="smart-insight__icon" aria-hidden="true">{item.icon}</span>
-                <span><strong>{item.title}</strong><small>{item.detail}</small></span>
-                <b aria-hidden="true">→</b>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <section className="talk-card" aria-labelledby="talk-title">
-          <div className="talk-card__copy">
-            <span className="talk-card__eyebrow">Tu acceso principal</span>
-            <h2 id="talk-title">Háblame <span aria-hidden="true">♥</span></h2>
-            <p>Cuéntame qué necesitas o qué te preocupa. Puedes hablar con tranquilidad o escribir.</p>
-          </div>
-          <div className="talk-card__actions">
-            <Link className="button talk-card__primary" to="/hablame">🎤 Hablar</Link>
-            <Link className="button talk-card__secondary" to="/oncoayuda">✎ Escribir</Link>
-          </div>
-        </section>
-
         <section className="card mood-card" aria-labelledby="mood-title">
           <div className="section-heading">
             <div>
@@ -304,6 +231,102 @@ export default function Today() {
               <p>Cuando elijas cómo te encuentras, aparecerán recomendaciones para hoy.</p>
             </div>
           )}
+        </section>
+
+
+        <section className="talk-card" aria-labelledby="talk-title">
+          <div className="talk-card__copy">
+            <span className="talk-card__eyebrow">El corazón de OncoResponde</span>
+            <h2 id="talk-title">Háblame <span aria-hidden="true">♥</span></h2>
+            <p>Cuéntame qué necesitas o qué te preocupa. Puedes hablar con tranquilidad o escribir; empezaremos por lo que hoy sea más importante para ti.</p>
+          </div>
+          <div className="talk-card__actions">
+            <Link className="button talk-card__primary" to="/hablame">🎤 Hablar</Link>
+            <Link className="button talk-card__secondary" to="/oncoayuda">✎ Escribir</Link>
+            <div className="talk-card__prompts" aria-label="Sugerencias para empezar">
+              <Link to="/hablame" state={{ prefill: 'Tengo una duda sobre mi tratamiento: ' }}>Tengo una duda sobre mi tratamiento</Link>
+              <Link to="/hablame" state={{ prefill: 'Me encuentro cansado y quisiera saber: ' }}>Me encuentro cansado</Link>
+              <Link to="/hablame" state={{ prefill: 'Ayúdame a comprender este informe: ' }}>Explícame mi informe</Link>
+            </div>
+          </div>
+        </section>
+
+
+        <section className="daily-minute" aria-labelledby="daily-minute-title">
+          <div className="daily-minute__icon" aria-hidden="true">🎙️</div>
+          <div className="daily-minute__copy">
+            <span className="daily-minute__eyebrow">Tu minuto de hoy</span>
+            <h2 id="daily-minute-title">{dailyEpisode.title}</h2>
+            <p>{dailyEpisode.description}</p>
+            <small>{dailyEpisode.category} · {dailyEpisode.duration}</small>
+          </div>
+          <div className="daily-minute__actions">
+            <button type="button" onClick={() => playDailyMinute()}>{minutePlaying ? '↻ Reiniciar' : '▶ Escuchar'}</button>
+            <Link className="button secondary" to="/un-minuto">Ver todos</Link>
+            <div className="daily-minute__voice-controls" aria-label="Controles de voz">
+              <button type="button" onClick={toggleDailyMinutePause} disabled={!minutePlaying} title={minutePaused ? 'Reanudar' : 'Pausar'}>{minutePaused ? '▶ Reanudar' : '⏸ Pausa'}</button>
+              <button type="button" onClick={stopDailyMinute} disabled={!minutePlaying} title="Detener">■ Detener</button>
+              <button type="button" onClick={increaseDailyMinuteRate} title="Cambiar velocidad">⏩ {minuteRate.toFixed(2)}×</button>
+            </div>
+          </div>
+          <div className="minute-followup">
+            <div className="minute-feedback" aria-label="Valoración del episodio">
+              <strong>¿Te ha resultado útil?</strong>
+              <div className="minute-feedback__buttons">
+                <button type="button" className={minuteFeedback === 'yes' ? 'is-selected' : ''} onClick={() => saveMinuteFeedback('yes')} aria-pressed={minuteFeedback === 'yes'}>👍 Sí</button>
+                <button type="button" className={minuteFeedback === 'no' ? 'is-selected' : ''} onClick={() => saveMinuteFeedback('no')} aria-pressed={minuteFeedback === 'no'}>👎 No</button>
+              </div>
+              {minuteFeedback && <small>Gracias. Tu valoración se guarda únicamente en este dispositivo.</small>}
+            </div>
+            <div className="minute-conversation">
+              <p>¿Quieres preguntarme algo relacionado con este tema?</p>
+              <Link className="button" to="/hablame" state={{ prefill: `He escuchado el episodio «${dailyEpisode.title}» y quisiera preguntar: ` }}>💬 Continuar la conversación</Link>
+            </div>
+          </div>
+        </section>
+
+
+        <section className="v3-dashboard accompaniment-card" aria-labelledby="v3-dashboard-title">
+          <div className="section-heading section-heading--compact">
+            <div>
+              <span className="section-kicker">Programa de 30 días</span>
+              <h2 id="v3-dashboard-title">Tu acompañamiento diario</h2>
+            </div>
+            <Link to="/programa-30-dias">Ver programa completo →</Link>
+          </div>
+          <div className="accompaniment-card__content">
+            <div>
+              <h3>Un paso cada día, a tu ritmo</h3>
+              <p>Encuentra una propuesta breve de escucha, calma o cuidado para acompañarte durante los próximos 30 días.</p>
+            </div>
+            <Link className="button" to="/programa-30-dias">Continuar mi acompañamiento</Link>
+          </div>
+        </section>
+
+        <section className="v3-dashboard tu-dia-dashboard" aria-labelledby="tu-dia-title">
+          <div className="section-heading section-heading--compact">
+            <div>
+              <span className="section-kicker">Tu día</span>
+              <h2 id="tu-dia-title">Lo más relevante ahora</h2>
+            </div>
+            <p>La información procede de lo que has guardado en este dispositivo.</p>
+          </div>
+          <div className="v3-dashboard__grid">
+            <article className="daily-goal-card"><span className="section-kicker">Objetivo de hoy</span><h3>Un gesto sencillo</h3><p>{mood === 'preocupado' || mood === 'apoyo' ? 'Haz tres respiraciones lentas y deja caer los hombros.' : mood === 'regular' ? 'Dedica diez minutos a descansar sin sentir culpa.' : 'Camina cinco minutos o toma un poco de aire si te apetece.'}</p><button type="button" className={dailyGoalDone ? 'is-complete' : ''} onClick={() => { const next=!dailyGoalDone; setDailyGoalDone(next); localStorage.setItem('oncoresponde:daily-goal:'+new Date().toISOString().slice(0,10), next?'1':'0'); }}>{dailyGoalDone ? '✓ Conseguido' : 'Marcar como realizado'}</button></article>
+            <article className="mood-mini-card"><span className="section-kicker">Últimos 7 días</span><h3>Cómo te has encontrado</h3><div className="mood-mini-chart">{moodHistory.length ? moodHistory.slice().reverse().map((entry) => <span key={entry.date} title={`${entry.date}: ${moodMeta[entry.mood].label}`}><i style={{height: `${moodMeta[entry.mood].score*18}px`}} /><small>{moodMeta[entry.mood].icon}</small></span>) : <p>Aún no hay registros. Elige cómo te encuentras más abajo.</p>}</div><small>Este gráfico es orientativo y no realiza diagnósticos.</small></article>
+            <article className="context-card"><span className="section-kicker">Conversación contextual</span><h3>{lastAudioTitle ? 'Continúa donde lo dejaste' : 'Habla sobre lo que necesites'}</h3><p>{lastAudioTitle ? `Has escuchado «${lastAudioTitle}». Puedes preguntar sobre ese tema.` : 'La IA puede tener en cuenta el audio que acabas de escuchar.'}</p><Link className="button" to="/hablame" state={{ prefill: lastAudioTitle ? `He escuchado «${lastAudioTitle}» y quisiera preguntar: ` : '' }}>💬 Continuar la conversación</Link></article>
+          </div>
+          <div className="tu-dia-dashboard__insights">
+          <div className="smart-summary__grid">
+            {homeInsights.map((item) => (
+              <Link to={item.to} className="smart-insight" key={item.id}>
+                <span className="smart-insight__icon" aria-hidden="true">{item.icon}</span>
+                <span><strong>{item.title}</strong><small>{item.detail}</small></span>
+                <b aria-hidden="true">→</b>
+              </Link>
+            ))}
+          </div>
+          </div>
         </section>
 
         <section className="access-section" aria-labelledby="access-title">

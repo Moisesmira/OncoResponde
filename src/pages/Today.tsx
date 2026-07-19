@@ -103,6 +103,8 @@ export default function Today() {
   const homeInsights = getHomeInsights();
   const dailyEpisode = getDailyEpisode();
   const [minutePlaying, setMinutePlaying] = useState(false);
+  const [minutePaused, setMinutePaused] = useState(false);
+  const [minuteRate, setMinuteRate] = useState(0.85);
   const [minuteFeedback, setMinuteFeedback] = useState<'yes' | 'no' | null>(() => {
     const saved = window.localStorage.getItem(`oncoresponde-minute-feedback-${dailyEpisode.id}`);
     return saved === 'yes' || saved === 'no' ? saved : null;
@@ -115,16 +117,36 @@ export default function Today() {
     window.localStorage.setItem(`oncoresponde-minute-feedback-${dailyEpisode.id}`, value);
   }
 
-  function playDailyMinute() {
+  function playDailyMinute(rate = minuteRate) {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
     const speech = new SpeechSynthesisUtterance(dailyEpisode.script);
     speech.lang = 'es-ES';
-    speech.rate = 0.85;
-    speech.onend = () => setMinutePlaying(false);
-    speech.onerror = () => setMinutePlaying(false);
+    speech.rate = rate;
+    speech.onend = () => { setMinutePlaying(false); setMinutePaused(false); };
+    speech.onerror = () => { setMinutePlaying(false); setMinutePaused(false); };
     setMinutePlaying(true);
+    setMinutePaused(false);
     window.speechSynthesis.speak(speech);
+  }
+
+  function toggleDailyMinutePause() {
+    if (!minutePlaying || !('speechSynthesis' in window)) return;
+    if (minutePaused) window.speechSynthesis.resume();
+    else window.speechSynthesis.pause();
+    setMinutePaused(!minutePaused);
+  }
+
+  function stopDailyMinute() {
+    window.speechSynthesis?.cancel();
+    setMinutePlaying(false);
+    setMinutePaused(false);
+  }
+
+  function increaseDailyMinuteRate() {
+    const nextRate = minuteRate >= 1.15 ? 0.85 : Number((minuteRate + 0.15).toFixed(2));
+    setMinuteRate(nextRate);
+    if (minutePlaying) playDailyMinute(nextRate);
   }
 
   return (
@@ -149,8 +171,13 @@ export default function Today() {
             <small>{dailyEpisode.category} · {dailyEpisode.duration}</small>
           </div>
           <div className="daily-minute__actions">
-            <button type="button" onClick={playDailyMinute}>{minutePlaying ? '↻ Reiniciar' : '▶ Escuchar'}</button>
+            <button type="button" onClick={() => playDailyMinute()}>{minutePlaying ? '↻ Reiniciar' : '▶ Escuchar'}</button>
             <Link className="button secondary" to="/un-minuto">Ver todos</Link>
+            <div className="daily-minute__voice-controls" aria-label="Controles de voz">
+              <button type="button" onClick={toggleDailyMinutePause} disabled={!minutePlaying} title={minutePaused ? 'Reanudar' : 'Pausar'}>{minutePaused ? '▶ Reanudar' : '⏸ Pausa'}</button>
+              <button type="button" onClick={stopDailyMinute} disabled={!minutePlaying} title="Detener">■ Detener</button>
+              <button type="button" onClick={increaseDailyMinuteRate} title="Cambiar velocidad">⏩ {minuteRate.toFixed(2)}×</button>
+            </div>
           </div>
           <div className="minute-followup">
             <div className="minute-feedback" aria-label="Valoración del episodio">

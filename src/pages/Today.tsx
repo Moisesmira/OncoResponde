@@ -71,6 +71,7 @@ const accessCards = [
   { to: '/camino', title: 'Mi camino', text: 'Tu diario personal durante el proceso.', icon: '▤', tone: 'purple', size: 'support' },
   { to: '/familia', title: 'Familia y cuidadores', text: 'Acompañar y cuidarse también importa.', icon: '◎', tone: 'rose', size: 'support' },
   { to: '/fuentes', title: 'Fuentes fiables', text: 'Información sanitaria de referencia.', icon: '◇', tone: 'slate', size: 'support' },
+  { to: '/valora', title: 'Ayúdanos a mejorar', text: 'Comparte tu experiencia en un cuestionario anónimo de 2–3 minutos.', icon: '✦', tone: 'green', size: 'support' },
   { to: '/ajustes', title: 'Ajustes y privacidad', text: 'Accesibilidad, datos locales y transparencia.', icon: '⚙', tone: 'slate', size: 'support' },
 ];
 

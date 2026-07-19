@@ -19,6 +19,7 @@ import Camino from './pages/Camino';
 import Family from './pages/Family';
 import Sources from './pages/Sources';
 import AppFooter from './components/AppFooter';
+import Feedback from './pages/Feedback';
 
 export default function App() {
   return (
@@ -55,6 +56,7 @@ export default function App() {
       <Route path="/informes" element={<Reports />} />
       <Route path="/familia" element={<Family />} />
       <Route path="/fuentes" element={<Sources />} />
+      <Route path="/valora" element={<Feedback />} />
       <Route path="/ajustes" element={<SimplePage title="Ajustes y privacidad" />} />
       </Routes>
       <AppFooter />

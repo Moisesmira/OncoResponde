@@ -38,3 +38,13 @@ La función de Netlify valida las respuestas vacías o no JSON, utiliza salida e
 Incluye una nueva sección «Escuchar y relajarte» con 32 cápsulas de apoyo, buscador, filtros por categoría, favoritos, historial local, recomendación según el estado de ánimo, controles de voz, valoración y enlace contextual a Háblame.
 
 Los favoritos, el historial y las valoraciones se guardan únicamente en el dispositivo mediante almacenamiento local.
+
+## OncoResponde 3.0
+
+Esta versión incorpora:
+- programa de acompañamiento de 30 días;
+- objetivo diario sin gamificación competitiva;
+- resumen emocional local de los últimos siete días;
+- recomendaciones adaptadas al estado de ánimo;
+- continuidad de la conversación con el último audio escuchado;
+- persistencia exclusivamente local en el dispositivo.

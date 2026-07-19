@@ -21,6 +21,7 @@ import Sources from './pages/Sources';
 import AppFooter from './components/AppFooter';
 import Feedback from './pages/Feedback';
 import OneMinute from './pages/OneMinute';
+import Program30 from './pages/Program30';
 
 export default function App() {
   return (
@@ -60,6 +61,7 @@ export default function App() {
       <Route path="/valora" element={<Feedback />} />
       <Route path="/un-minuto" element={<OneMinute />} />
       <Route path="/escuchar" element={<OneMinute />} />
+      <Route path="/programa-30-dias" element={<Program30 />} />
       <Route path="/ajustes" element={<SimplePage title="Ajustes y privacidad" />} />
       </Routes>
       <AppFooter />

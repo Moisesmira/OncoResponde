@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import BottomNav from '../components/BottomNav';
 import { useAppStore } from '../store/useAppStore';
-import { saveMoodForToday } from '../utils/moodTracking';
+import { saveMoodForToday, readMoodHistory, moodMeta } from '../utils/moodTracking';
 import { getHomeInsights } from '../utils/personalAssistantContext';
 import { getDailyEpisode } from '../data/oneMinuteEpisodes';
 import { useEffect, useState } from 'react';
@@ -103,6 +103,9 @@ export default function Today() {
   const homeInsights = getHomeInsights();
   const dailyEpisode = getDailyEpisode();
   const [minutePlaying, setMinutePlaying] = useState(false);
+  const [dailyGoalDone, setDailyGoalDone] = useState(() => localStorage.getItem('oncoresponde:daily-goal:'+new Date().toISOString().slice(0,10)) === '1');
+  const moodHistory = readMoodHistory().slice(0,7);
+  let lastAudioTitle = ''; try { lastAudioTitle = JSON.parse(localStorage.getItem('oncoresponde:last-audio') || '{}').title || ''; } catch {}
   const [minutePaused, setMinutePaused] = useState(false);
   const [minuteRate, setMinuteRate] = useState(0.85);
   const [minuteFeedback, setMinuteFeedback] = useState<'yes' | 'no' | null>(() => {
@@ -192,6 +195,15 @@ export default function Today() {
               <p>¿Quieres preguntarme algo relacionado con este tema?</p>
               <Link className="button" to="/hablame" state={{ prefill: `He escuchado el episodio «${dailyEpisode.title}» y quisiera preguntar: ` }}>💬 Continuar la conversación</Link>
             </div>
+          </div>
+        </section>
+
+        <section className="v3-dashboard" aria-labelledby="v3-dashboard-title">
+          <div className="section-heading section-heading--compact"><div><span className="section-kicker">OncoResponde 3.0</span><h2 id="v3-dashboard-title">Tu acompañamiento diario</h2></div><Link to="/programa-30-dias">Ver programa de 30 días →</Link></div>
+          <div className="v3-dashboard__grid">
+            <article className="daily-goal-card"><span className="section-kicker">Objetivo de hoy</span><h3>Un gesto sencillo</h3><p>{mood === 'preocupado' || mood === 'apoyo' ? 'Haz tres respiraciones lentas y deja caer los hombros.' : mood === 'regular' ? 'Dedica diez minutos a descansar sin sentir culpa.' : 'Camina cinco minutos o toma un poco de aire si te apetece.'}</p><button type="button" className={dailyGoalDone ? 'is-complete' : ''} onClick={() => { const next=!dailyGoalDone; setDailyGoalDone(next); localStorage.setItem('oncoresponde:daily-goal:'+new Date().toISOString().slice(0,10), next?'1':'0'); }}>{dailyGoalDone ? '✓ Conseguido' : 'Marcar como realizado'}</button></article>
+            <article className="mood-mini-card"><span className="section-kicker">Últimos 7 días</span><h3>Cómo te has encontrado</h3><div className="mood-mini-chart">{moodHistory.length ? moodHistory.slice().reverse().map((entry) => <span key={entry.date} title={`${entry.date}: ${moodMeta[entry.mood].label}`}><i style={{height: `${moodMeta[entry.mood].score*18}px`}} /><small>{moodMeta[entry.mood].icon}</small></span>) : <p>Aún no hay registros. Elige cómo te encuentras más abajo.</p>}</div><small>Este gráfico es orientativo y no realiza diagnósticos.</small></article>
+            <article className="context-card"><span className="section-kicker">Conversación contextual</span><h3>{lastAudioTitle ? 'Continúa donde lo dejaste' : 'Habla sobre lo que necesites'}</h3><p>{lastAudioTitle ? `Has escuchado «${lastAudioTitle}». Puedes preguntar sobre ese tema.` : 'La IA puede tener en cuenta el audio que acabas de escuchar.'}</p><Link className="button" to="/hablame" state={{ prefill: lastAudioTitle ? `He escuchado «${lastAudioTitle}» y quisiera preguntar: ` : '' }}>💬 Continuar la conversación</Link></article>
           </div>
         </section>
 

@@ -64,6 +64,7 @@ export default function OneMinute() {
     speech.onerror = () => { setActiveId(null); setPaused(false); };
     utteranceRef.current = speech;
     setActiveId(episode.id); setPaused(false); rememberRecent(episode.id);
+    localStorage.setItem('oncoresponde:last-audio', JSON.stringify({ id: episode.id, title: episode.title, at: new Date().toISOString() }));
     window.speechSynthesis.speak(speech);
   }
   function togglePause() {

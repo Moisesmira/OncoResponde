@@ -10,6 +10,7 @@ const categories: Array<AudioCategory | typeof ALL> = [ALL, 'Respiración', 'Bie
 const LS_FAV = 'oncoresponde-audio-favourites';
 const LS_RECENT = 'oncoresponde-audio-recent';
 const LS_FEEDBACK = 'oncoresponde-minute-feedback';
+type AmbientId = 'lluvia' | 'mar' | 'naturaleza';
 
 function readList(key: string): string[] {
   try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
@@ -29,8 +30,15 @@ export default function OneMinute() {
   const [recent, setRecent] = useState<string[]>(() => readList(LS_RECENT));
   const [feedback, setFeedback] = useState<Record<string, 'yes' | 'no'>>(() => readFeedback());
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const [ambient, setAmbient] = useState<AmbientId | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const ambientNodesRef = useRef<AudioNode[]>([]);
 
-  useEffect(() => () => window.speechSynthesis?.cancel(), []);
+  useEffect(() => () => {
+    window.speechSynthesis?.cancel();
+    ambientNodesRef.current.forEach((node) => { try { node.disconnect(); } catch { /* no-op */ } });
+    audioContextRef.current?.close().catch(() => undefined);
+  }, []);
 
   const recommended = useMemo(() => {
     if (mood === 'preocupado' || mood === 'apoyo') return oneMinuteEpisodes.find((e) => e.id === 'respirar-ansiedad')!;
@@ -82,6 +90,35 @@ export default function OneMinute() {
     const next = { ...feedback, [id]: value }; setFeedback(next); localStorage.setItem(LS_FEEDBACK, JSON.stringify(next));
   }
 
+  function stopAmbient() {
+    ambientNodesRef.current.forEach((node) => { try { node.disconnect(); } catch { /* no-op */ } });
+    ambientNodesRef.current = [];
+    audioContextRef.current?.close().catch(() => undefined);
+    audioContextRef.current = null;
+    setAmbient(null);
+  }
+
+  function startAmbient(id: AmbientId) {
+    stopAmbient();
+    const AudioContextCtor = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextCtor) return;
+    const ctx = new AudioContextCtor();
+    audioContextRef.current = ctx;
+    const buffer = ctx.createBuffer(1, ctx.sampleRate * 4, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i += 1) data[i] = Math.random() * 2 - 1;
+    const source = ctx.createBufferSource();
+    source.buffer = buffer; source.loop = true;
+    const filter = ctx.createBiquadFilter();
+    const gain = ctx.createGain();
+    if (id === 'lluvia') { filter.type = 'highpass'; filter.frequency.value = 900; gain.gain.value = 0.055; }
+    if (id === 'mar') { filter.type = 'lowpass'; filter.frequency.value = 650; gain.gain.value = 0.12; }
+    if (id === 'naturaleza') { filter.type = 'bandpass'; filter.frequency.value = 1400; filter.Q.value = 0.7; gain.gain.value = 0.045; }
+    source.connect(filter); filter.connect(gain); gain.connect(ctx.destination); source.start();
+    ambientNodesRef.current = [source, filter, gain];
+    setAmbient(id);
+  }
+
   function EpisodeCard({ episode }: { episode: OneMinuteEpisode }) {
     const playing = activeId === episode.id;
     const fav = favourites.includes(episode.id);
@@ -100,6 +137,8 @@ export default function OneMinute() {
         <div><span className="section-kicker">Biblioteca de acompañamiento</span><h1>🎧 Escuchar y relajarte</h1><p>Cápsulas breves para comprender, respirar, descansar y sentirte acompañado.</p></div>
         <div className="audio-library-summary"><b>{oneMinuteEpisodes.length}</b><span>audios disponibles</span></div>
       </section>
+
+      <section className="audio-shelf"><div className="section-heading section-heading--compact"><div><span className="section-kicker">Podcasts y audios guiados</span><h2>Escucha contenidos breves</h2><p>Audios hablados para comprender, respirar, descansar y sentirte acompañado.</p></div></div></section>
 
       <section className="recommended-audio" aria-labelledby="recommended-title">
         <div><span className="section-kicker">Recomendado para ti</span><h2 id="recommended-title">{recommended.title}</h2><p>{recommended.description}</p><small>{recommended.category} · {recommended.duration}</small></div>
@@ -125,6 +164,40 @@ export default function OneMinute() {
       {recentEpisodes.length > 0 && <section className="audio-shelf"><div className="section-heading section-heading--compact"><div><span className="section-kicker">Tu actividad</span><h2>Escuchados recientemente</h2></div></div><div className="audio-library-grid">{recentEpisodes.slice(0,4).map((e) => <EpisodeCard key={e.id} episode={e} />)}</div></section>}
 
       <section className="audio-shelf"><div className="section-heading section-heading--compact"><div><span className="section-kicker">Biblioteca</span><h2>{category === ALL ? 'Todos los audios' : category}</h2></div><small>{filtered.length} resultados</small></div>{filtered.length ? <div className="audio-library-grid">{filtered.map((e) => <EpisodeCard key={e.id} episode={e} />)}</div> : <div className="empty-audio-state"><strong>No hemos encontrado audios</strong><p>Prueba con otra palabra o categoría.</p></div>}</section>
+      <section className="relax-section card" aria-labelledby="ambient-title">
+        <div className="section-heading"><div><span className="section-kicker">Sonidos de la naturaleza</span><h2 id="ambient-title">Escucha sin palabras</h2><p>Sonidos continuos generados en tu dispositivo para descansar, leer o bajar el ritmo.</p></div></div>
+        <div className="audio-card-grid">
+          {[
+            { id: 'lluvia' as AmbientId, icon: '🌧️', title: 'Lluvia suave', text: 'Un sonido continuo y delicado de lluvia.' },
+            { id: 'mar' as AmbientId, icon: '🌊', title: 'Sonido del mar', text: 'Oleaje suave para favorecer una pausa tranquila.' },
+            { id: 'naturaleza' as AmbientId, icon: '🌿', title: 'Naturaleza', text: 'Un ambiente natural continuo y discreto.' }
+          ].map((sound) => (
+            <article className={`audio-card${ambient === sound.id ? ' is-playing' : ''}`} key={sound.id}>
+              <span className="audio-card__icon" aria-hidden="true">{sound.icon}</span>
+              <div><small>Sonido continuo</small><h3>{sound.title}</h3><p>{sound.text}</p></div>
+              <button type="button" className="primary-button" onClick={() => ambient === sound.id ? stopAmbient() : startAmbient(sound.id)}>{ambient === sound.id ? '■ Detener' : '▶ Escuchar'}</button>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="relax-section card" aria-labelledby="youtube-title">
+        <div className="section-heading"><div><span className="section-kicker">Música y naturaleza</span><h2 id="youtube-title">Recursos externos en YouTube</h2></div></div>
+        <p className="external-resource-warning" role="note"><strong>Antes de escuchar:</strong> YouTube puede mostrar anuncios de publicidad. Cuando aparezcan, pulsa «Omitir anuncio». La publicidad depende exclusivamente de YouTube y no de OncoResponde.</p>
+        <div className="audio-card-grid external-audio-grid">
+          <article className="audio-card external-audio-card">
+            <span className="audio-card__icon" aria-hidden="true">🌊</span>
+            <div><small>Recurso externo · YouTube</small><h3>Sonidos del mar y música relajante</h3><p>Para descansar, leer, meditar o acompañar momentos de calma.</p></div>
+            <a className="primary-button external-link-button" href="https://www.youtube.com/watch?v=263Vb6xiifo&list=RD263Vb6xiifo&start_radio=1" target="_blank" rel="noopener noreferrer">▶ Abrir en YouTube</a>
+          </article>
+          <article className="audio-card external-audio-card">
+            <span className="audio-card__icon" aria-hidden="true">🌿</span>
+            <div><small>Recurso externo · YouTube</small><h3>Naturaleza y relajación</h3><p>Música y sonidos de naturaleza para favorecer una pausa tranquila.</p></div>
+            <a className="primary-button external-link-button" href="https://www.youtube.com/watch?v=FBd2YJKk15I&list=RDFBd2YJKk15I&start_radio=1" target="_blank" rel="noopener noreferrer">▶ Abrir en YouTube</a>
+          </article>
+        </div>
+      </section>
+
       <section className="wellness-note" role="note"><strong>Contenido de apoyo</strong><p>No sustituye una valoración sanitaria. Si aparecen síntomas intensos, nuevos o preocupantes, consulta con tu equipo.</p></section>
     </main><BottomNav />
   </>;

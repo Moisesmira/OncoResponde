@@ -1,3 +1,9 @@
+## 3.2.6 — Iconografía clínica mejorada
+
+- Sustituidos los símbolos genéricos de TAC, resonancia magnética, PET/CT, radioterapia y cirugía por iconos clínicos ilustrados.
+- Iconos adaptados a las tarjetas de Mi tratamiento y al selector de la guía Prepárate.
+- Se conserva todo el contenido y funcionamiento de la versión 3.2.5.
+
 # OncoResponde 3.2.5 — Nueva imagen de inicio
 
 - Se integra la imagen de bienvenida seleccionada por el usuario.

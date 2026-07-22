@@ -1209,3 +1209,11 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 @media (max-width: 520px) {
   .brand-lockup { width: min(315px, 82vw); padding: 8px 12px; border-radius: 16px; }
 }
+
+
+/* v3.2.6 · iconografía clínica de pruebas y tratamientos */
+.prepare-chip__icon { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; flex: 0 0 2rem; }
+.prepare-chip__icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.treatment-guide-card__icon { grid-row: 1 / 3; display: inline-flex; align-items: center; justify-content: center; width: 3.25rem; height: 3.25rem; }
+.treatment-guide-card__icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+@media (max-width: 640px) { .treatment-guide-card__icon { width: 2.75rem; height: 2.75rem; } }

@@ -109,7 +109,7 @@ export default function Treatment() {
         <div className="treatment-guide-grid">
           {prepareItems.map((item) => (
             <Link className="treatment-guide-card" to={`/preparate?guia=${item.id}`} key={item.id}>
-              <span aria-hidden="true">{item.icon}</span>
+              <span className="treatment-guide-card__icon" aria-hidden="true">{item.iconImage ? <img src={item.iconImage} alt="" /> : item.icon}</span>
               <strong>{item.title}</strong>
               <small>{item.subtitle}</small>
               <b aria-hidden="true">→</b>

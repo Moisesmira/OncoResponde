@@ -1,4 +1,4 @@
-const CACHE = 'oncoresponde-3.2.5-hero';
+const CACHE = 'oncoresponde-3.2.6';
 const APP_SHELL = ['/manifest.webmanifest', '/brand/icon-192.png', '/brand/icon-512.png', '/brand/apple-touch-icon.png', '/brand/logo-oncoresponde.png', '/assets/camino.png', '/assets/inicio-oncoresponde-3.2.5.jpeg'];
 
 self.addEventListener('install', (event) => {

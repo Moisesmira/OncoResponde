@@ -7,6 +7,7 @@ import OncoBox from '../components/OncoBox';
 export type PrepareItem = {
   id: string;
   icon: string;
+  iconImage?: string;
   title: string;
   subtitle: string;
   before: string[];
@@ -62,6 +63,7 @@ export const prepareItems: PrepareItem[] = [
   {
     id: 'tac',
     icon: '◉',
+    iconImage: '/medical-icons/tac.png',
     title: 'TAC',
     subtitle: 'Una prueba rápida que obtiene imágenes mediante rayos X.',
     before: [
@@ -82,6 +84,7 @@ export const prepareItems: PrepareItem[] = [
   {
     id: 'resonancia',
     icon: '🧲',
+    iconImage: '/medical-icons/resonancia.png',
     title: 'Resonancia magnética',
     subtitle: 'Obtiene imágenes detalladas sin utilizar radiación ionizante.',
     before: [
@@ -103,6 +106,7 @@ export const prepareItems: PrepareItem[] = [
   {
     id: 'pet',
     icon: '✦',
+    iconImage: '/medical-icons/pet-ct.png',
     title: 'PET/CT',
     subtitle: 'Combina información metabólica e imágenes anatómicas.',
     before: [
@@ -145,6 +149,7 @@ export const prepareItems: PrepareItem[] = [
   {
     id: 'radioterapia',
     icon: '☀',
+    iconImage: '/medical-icons/radioterapia.png',
     title: 'Radioterapia',
     subtitle: 'Conoce la planificación, las sesiones y los cuidados básicos.',
     before: [
@@ -165,6 +170,7 @@ export const prepareItems: PrepareItem[] = [
   {
     id: 'cirugia',
     icon: '✚',
+    iconImage: '/medical-icons/cirugia.png',
     title: 'Cirugía',
     subtitle: 'Una guía para organizar la preparación y el regreso a casa.',
     before: [
@@ -223,7 +229,7 @@ export default function Prepare() {
               onClick={() => setSelectedId(item.id)}
               aria-pressed={selectedId === item.id}
             >
-              <span aria-hidden="true">{item.icon}</span>
+              <span className="prepare-chip__icon" aria-hidden="true">{item.iconImage ? <img src={item.iconImage} alt="" /> : item.icon}</span>
               {item.title}
             </button>
           ))}

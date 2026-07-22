@@ -161,7 +161,9 @@ export default function Today() {
           <img src="/assets/camino.png" alt="Persona recorriendo un sendero hacia la luz" />
           <div className="today-hero__shade" />
           <div className="today-hero__content">
-            <span className="brand-pill">OncoResponde · {t("Información que acompaña")}</span>
+            <div className="brand-lockup" aria-label="OncoResponde · Información, apoyo y acompañamiento">
+              <img src="/brand/logo-oncoresponde.png" alt="OncoResponde. Información, apoyo y acompañamiento" />
+            </div>
             <h1 id="today-title">{getGreeting(t)}</h1>
             <p>{t("Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.")}</p>
           </div>

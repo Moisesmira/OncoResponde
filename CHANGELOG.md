@@ -1,3 +1,12 @@
+# OncoResponde 3.2.4 — Nueva identidad visual
+
+- Nuevo logotipo corporativo OncoResponde en la pantalla inicial.
+- Nuevo icono minimalista para iPhone, iPad, Android y PWA.
+- Nuevos favicon, Apple Touch Icon e iconos 192/512 px.
+- Icono maskable específico para Android.
+- Manifest, metadatos, caché PWA y título web actualizados.
+- Se conserva la imagen del camino dentro de la experiencia de la aplicación.
+
 ## 3.2.3
 
 - Añadido en la tarjeta principal «Háblame» un acceso siempre visible: «Ahora no sé qué preguntar. Ayúdame a empezar».

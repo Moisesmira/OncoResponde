@@ -157,16 +157,13 @@ export default function Today() {
   return (
     <>
       <main className="today-page">
-        <section className="today-hero" aria-labelledby="today-title">
-          <img src="/assets/camino.png" alt="Persona recorriendo un sendero hacia la luz" />
-          <div className="today-hero__shade" />
-          <div className="today-hero__content">
-            <div className="brand-lockup" aria-label="OncoResponde · Información, apoyo y acompañamiento">
-              <img src="/brand/logo-oncoresponde.png" alt="OncoResponde. Información, apoyo y acompañamiento" />
-            </div>
-            <h1 id="today-title">{getGreeting(t)}</h1>
-            <p>{t("Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.")}</p>
-          </div>
+        <section className="today-hero today-hero--artwork" aria-labelledby="today-title">
+          <h1 id="today-title" className="sr-only">{getGreeting(t)}</h1>
+          <img
+            className="today-hero__artwork"
+            src="/assets/inicio-oncoresponde-3.2.5.jpeg"
+            alt="OncoResponde. Buenos días. Estoy aquí para ayudarte a comprender mejor lo que estás viviendo. Mujer contemplando un camino al amanecer."
+          />
         </section>
 
         <section className="card mood-card" aria-labelledby="mood-title">

@@ -1,3 +1,10 @@
+# OncoResponde 3.2.5 — Nueva imagen de inicio
+
+- Se integra la imagen de bienvenida seleccionada por el usuario.
+- El logotipo queda situado en la parte superior derecha, sin cubrir la figura.
+- La imagen se adapta de forma proporcional a móvil, tableta y escritorio.
+- Se conserva toda la funcionalidad previa de OncoResponde 3.2.4.
+
 # OncoResponde 3.2.4 — Nueva identidad visual
 
 - Nuevo logotipo corporativo OncoResponde en la pantalla inicial.

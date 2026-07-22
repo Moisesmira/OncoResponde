@@ -1,5 +1,5 @@
-const CACHE = 'oncoresponde-3.2.4-brand';
-const APP_SHELL = ['/manifest.webmanifest', '/brand/icon-192.png', '/brand/icon-512.png', '/brand/apple-touch-icon.png', '/brand/logo-oncoresponde.png', '/assets/camino.png'];
+const CACHE = 'oncoresponde-3.2.5-hero';
+const APP_SHELL = ['/manifest.webmanifest', '/brand/icon-192.png', '/brand/icon-512.png', '/brand/apple-touch-icon.png', '/brand/logo-oncoresponde.png', '/assets/camino.png', '/assets/inicio-oncoresponde-3.2.5.jpeg'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(APP_SHELL)));

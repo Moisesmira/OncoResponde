@@ -80,6 +80,31 @@ button:disabled { opacity: .5; cursor: not-allowed; transform: none; }
   isolation: isolate;
 }
 .today-hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+.today-hero--artwork {
+  min-height: 0;
+  aspect-ratio: 1536 / 900;
+  background: #eef6fb;
+}
+.today-hero--artwork .today-hero__artwork {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 .today-hero__shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4, 45, 82, .72) 0%, rgba(7, 48, 81, .22) 40%, rgba(5, 34, 55, .65) 100%); }
 .today-hero__content { position: relative; z-index: 1; min-height: inherit; color: #fff; padding: clamp(24px, 6vw, 50px); display: flex; flex-direction: column; justify-content: flex-end; }
 .today-hero__content h1 { color: #fff; margin: 0 0 14px; letter-spacing: -.035em; text-shadow: 0 3px 16px rgba(5, 34, 55, .25); }
@@ -189,6 +214,7 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 @media (max-width: 760px) {
   main { padding: 12px 12px 112px; }
   .today-hero { min-height: 410px; border-radius: 27px; }
+  .today-hero--artwork { min-height: 0; }
   .today-hero__content { padding: 24px; }
   .talk-card { margin: -28px 12px 22px; grid-template-columns: 1fr; gap: 18px; }
   .mood-grid { grid-template-columns: 1fr 1fr; }
@@ -204,6 +230,7 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 @media (max-width: 480px) {
   :root { font-size: 16px; }
   .today-hero { min-height: 365px; }
+  .today-hero--artwork { min-height: 0; }
   .brand-pill { font-size: .72rem; }
   .talk-card__actions { grid-template-columns: 1fr; }
   .mood-option { min-height: 130px; }

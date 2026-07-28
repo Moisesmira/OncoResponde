@@ -1,3 +1,11 @@
+## 3.2.9 — Voz peninsular y selector de género
+
+- Refuerzo explícito de la distinción castellana entre **s** y **c/z** (sin seseo).
+- Instrucciones fonéticas de ejemplo para palabras como «recibe» y «utiliza».
+- Selector visible entre voz **femenina** y **masculina**.
+- Preferencia guardada en el dispositivo.
+- Respaldo con voces `es-ES` del sistema, diferenciadas por género cuando estén disponibles.
+
 ## 3.2.8 — Voz en español de España
 
 - La voz neuronal de «Háblame» se configura explícitamente en castellano peninsular estándar.

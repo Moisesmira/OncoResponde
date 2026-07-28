@@ -1224,3 +1224,8 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
   font-size:.82rem;
   line-height:1.45;
 }
+
+
+/* Selector de voz — OncoResponde 3.2.9 */
+.voice-choice{margin:20px 0 12px;padding:15px 16px;border:1px solid #c9e1ec;border-radius:18px;background:#f4fafc;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}.voice-choice>span{font-weight:850;color:#174f6c}.voice-choice__buttons{display:flex;gap:8px}.voice-choice__buttons button{min-height:40px;padding:9px 14px;border-radius:999px;border:1px solid #9fc8da;background:#fff;color:#245e78;font:inherit;font-weight:800;box-shadow:none}.voice-choice__buttons button.active{background:#0b6fa4;color:#fff;border-color:#0b6fa4}.voice-choice small{flex-basis:100%;color:#5d7683}.answer-voice-note{line-height:1.45}
+@media(max-width:560px){.voice-choice{align-items:stretch}.voice-choice>span{width:100%}.voice-choice__buttons{width:100%}.voice-choice__buttons button{flex:1}}

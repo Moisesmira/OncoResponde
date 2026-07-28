@@ -30,6 +30,9 @@ export default function Answer() {
   const [error, setError] = useState('');
   const [audioState, setAudioState] = useState<'idle' | 'loading' | 'playing' | 'paused'>('idle');
   const [audioNotice, setAudioNotice] = useState('');
+  const [voiceGender, setVoiceGender] = useState<'female' | 'male'>(() =>
+    localStorage.getItem('oncoresponde:voice-gender') === 'male' ? 'male' : 'female'
+  );
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioUrlRef = useRef<string | null>(null);
 
@@ -98,6 +101,12 @@ export default function Answer() {
     window.speechSynthesis?.cancel();
   }, []);
 
+  const changeVoiceGender = (gender: 'female' | 'male') => {
+    stopListening();
+    setVoiceGender(gender);
+    localStorage.setItem('oncoresponde:voice-gender', gender);
+  };
+
   const fallbackToDeviceVoice = (text: string) => {
     if (!('speechSynthesis' in window)) {
       setAudioNotice('Este dispositivo no permite reproducir la respuesta en voz alta.');
@@ -113,9 +122,11 @@ export default function Answer() {
 
     const voices = window.speechSynthesis.getVoices();
     const spanishSpain = voices.filter((voice) => /^es-ES$/i.test(voice.lang));
-    const preferred = spanishSpain.find((voice) =>
-      /mónica|monica|helena|marisol|carmen|conchita|lucía|lucia|premium|enhanced|natural/i.test(voice.name)
-    ) || spanishSpain.find((voice) => voice.localService)
+    const femalePattern = /mónica|monica|helena|marisol|carmen|conchita|lucía|lucia|paulina|female|mujer|premium|enhanced|natural/i;
+    const malePattern = /jorge|enrique|pablo|diego|male|hombre|premium|enhanced|natural/i;
+    const preferredPattern = voiceGender === 'male' ? malePattern : femalePattern;
+    const preferred = spanishSpain.find((voice) => preferredPattern.test(voice.name))
+      || spanishSpain.find((voice) => voice.localService)
       || spanishSpain[0];
     if (preferred) utterance.voice = preferred;
 
@@ -149,7 +160,7 @@ export default function Answer() {
       const response = await fetch('/.netlify/functions/voz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, language: 'es' }),
+        body: JSON.stringify({ text, language: 'es', voiceGender }),
       });
       if (!response.ok) throw new Error('TTS unavailable');
 
@@ -166,7 +177,7 @@ export default function Answer() {
         fallbackToDeviceVoice(text);
       };
       await audio.play();
-      setAudioNotice('Voz generada por inteligencia artificial.');
+      setAudioNotice(`Voz ${voiceGender === 'male' ? 'masculina' : 'femenina'} en español de España, generada por inteligencia artificial.`);
       setAudioState('playing');
     } catch {
       fallbackToDeviceVoice(text);
@@ -228,6 +239,28 @@ export default function Answer() {
               </ul>
             </>
           )}
+          <div className="voice-choice" aria-label="Elegir voz de OncoResponde">
+            <span>Voz de OncoResponde</span>
+            <div className="voice-choice__buttons" role="group" aria-label="Tipo de voz">
+              <button
+                type="button"
+                className={voiceGender === 'female' ? 'active' : ''}
+                aria-pressed={voiceGender === 'female'}
+                onClick={() => changeVoiceGender('female')}
+              >
+                👩 Femenina
+              </button>
+              <button
+                type="button"
+                className={voiceGender === 'male' ? 'active' : ''}
+                aria-pressed={voiceGender === 'male'}
+                onClick={() => changeVoiceGender('male')}
+              >
+                👨 Masculina
+              </button>
+            </div>
+            <small>Ambas voces usan castellano de España.</small>
+          </div>
           <div className="row">
             <button type="button" onClick={listen} disabled={audioState === 'loading'}>
               {audioState === 'loading' ? '⏳ Preparando voz…' : audioState === 'playing' ? '⏸ Pausar' : audioState === 'paused' ? '▶️ Continuar' : '🔊 Escuchar'}

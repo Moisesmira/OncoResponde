@@ -19,6 +19,7 @@ export default async (req) => {
     const body = await req.json();
     const text = cleanText(body?.text);
     const language = body?.language === 'ca' ? 'ca' : body?.language === 'en' ? 'en' : 'es';
+    const voiceGender = body?.voiceGender === 'male' ? 'male' : 'female';
 
     if (!text) return jsonResponse({ error: 'No hay texto para leer.' }, 400);
 
@@ -28,6 +29,8 @@ export default async (req) => {
         ? 'Speak in clear, natural international English.'
         : 'Habla exclusivamente en español de España (castellano peninsular estándar), con pronunciación clara y natural. Usa la entonación y el ritmo propios de España, con distinción entre s y z/c cuando corresponda. Evita el seseo, el voseo y cualquier acento o entonación latinoamericana.';
 
+    const selectedVoice = voiceGender === 'male' ? 'onyx' : 'shimmer';
+
     const response = await fetch('https://api.openai.com/v1/audio/speech', {
       method: 'POST',
       headers: {
@@ -36,10 +39,10 @@ export default async (req) => {
       },
       body: JSON.stringify({
         model: 'gpt-4o-mini-tts',
-        voice: 'coral',
+        voice: selectedVoice,
         input: text,
         response_format: 'mp3',
-        instructions: `${languageInstruction} Para español, utiliza una voz femenina adulta de España, cálida, serena y cercana, como una profesional sanitaria española que explica algo con tranquilidad. Mantén un ritmo pausado, natural y conversacional, con empatía contenida y profesional. Pronuncia con claridad nombres de pruebas, tratamientos, cifras y siglas. Evita sonar publicitaria, infantil, dramática, robótica o excesivamente entusiasta. Haz pausas breves entre ideas para facilitar la comprensión de una persona preocupada.`,
+        instructions: `${languageInstruction} ${language === 'es' ? `La voz debe sonar inequívocamente peninsular, de España. Realiza distinción castellana: pronuncia la c ante e/i y la z con el sonido interdental /θ/, claramente diferente de la s. Por ejemplo: "recibe" debe sonar "re-θi-be" y "utiliza" debe sonar "u-ti-li-θa", nunca "resibe" ni "utilisa". No uses seseo. No uses entonación mexicana, caribeña, rioplatense, andina ni de ningún otro español americano. Usa vocabulario, ritmo y prosodia propios del castellano estándar de España.` : ''} Usa una voz ${voiceGender === 'male' ? 'masculina' : 'femenina'} adulta, cálida, serena y cercana, como un profesional sanitario español que explica algo con tranquilidad. Mantén un ritmo pausado, natural y conversacional, con empatía contenida y profesional. Pronuncia con claridad nombres de pruebas, tratamientos, cifras y siglas. Evita sonar publicitaria, infantil, dramática, robótica o excesivamente entusiasta. Haz pausas breves entre ideas para facilitar la comprensión de una persona preocupada.`,
       }),
     });
 

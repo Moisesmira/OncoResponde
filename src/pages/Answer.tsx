@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import NavHeader from '../components/NavHeader';
 
@@ -28,6 +28,10 @@ export default function Answer() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<AnswerData | null>(null);
   const [error, setError] = useState('');
+  const [audioState, setAudioState] = useState<'idle' | 'loading' | 'playing' | 'paused'>('idle');
+  const [audioNotice, setAudioNotice] = useState('');
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (!request.question?.trim()) {
@@ -88,12 +92,93 @@ export default function Answer() {
     };
   }, [request.question, request.contextId, request.context, request.profileContext, request.cancerType, request.attachment]);
 
-  const listen = () => {
-    if (!data) return;
+  useEffect(() => () => {
+    audioRef.current?.pause();
+    if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+    window.speechSynthesis?.cancel();
+  }, []);
+
+  const fallbackToDeviceVoice = (text: string) => {
+    if (!('speechSynthesis' in window)) {
+      setAudioNotice('Este dispositivo no permite reproducir la respuesta en voz alta.');
+      setAudioState('idle');
+      return;
+    }
+
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(`${data.summary}. ${data.answer}`);
+    const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'es-ES';
+    utterance.rate = 0.88;
+    utterance.pitch = 1;
+
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = voices.find((voice) =>
+      /mónica|monica|paulina|helena|marisol|luciana|premium|enhanced|natural/i.test(voice.name)
+      && /^es/i.test(voice.lang)
+    ) || voices.find((voice) => /^es-ES/i.test(voice.lang))
+      || voices.find((voice) => /^es/i.test(voice.lang));
+    if (preferred) utterance.voice = preferred;
+
+    utterance.onend = () => setAudioState('idle');
+    utterance.onerror = () => setAudioState('idle');
+    setAudioNotice('Se está usando temporalmente la voz disponible en tu dispositivo.');
+    setAudioState('playing');
     window.speechSynthesis.speak(utterance);
+  };
+
+  const listen = async () => {
+    if (!data) return;
+
+    if (audioState === 'playing') {
+      audioRef.current?.pause();
+      setAudioState('paused');
+      return;
+    }
+
+    if (audioState === 'paused' && audioRef.current) {
+      await audioRef.current.play();
+      setAudioState('playing');
+      return;
+    }
+
+    const text = `${data.summary}. ${data.answer}`;
+    setAudioState('loading');
+    setAudioNotice('Preparando una voz más natural y cercana…');
+
+    try {
+      const response = await fetch('/.netlify/functions/voz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, language: 'es' }),
+      });
+      if (!response.ok) throw new Error('TTS unavailable');
+
+      const blob = await response.blob();
+      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+      const url = URL.createObjectURL(blob);
+      audioUrlRef.current = url;
+
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      audio.onended = () => setAudioState('idle');
+      audio.onerror = () => {
+        setAudioState('idle');
+        fallbackToDeviceVoice(text);
+      };
+      await audio.play();
+      setAudioNotice('Voz generada por inteligencia artificial.');
+      setAudioState('playing');
+    } catch {
+      fallbackToDeviceVoice(text);
+    }
+  };
+
+  const stopListening = () => {
+    audioRef.current?.pause();
+    if (audioRef.current) audioRef.current.currentTime = 0;
+    window.speechSynthesis?.cancel();
+    setAudioState('idle');
+    setAudioNotice('');
   };
 
   return (
@@ -144,9 +229,15 @@ export default function Answer() {
             </>
           )}
           <div className="row">
-            <button type="button" onClick={listen}>🔊 Escuchar</button>
+            <button type="button" onClick={listen} disabled={audioState === 'loading'}>
+              {audioState === 'loading' ? '⏳ Preparando voz…' : audioState === 'playing' ? '⏸ Pausar' : audioState === 'paused' ? '▶️ Continuar' : '🔊 Escuchar'}
+            </button>
+            {audioState !== 'idle' && (
+              <button type="button" className="secondary" onClick={stopListening}>⏹ Detener</button>
+            )}
             <button type="button" className="secondary" onClick={() => navigate(-1)}>Cerrar y no guardar</button>
           </div>
+          {audioNotice && <p className="answer-voice-note" role="status">{audioNotice}</p>}
         </section>
       )}
     </main>

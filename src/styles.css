@@ -1217,3 +1217,10 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 .treatment-guide-card__icon { grid-row: 1 / 3; display: inline-flex; align-items: center; justify-content: center; width: 3.25rem; height: 3.25rem; }
 .treatment-guide-card__icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
 @media (max-width: 640px) { .treatment-guide-card__icon { width: 2.75rem; height: 2.75rem; } }
+
+.answer-voice-note{
+  margin:10px 0 0;
+  color:#5a7182;
+  font-size:.82rem;
+  line-height:1.45;
+}

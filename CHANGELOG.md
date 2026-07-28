@@ -1,3 +1,11 @@
+## 3.2.7 — Voz más humana en las respuestas
+
+- Sustituida la voz principal del navegador por síntesis de voz neuronal generada en el servidor.
+- Tono configurado como adulto, cálido, sereno, cercano y profesional.
+- Añadidos controles de pausar, continuar y detener.
+- Se muestra de forma transparente que la voz está generada por inteligencia artificial.
+- Si el servicio de voz no está disponible, la app utiliza como respaldo la mejor voz española instalada en el dispositivo.
+
 ## 3.2.6 — Iconografía clínica mejorada
 
 - Sustituidos los símbolos genéricos de TAC, resonancia magnética, PET/CT, radioterapia y cirugía por iconos clínicos ilustrados.

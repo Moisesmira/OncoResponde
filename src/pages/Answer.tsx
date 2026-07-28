@@ -19,6 +19,7 @@ type VoiceOption = {
   accent?: string | null;
   description?: string | null;
   previewUrl?: string | null;
+  recommended?: boolean;
 };
 
 type AnswerLocationState = {
@@ -54,8 +55,8 @@ function VoiceGroup({ title, voices, selectedVoiceId, previewingId, onSelect, on
               onChange={() => onSelect(voice)}
             />
             <span>
-              <strong>{voice.name}</strong>
-              <small>{voice.accent || 'España'}{voice.description ? ` · ${voice.description}` : ''}</small>
+              <strong>{voice.name}{voice.recommended && <span className="voice-recommended">Recomendada para OncoResponde</span>}</strong>
+              <small>{voice.accent || 'Español de España'}{voice.description ? ` · ${voice.description}` : ''}</small>
             </span>
           </label>
           <button type="button" className="voice-preview" onClick={() => onPreview(voice)}>
@@ -165,7 +166,9 @@ export default function Answer() {
         const all = [...nextVoices.female, ...nextVoices.male, ...nextVoices.unknown];
         const stored = localStorage.getItem('oncoresponde:voice-id');
         const storedVoice = all.find((voice) => voice.id === stored);
+        const recommendedVoice = all.find((voice) => voice.recommended);
         const preferred = storedVoice
+          || recommendedVoice
           || (voiceGender === 'male' ? nextVoices.male[0] : nextVoices.female[0])
           || nextVoices.female[0]
           || nextVoices.male[0]
@@ -381,7 +384,7 @@ export default function Answer() {
             <div className="voice-selector__header">
               <div>
                 <h2 id="voice-selector-title">Elige la voz de OncoResponde</h2>
-                <p>Se muestran las voces disponibles en tu cuenta que ElevenLabs identifica como españolas.</p>
+                <p>Solo se muestran voces verificadas como español de España (es-ES).</p>
               </div>
               {voicesLoading && <span className="voice-selector__status">Cargando voces…</span>}
             </div>
@@ -402,7 +405,7 @@ export default function Answer() {
                   <VoiceGroup title="Otras voces españolas" voices={voices.unknown} selectedVoiceId={selectedVoiceId} previewingId={previewingId} onSelect={selectVoice} onPreview={previewVoice} />
                 )}
                 {voices.female.length === 0 && voices.male.length === 0 && voices.unknown.length === 0 && (
-                  <p className="voice-selector__empty">Tu cuenta no tiene todavía voces identificadas como español de España. Añade voces desde la Voice Library de ElevenLabs y vuelve a cargar la aplicación.</p>
+                  <p className="voice-selector__empty">No hay voces es-ES disponibles en tu cuenta. Añade una voz de español de España (Castilian Spanish) desde la Voice Library de ElevenLabs y vuelve a cargar la aplicación.</p>
                 )}
               </div>
             )}

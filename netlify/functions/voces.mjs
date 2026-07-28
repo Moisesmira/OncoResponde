@@ -16,33 +16,45 @@ const inferGender = (voice) => {
   return 'unknown';
 };
 
-const spanishSpainScore = (voice) => {
+const isSpanishSpain = (voice) => {
   const labels = voice?.labels ?? {};
-  const haystack = [
-    voice?.name,
-    voice?.description,
-    labels.language,
-    labels.locale,
-    labels.accent,
-    ...(Array.isArray(voice?.verified_languages)
-      ? voice.verified_languages.flatMap((item) => [item?.language, item?.locale, item?.accent])
-      : []),
-  ].map(normalise).join(' ');
+  const verified = Array.isArray(voice?.verified_languages) ? voice.verified_languages : [];
 
+  const locales = [labels.locale, ...verified.map((item) => item?.locale)]
+    .map(normalise)
+    .filter(Boolean);
+  if (locales.some((locale) => /^es[-_]es$/.test(locale))) return true;
+
+  const languages = [labels.language, ...verified.map((item) => item?.language)]
+    .map(normalise)
+    .filter(Boolean);
+  const accents = [labels.accent, ...verified.map((item) => item?.accent)]
+    .map(normalise)
+    .filter(Boolean);
+
+  const isSpanish = languages.some((language) => /^es$|spanish|español/.test(language));
+  const isSpainAccent = accents.some((accent) => /spain|españa|castilian|castellano|peninsular|madrid/.test(accent));
+  const excludedAccent = accents.some((accent) => /latin|mexic|argentin|colombi|chile|peru|perú|venezu|caribbean|south american|american|australian|british/.test(accent));
+
+  return isSpanish && isSpainAccent && !excludedAccent;
+};
+
+const rankingScore = (voice) => {
   let score = 0;
-  if (/es[-_ ]?es|spanish[^a-z]+spain|castilian|castellano|españa|spain/.test(haystack)) score += 100;
-  if (/spanish|español|española/.test(haystack)) score += 30;
-  if (/latin|mexic|argentin|colombi|chile|peru|venezu|caribbean|south american/.test(haystack)) score -= 120;
-  if (voice?.category === 'professional') score += 10;
-  if (voice?.is_bookmarked) score += 4;
+  if (voice?.category === 'professional') score += 20;
+  if (voice?.is_bookmarked) score += 8;
+  if (Array.isArray(voice?.verified_languages) && voice.verified_languages.some((item) => /^es[-_]es$/i.test(item?.locale || ''))) score += 50;
+  const accent = normalise(voice?.labels?.accent);
+  if (/castilian|castellano|peninsular/.test(accent)) score += 20;
+  if (/spain|españa|madrid/.test(accent)) score += 15;
+  if (voice?.preview_url) score += 3;
   return score;
 };
 
 const getPreview = (voice) => {
   const verified = Array.isArray(voice?.verified_languages) ? voice.verified_languages : [];
-  const preferred = verified.find((item) => /es[-_]?es/i.test(item?.locale || ''))
-    || verified.find((item) => /spain|castilian|españa/i.test(`${item?.accent || ''} ${item?.locale || ''}`))
-    || verified.find((item) => /^es$/i.test(item?.language || ''));
+  const preferred = verified.find((item) => /^es[-_]?es$/i.test(item?.locale || ''))
+    || verified.find((item) => /spain|castilian|españa|castellano|peninsular/i.test(`${item?.accent || ''} ${item?.locale || ''}`));
   return preferred?.preview_url || voice?.preview_url || null;
 };
 
@@ -75,23 +87,29 @@ export default async (req) => {
 
     const payload = await response.json();
     const voices = (Array.isArray(payload?.voices) ? payload.voices : [])
+      .filter(isSpanishSpain)
       .map((voice) => ({
         id: voice.voice_id,
         name: voice.name || 'Voz sin nombre',
         gender: inferGender(voice),
-        accent: voice?.labels?.accent || null,
+        accent: 'Español de España',
         description: voice.description || voice?.labels?.description || null,
         previewUrl: getPreview(voice),
-        score: spanishSpainScore(voice),
+        score: rankingScore(voice),
+        recommended: false,
       }))
-      .filter((voice) => voice.id && voice.score >= 30)
+      .filter((voice) => voice.id)
       .sort((a, b) => b.score - a.score || a.name.localeCompare(b.name, 'es'));
+
+    // Preferimos una voz femenina como recomendación clínica; si no existe, la mejor disponible.
+    const recommended = voices.find((voice) => voice.gender === 'female') || voices[0];
+    if (recommended) recommended.recommended = true;
 
     const female = voices.filter((voice) => voice.gender === 'female').slice(0, 6);
     const male = voices.filter((voice) => voice.gender === 'male').slice(0, 6);
     const unknown = voices.filter((voice) => voice.gender === 'unknown').slice(0, 6);
 
-    return jsonResponse({ female, male, unknown });
+    return jsonResponse({ female, male, unknown, locale: 'es-ES', recommendedVoiceId: recommended?.id || null });
   } catch (error) {
     console.error('Voice list function error:', error);
     return jsonResponse({ error: 'No se ha podido conectar con ElevenLabs.' }, 500);

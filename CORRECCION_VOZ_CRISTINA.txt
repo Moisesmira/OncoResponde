@@ -1,0 +1,16 @@
+ONCOResponde 3.4.1 — VOZ CRISTINA EXACTA
+
+La aplicación solicita exclusivamente:
+dNjJKg63Fr5AXwIdkATa
+
+Se ha eliminado por completo la voz alternativa del dispositivo. Por tanto:
+- Si se oye una voz, es Cristina de ElevenLabs.
+- Si ElevenLabs rechaza la solicitud, se muestra el error y no se sustituye por otra voz.
+- La respuesta HTTP se valida comprobando el ID de voz devuelto por la función.
+- Se ha renovado la caché de la PWA.
+
+Despliegue:
+1. Sustituir el proyecto por esta carpeta.
+2. Commit y Push origin.
+3. Netlify > Deploys > Trigger deploy > Clear cache and deploy site.
+4. Cerrar completamente la PWA y volver a abrirla.

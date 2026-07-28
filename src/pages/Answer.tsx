@@ -107,34 +107,6 @@ export default function Answer() {
     };
   }, []);
 
-  const fallbackToDeviceVoice = (text: string) => {
-    if (!('speechSynthesis' in window)) {
-      setAudioNotice('Este dispositivo no permite reproducir la respuesta en voz alta.');
-      setAudioState('idle');
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-ES';
-    utterance.rate = 0.88;
-    utterance.pitch = 1;
-
-    const voices = window.speechSynthesis.getVoices();
-    const spanishSpain = voices.filter((voice) => /^es-ES$/i.test(voice.lang));
-    const preferredPattern = /mónica|monica|helena|marisol|carmen|conchita|lucía|lucia|paulina|female|mujer|premium|enhanced|natural/i;
-    const preferred = spanishSpain.find((voice) => preferredPattern.test(voice.name))
-      || spanishSpain.find((voice) => voice.localService)
-      || spanishSpain[0];
-    if (preferred) utterance.voice = preferred;
-
-    utterance.onend = () => setAudioState('idle');
-    utterance.onerror = () => setAudioState('idle');
-    setAudioNotice(preferred ? 'Se está usando temporalmente una voz de español de España disponible en tu dispositivo.' : 'No se ha encontrado una voz de español de España en este dispositivo.');
-    setAudioState('playing');
-    window.speechSynthesis.speak(utterance);
-  };
-
   const listen = async () => {
     if (!data) return;
 
@@ -155,7 +127,7 @@ export default function Answer() {
     setAudioNotice('Preparando una voz castellana de España con ElevenLabs…');
 
     try {
-      const response = await fetch('/.netlify/functions/voz?v=3.4.0-audio-fix', {
+      const response = await fetch('/.netlify/functions/voz?v=3.4.1-cristina-exacta', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -177,32 +149,36 @@ export default function Answer() {
         throw new Error(message);
       }
 
+      const returnedVoiceId = response.headers.get('X-OncoResponde-Voice-Id');
+      if (returnedVoiceId !== 'dNjJKg63Fr5AXwIdkATa') {
+        throw new Error('El servidor ha devuelto una voz distinta de Cristina.');
+      }
+
       const blob = await response.blob();
       if (!blob.size || !blob.type.startsWith('audio/')) {
         throw new Error('El servidor no ha devuelto un archivo de audio válido.');
       }
+
       if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
       const url = URL.createObjectURL(blob);
       audioUrlRef.current = url;
 
       const audio = new Audio(url);
+      audio.preload = 'auto';
       audioRef.current = audio;
       audio.onended = () => setAudioState('idle');
       audio.onerror = () => {
-        fallbackToDeviceVoice(text);
+        setAudioNotice('El audio de Cristina se ha generado, pero este dispositivo no ha podido reproducirlo.');
+        setAudioState('idle');
       };
 
-      try {
-        await audio.play();
-        setAudioNotice('Voz predeterminada de OncoResponde, generada con ElevenLabs.');
-        setAudioState('playing');
-      } catch {
-        fallbackToDeviceVoice(text);
-      }
+      await audio.play();
+      setAudioNotice('Cristina · español peninsular · ElevenLabs');
+      setAudioState('playing');
     } catch (caught) {
       const message = caught instanceof Error ? caught.message : 'No se ha podido generar el audio.';
-      setAudioNotice(`${message} Se utilizará temporalmente la voz española disponible en este dispositivo.`);
-      fallbackToDeviceVoice(text);
+      setAudioNotice(message);
+      setAudioState('idle');
     }
   };
 

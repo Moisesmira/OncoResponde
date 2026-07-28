@@ -1,4 +1,4 @@
-const ONCORESPONDE_VOICE_ID = 'dNjJKg63Fr5AXwIdkATa';
+const ONCORESPONDE_VOICE_ID = 'dNjJKg63Fr5AXwIdkATa'; // Voz predeterminada e inmutable de OncoResponde
 
 const jsonResponse = (payload, status = 200) => new Response(JSON.stringify(payload), {
   status,
@@ -74,7 +74,7 @@ export default async (req) => {
       status: 200,
       headers: {
         'Content-Type': response.headers.get('content-type') || 'audio/mpeg',
-        'Cache-Control': 'private, max-age=300',
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
         'Content-Disposition': 'inline; filename="oncoresponde-elevenlabs.mp3"',
         'X-OncoResponde-Voice-Provider': 'ElevenLabs',
         'X-OncoResponde-Voice-Id': voiceId,

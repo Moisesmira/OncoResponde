@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js?v=3.4.0', { updateViaCache: 'none' }).then((registration) => registration.update()).catch(() => {
+    navigator.serviceWorker.register('/sw.js?v=3.4.0-voice-fix-1', { updateViaCache: 'none' }).then((registration) => registration.update()).catch(() => {
       // La aplicación sigue funcionando aunque el navegador no permita registrar el service worker.
     });
   });

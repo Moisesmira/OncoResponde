@@ -155,12 +155,32 @@ export default function Answer() {
     setAudioNotice('Preparando una voz castellana de España con ElevenLabs…');
 
     try {
-      const response = await fetch('/.netlify/functions/voz', {
+      const response = await fetch('/.netlify/functions/voz?v=3.4.0-fixed-voice', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache',
+        },
+        cache: 'no-store',
         body: JSON.stringify({ text, language: 'es' }),
       });
-      if (!response.ok) throw new Error('TTS unavailable');
+
+      if (!response.ok) {
+        let message = 'ElevenLabs no ha podido generar la voz seleccionada.';
+        try {
+          const payload = await response.json() as { error?: string; providerStatus?: number };
+          if (payload.error) message = payload.error;
+          if (payload.providerStatus) message += ` Código de ElevenLabs: ${payload.providerStatus}.`;
+        } catch {
+          // Se conserva el mensaje general cuando la respuesta no es JSON.
+        }
+        throw new Error(message);
+      }
+
+      const receivedVoiceId = response.headers.get('X-OncoResponde-Voice-Id');
+      if (receivedVoiceId !== 'dNjJKg63Fr5AXwIdkATa') {
+        throw new Error('El servidor no está utilizando la voz predeterminada de OncoResponde. Vuelve a desplegar con la caché limpia.');
+      }
 
       const blob = await response.blob();
       if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
@@ -175,10 +195,12 @@ export default function Answer() {
         fallbackToDeviceVoice(text);
       };
       await audio.play();
-      setAudioNotice('Voz oficial de OncoResponde, generada con ElevenLabs.');
+      setAudioNotice('Voz predeterminada de OncoResponde (dNjJKg63Fr5AXwIdkATa), generada con ElevenLabs.');
       setAudioState('playing');
-    } catch {
-      fallbackToDeviceVoice(text);
+    } catch (caught) {
+      const message = caught instanceof Error ? caught.message : 'No se ha podido generar el audio.';
+      setAudioNotice(`${message} No se usará otra voz para evitar confusiones.`);
+      setAudioState('idle');
     }
   };
 

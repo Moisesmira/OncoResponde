@@ -112,16 +112,16 @@ export default function Answer() {
     utterance.pitch = 1;
 
     const voices = window.speechSynthesis.getVoices();
-    const preferred = voices.find((voice) =>
-      /mónica|monica|paulina|helena|marisol|luciana|premium|enhanced|natural/i.test(voice.name)
-      && /^es/i.test(voice.lang)
-    ) || voices.find((voice) => /^es-ES/i.test(voice.lang))
-      || voices.find((voice) => /^es/i.test(voice.lang));
+    const spanishSpain = voices.filter((voice) => /^es-ES$/i.test(voice.lang));
+    const preferred = spanishSpain.find((voice) =>
+      /mónica|monica|helena|marisol|carmen|conchita|lucía|lucia|premium|enhanced|natural/i.test(voice.name)
+    ) || spanishSpain.find((voice) => voice.localService)
+      || spanishSpain[0];
     if (preferred) utterance.voice = preferred;
 
     utterance.onend = () => setAudioState('idle');
     utterance.onerror = () => setAudioState('idle');
-    setAudioNotice('Se está usando temporalmente la voz disponible en tu dispositivo.');
+    setAudioNotice(preferred ? 'Se está usando temporalmente una voz de español de España disponible en tu dispositivo.' : 'No se ha encontrado una voz de español de España en este dispositivo.');
     setAudioState('playing');
     window.speechSynthesis.speak(utterance);
   };

@@ -1,3 +1,10 @@
+## 3.2.8 — Voz en español de España
+
+- La voz neuronal de «Háblame» se configura explícitamente en castellano peninsular estándar.
+- Se refuerzan la entonación, pronunciación y ritmo propios de España, evitando acentos latinoamericanos.
+- Se mantiene un tono femenino adulto, cálido, sereno, cercano y profesional.
+- La voz de respaldo del dispositivo queda limitada a voces etiquetadas como `es-ES`; ya no selecciona voces `es-MX`, `es-US` u otras variantes.
+
 ## 3.2.7 — Voz más humana en las respuestas
 
 - Sustituida la voz principal del navegador por síntesis de voz neuronal generada en el servidor.

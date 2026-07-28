@@ -26,7 +26,7 @@ export default async (req) => {
       ? 'Parla en català central, amb pronunciació clara i natural.'
       : language === 'en'
         ? 'Speak in clear, natural international English.'
-        : 'Habla en español de España, con pronunciación clara y natural.';
+        : 'Habla exclusivamente en español de España (castellano peninsular estándar), con pronunciación clara y natural. Usa la entonación y el ritmo propios de España, con distinción entre s y z/c cuando corresponda. Evita el seseo, el voseo y cualquier acento o entonación latinoamericana.';
 
     const response = await fetch('https://api.openai.com/v1/audio/speech', {
       method: 'POST',
@@ -39,7 +39,7 @@ export default async (req) => {
         voice: 'coral',
         input: text,
         response_format: 'mp3',
-        instructions: `${languageInstruction} Usa una voz adulta, cálida, serena y cercana. Mantén un ritmo pausado, natural y conversacional, con empatía contenida y profesional. Evita sonar publicitaria, infantil, dramática o excesivamente entusiasta. Haz pausas breves entre ideas para facilitar la comprensión de una persona preocupada.`,
+        instructions: `${languageInstruction} Para español, utiliza una voz femenina adulta de España, cálida, serena y cercana, como una profesional sanitaria española que explica algo con tranquilidad. Mantén un ritmo pausado, natural y conversacional, con empatía contenida y profesional. Pronuncia con claridad nombres de pruebas, tratamientos, cifras y siglas. Evita sonar publicitaria, infantil, dramática, robótica o excesivamente entusiasta. Haz pausas breves entre ideas para facilitar la comprensión de una persona preocupada.`,
       }),
     });
 

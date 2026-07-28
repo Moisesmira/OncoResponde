@@ -1,3 +1,10 @@
+## 3.3.3
+
+- Corrige el filtro de voces de ElevenLabs: ya no se interpreta la capacidad multilingüe `es-ES` como prueba de acento castellano.
+- Solo se muestran voces cuya ficha declara explícitamente España, castellano, Castilian Spanish o acento peninsular.
+- Se excluyen voces estadounidenses, británicas, australianas y latinoamericanas aunque puedan hablar español.
+- La etiqueta de acento muestra los metadatos reales de ElevenLabs y deja de renombrar voces extranjeras como «Español de España».
+
 ## 3.3.0 — Voz ElevenLabs en castellano de España
 
 - Sustituye el motor neuronal anterior por ElevenLabs en la función segura de Netlify.

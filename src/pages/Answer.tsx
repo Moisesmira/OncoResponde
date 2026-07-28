@@ -56,7 +56,7 @@ function VoiceGroup({ title, voices, selectedVoiceId, previewingId, onSelect, on
             />
             <span>
               <strong>{voice.name}{voice.recommended && <span className="voice-recommended">Recomendada para OncoResponde</span>}</strong>
-              <small>{voice.accent || 'Español de España'}{voice.description ? ` · ${voice.description}` : ''}</small>
+              <small>{voice.accent || 'Acento de España verificado'}{voice.description ? ` · ${voice.description}` : ''}</small>
             </span>
           </label>
           <button type="button" className="voice-preview" onClick={() => onPreview(voice)}>
@@ -405,7 +405,7 @@ export default function Answer() {
                   <VoiceGroup title="Otras voces españolas" voices={voices.unknown} selectedVoiceId={selectedVoiceId} previewingId={previewingId} onSelect={selectVoice} onPreview={previewVoice} />
                 )}
                 {voices.female.length === 0 && voices.male.length === 0 && voices.unknown.length === 0 && (
-                  <p className="voice-selector__empty">No hay voces es-ES disponibles en tu cuenta. Añade una voz de español de España (Castilian Spanish) desde la Voice Library de ElevenLabs y vuelve a cargar la aplicación.</p>
+                  <p className="voice-selector__empty">No hay voces con acento castellano de España verificable en tu cuenta. Añade desde la Voice Library una voz cuya ficha indique Spain, Spanish (Spain), Castilian Spanish o castellano y vuelve a cargar la aplicación.</p>
                 )}
               </div>
             )}

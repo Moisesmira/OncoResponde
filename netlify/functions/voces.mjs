@@ -20,23 +20,29 @@ const isSpanishSpain = (voice) => {
   const labels = voice?.labels ?? {};
   const verified = Array.isArray(voice?.verified_languages) ? voice.verified_languages : [];
 
-  const locales = [labels.locale, ...verified.map((item) => item?.locale)]
-    .map(normalise)
-    .filter(Boolean);
-  if (locales.some((locale) => /^es[-_]es$/.test(locale))) return true;
+  // ElevenLabs puede indicar que una voz es capaz de hablar es-ES aunque su acento
+  // original sea estadounidense, británico, australiano o latinoamericano. Por eso
+  // NO usamos verified_languages.locale como prueba del acento de la voz.
+  const language = normalise(labels.language || voice?.language);
+  const accent = normalise(labels.accent || voice?.accent);
+  const searchable = normalise([
+    voice?.name,
+    voice?.description,
+    labels.description,
+    labels.locale,
+    labels.region,
+    labels.country,
+    accent,
+    language,
+  ].filter(Boolean).join(' '));
 
-  const languages = [labels.language, ...verified.map((item) => item?.language)]
-    .map(normalise)
-    .filter(Boolean);
-  const accents = [labels.accent, ...verified.map((item) => item?.accent)]
-    .map(normalise)
-    .filter(Boolean);
+  const explicitlySpanish = /(^|\b)(español|spanish|castellano|castilian)(\b|$)/.test(`${language} ${searchable}`);
+  const explicitlySpain = /(^|\b)(spain|españa|es[-_]es|castilian|castellano|peninsular|madrid)(\b|$)/.test(searchable);
+  const excludedAccent = /latin|latino|mexic|argentin|colombi|chil(e|ean)|peru|perú|venezu|caribbean|south american|american|australian|british|united states|u\.?s\.?|england|uk/.test(searchable);
 
-  const isSpanish = languages.some((language) => /^es$|spanish|español/.test(language));
-  const isSpainAccent = accents.some((accent) => /spain|españa|castilian|castellano|peninsular|madrid/.test(accent));
-  const excludedAccent = accents.some((accent) => /latin|mexic|argentin|colombi|chile|peru|perú|venezu|caribbean|south american|american|australian|british/.test(accent));
-
-  return isSpanish && isSpainAccent && !excludedAccent;
+  // Solo aceptamos voces cuya ficha describa explícitamente el acento como España
+  // o castellano. La mera capacidad multilingüe es-ES no es suficiente.
+  return explicitlySpanish && explicitlySpain && !excludedAccent;
 };
 
 const rankingScore = (voice) => {
@@ -92,7 +98,7 @@ export default async (req) => {
         id: voice.voice_id,
         name: voice.name || 'Voz sin nombre',
         gender: inferGender(voice),
-        accent: 'Español de España',
+        accent: voice?.labels?.accent || voice?.accent || 'Español de España',
         description: voice.description || voice?.labels?.description || null,
         previewUrl: getPreview(voice),
         score: rankingScore(voice),

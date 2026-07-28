@@ -9,11 +9,6 @@ const jsonResponse = (payload, status = 200) => new Response(JSON.stringify(payl
 const cleanText = (value, maxLength = 3600) =>
   typeof value === 'string' ? value.replace(/\s+/g, ' ').trim().slice(0, maxLength) : '';
 
-const getVoiceId = (gender) => {
-  const female = process.env.ELEVENLABS_FEMALE_VOICE_ID?.trim();
-  const male = process.env.ELEVENLABS_MALE_VOICE_ID?.trim();
-  return gender === 'male' ? male : female;
-};
 
 export default async (req) => {
   if (req.method !== 'POST') return jsonResponse({ error: 'Método no permitido' }, 405);
@@ -31,12 +26,16 @@ export default async (req) => {
     const text = cleanText(body?.text);
     const language = body?.language === 'ca' ? 'ca' : body?.language === 'en' ? 'en' : 'es';
     const voiceGender = body?.voiceGender === 'male' ? 'male' : 'female';
-    const voiceId = getVoiceId(voiceGender);
+    const requestedVoiceId = cleanText(body?.voiceId, 120);
+    const configuredVoiceId = voiceGender === 'male'
+      ? process.env.ELEVENLABS_MALE_VOICE_ID?.trim()
+      : process.env.ELEVENLABS_FEMALE_VOICE_ID?.trim();
+    const voiceId = requestedVoiceId || configuredVoiceId;
 
     if (!text) return jsonResponse({ error: 'No hay texto para leer.' }, 400);
     if (!voiceId) {
       return jsonResponse({
-        error: `Falta configurar ${voiceGender === 'male' ? 'ELEVENLABS_MALE_VOICE_ID' : 'ELEVENLABS_FEMALE_VOICE_ID'} en Netlify.`,
+        error: 'No se ha seleccionado ninguna voz de ElevenLabs.',
         code: 'ELEVENLABS_VOICE_NOT_CONFIGURED',
       }, 503);
     }
@@ -86,6 +85,7 @@ export default async (req) => {
         'Content-Disposition': 'inline; filename="oncoresponde-elevenlabs.mp3"',
         'X-OncoResponde-Voice-Provider': 'ElevenLabs',
         'X-OncoResponde-Voice-Gender': voiceGender,
+        'X-OncoResponde-Voice-Id': voiceId,
       },
     });
   } catch (error) {

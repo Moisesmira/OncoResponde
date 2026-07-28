@@ -154,7 +154,7 @@ export default function Answer() {
 
     const text = `${data.summary}. ${data.answer}`;
     setAudioState('loading');
-    setAudioNotice('Preparando una voz más natural y cercana…');
+    setAudioNotice('Preparando una voz castellana de España con ElevenLabs…');
 
     try {
       const response = await fetch('/.netlify/functions/voz', {
@@ -177,7 +177,7 @@ export default function Answer() {
         fallbackToDeviceVoice(text);
       };
       await audio.play();
-      setAudioNotice(`Voz ${voiceGender === 'male' ? 'masculina' : 'femenina'} en español de España, generada por inteligencia artificial.`);
+      setAudioNotice(`Voz ${voiceGender === 'male' ? 'masculina' : 'femenina'} de castellano de España, generada con ElevenLabs.`);
       setAudioState('playing');
     } catch {
       fallbackToDeviceVoice(text);

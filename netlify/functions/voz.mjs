@@ -9,56 +9,83 @@ const jsonResponse = (payload, status = 200) => new Response(JSON.stringify(payl
 const cleanText = (value, maxLength = 3600) =>
   typeof value === 'string' ? value.replace(/\s+/g, ' ').trim().slice(0, maxLength) : '';
 
+const getVoiceId = (gender) => {
+  const female = process.env.ELEVENLABS_FEMALE_VOICE_ID?.trim();
+  const male = process.env.ELEVENLABS_MALE_VOICE_ID?.trim();
+  return gender === 'male' ? male : female;
+};
+
 export default async (req) => {
   if (req.method !== 'POST') return jsonResponse({ error: 'Método no permitido' }, 405);
 
-  const key = process.env.OPENAI_API_KEY?.trim();
-  if (!key) return jsonResponse({ error: 'OPENAI_API_KEY no está configurada en Netlify.' }, 500);
+  const apiKey = process.env.ELEVENLABS_API_KEY?.trim();
+  if (!apiKey) {
+    return jsonResponse({
+      error: 'ELEVENLABS_API_KEY no está configurada en Netlify.',
+      code: 'ELEVENLABS_NOT_CONFIGURED',
+    }, 503);
+  }
 
   try {
     const body = await req.json();
     const text = cleanText(body?.text);
     const language = body?.language === 'ca' ? 'ca' : body?.language === 'en' ? 'en' : 'es';
     const voiceGender = body?.voiceGender === 'male' ? 'male' : 'female';
+    const voiceId = getVoiceId(voiceGender);
 
     if (!text) return jsonResponse({ error: 'No hay texto para leer.' }, 400);
+    if (!voiceId) {
+      return jsonResponse({
+        error: `Falta configurar ${voiceGender === 'male' ? 'ELEVENLABS_MALE_VOICE_ID' : 'ELEVENLABS_FEMALE_VOICE_ID'} en Netlify.`,
+        code: 'ELEVENLABS_VOICE_NOT_CONFIGURED',
+      }, 503);
+    }
 
-    const languageInstruction = language === 'ca'
-      ? 'Parla en català central, amb pronunciació clara i natural.'
-      : language === 'en'
-        ? 'Speak in clear, natural international English.'
-        : 'Habla exclusivamente en español de España (castellano peninsular estándar), con pronunciación clara y natural. Usa la entonación y el ritmo propios de España, con distinción entre s y z/c cuando corresponda. Evita el seseo, el voseo y cualquier acento o entonación latinoamericana.';
+    const modelId = process.env.ELEVENLABS_MODEL_ID?.trim() || 'eleven_multilingual_v2';
+    const outputFormat = process.env.ELEVENLABS_OUTPUT_FORMAT?.trim() || 'mp3_44100_128';
 
-    const selectedVoice = voiceGender === 'male' ? 'onyx' : 'shimmer';
-
-    const response = await fetch('https://api.openai.com/v1/audio/speech', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${key}`,
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voiceId)}?output_format=${encodeURIComponent(outputFormat)}`,
+      {
+        method: 'POST',
+        headers: {
+          'xi-api-key': apiKey,
+          'Content-Type': 'application/json',
+          Accept: 'audio/mpeg',
+        },
+        body: JSON.stringify({
+          text,
+          model_id: modelId,
+          language_code: language,
+          voice_settings: {
+            stability: 0.58,
+            similarity_boost: 0.82,
+            style: 0.12,
+            use_speaker_boost: true,
+            speed: 0.92,
+          },
+        }),
       },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini-tts',
-        voice: selectedVoice,
-        input: text,
-        response_format: 'mp3',
-        instructions: `${languageInstruction} ${language === 'es' ? `La voz debe sonar inequívocamente peninsular, de España. Realiza distinción castellana: pronuncia la c ante e/i y la z con el sonido interdental /θ/, claramente diferente de la s. Por ejemplo: "recibe" debe sonar "re-θi-be" y "utiliza" debe sonar "u-ti-li-θa", nunca "resibe" ni "utilisa". No uses seseo. No uses entonación mexicana, caribeña, rioplatense, andina ni de ningún otro español americano. Usa vocabulario, ritmo y prosodia propios del castellano estándar de España.` : ''} Usa una voz ${voiceGender === 'male' ? 'masculina' : 'femenina'} adulta, cálida, serena y cercana, como un profesional sanitario español que explica algo con tranquilidad. Mantén un ritmo pausado, natural y conversacional, con empatía contenida y profesional. Pronuncia con claridad nombres de pruebas, tratamientos, cifras y siglas. Evita sonar publicitaria, infantil, dramática, robótica o excesivamente entusiasta. Haz pausas breves entre ideas para facilitar la comprensión de una persona preocupada.`,
-      }),
-    });
+    );
 
     if (!response.ok) {
       const details = await response.text();
-      console.error('OpenAI TTS error:', response.status, details);
-      return jsonResponse({ error: 'No se ha podido generar la voz natural.' }, 502);
+      console.error('ElevenLabs TTS error:', response.status, details);
+      return jsonResponse({
+        error: 'No se ha podido generar la voz española con ElevenLabs.',
+        code: 'ELEVENLABS_REQUEST_FAILED',
+      }, 502);
     }
 
     const audio = await response.arrayBuffer();
     return new Response(audio, {
       status: 200,
       headers: {
-        'Content-Type': 'audio/mpeg',
-        'Cache-Control': 'no-store',
-        'Content-Disposition': 'inline; filename="oncoresponde-voz.mp3"',
+        'Content-Type': response.headers.get('content-type') || 'audio/mpeg',
+        'Cache-Control': 'private, max-age=300',
+        'Content-Disposition': 'inline; filename="oncoresponde-elevenlabs.mp3"',
+        'X-OncoResponde-Voice-Provider': 'ElevenLabs',
+        'X-OncoResponde-Voice-Gender': voiceGender,
       },
     });
   } catch (error) {

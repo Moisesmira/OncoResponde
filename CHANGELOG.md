@@ -1,3 +1,12 @@
+## 3.3.0 — Voz ElevenLabs en castellano de España
+
+- Sustituye el motor neuronal anterior por ElevenLabs en la función segura de Netlify.
+- Mantiene el selector visible de voz femenina y masculina.
+- Las dos voces se configuran mediante identificadores independientes para elegir voces nativas de España.
+- Modelo multilingüe, idioma `es`, velocidad pausada y ajustes orientados a una locución sanitaria cálida y natural.
+- La clave de ElevenLabs permanece protegida en Netlify y nunca se expone en el navegador.
+- Conserva como respaldo una voz `es-ES` instalada en el dispositivo si ElevenLabs no está disponible.
+
 ## 3.2.9 — Voz peninsular y selector de género
 
 - Refuerzo explícito de la distinción castellana entre **s** y **c/z** (sin seseo).

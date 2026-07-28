@@ -1,3 +1,12 @@
+## 3.4.0 — voz fija oficial de OncoResponde
+
+- Se fija en el servidor la voz de ElevenLabs `dNjJKg63Fr5AXwIdkATa`.
+- La función de Netlify ignora cualquier voz o género enviado por el navegador.
+- Se elimina el selector dinámico y las preferencias antiguas guardadas localmente.
+- Ya no se utilizan `ELEVENLABS_FEMALE_VOICE_ID` ni `ELEVENLABS_MALE_VOICE_ID`.
+- Se mantiene únicamente `ELEVENLABS_API_KEY` como variable obligatoria.
+- Se actualiza la caché PWA a 3.4.0.
+
 ## 3.3.3
 
 - Corrige el filtro de voces de ElevenLabs: ya no se interpreta la capacidad multilingüe `es-ES` como prueba de acento castellano.

@@ -1,3 +1,5 @@
+const ONCORESPONDE_VOICE_ID = 'dNjJKg63Fr5AXwIdkATa';
+
 const jsonResponse = (payload, status = 200) => new Response(JSON.stringify(payload), {
   status,
   headers: {
@@ -8,7 +10,6 @@ const jsonResponse = (payload, status = 200) => new Response(JSON.stringify(payl
 
 const cleanText = (value, maxLength = 3600) =>
   typeof value === 'string' ? value.replace(/\s+/g, ' ').trim().slice(0, maxLength) : '';
-
 
 export default async (req) => {
   if (req.method !== 'POST') return jsonResponse({ error: 'Método no permitido' }, 405);
@@ -25,21 +26,12 @@ export default async (req) => {
     const body = await req.json();
     const text = cleanText(body?.text);
     const language = body?.language === 'ca' ? 'ca' : body?.language === 'en' ? 'en' : 'es';
-    const voiceGender = body?.voiceGender === 'male' ? 'male' : 'female';
-    const requestedVoiceId = cleanText(body?.voiceId, 120);
-    const configuredVoiceId = voiceGender === 'male'
-      ? process.env.ELEVENLABS_MALE_VOICE_ID?.trim()
-      : process.env.ELEVENLABS_FEMALE_VOICE_ID?.trim();
-    const voiceId = requestedVoiceId || configuredVoiceId;
 
     if (!text) return jsonResponse({ error: 'No hay texto para leer.' }, 400);
-    if (!voiceId) {
-      return jsonResponse({
-        error: 'No se ha seleccionado ninguna voz de ElevenLabs.',
-        code: 'ELEVENLABS_VOICE_NOT_CONFIGURED',
-      }, 503);
-    }
 
+    // Versión 3.4.0: la voz se fija en el servidor. Se ignoran voiceId, género
+    // y cualquier preferencia antigua enviada por el navegador.
+    const voiceId = ONCORESPONDE_VOICE_ID;
     const modelId = process.env.ELEVENLABS_MODEL_ID?.trim() || 'eleven_multilingual_v2';
     const outputFormat = process.env.ELEVENLABS_OUTPUT_FORMAT?.trim() || 'mp3_44100_128';
 
@@ -71,8 +63,9 @@ export default async (req) => {
       const details = await response.text();
       console.error('ElevenLabs TTS error:', response.status, details);
       return jsonResponse({
-        error: 'No se ha podido generar la voz española con ElevenLabs.',
+        error: 'No se ha podido generar la voz de OncoResponde con ElevenLabs.',
         code: 'ELEVENLABS_REQUEST_FAILED',
+        providerStatus: response.status,
       }, 502);
     }
 
@@ -84,8 +77,8 @@ export default async (req) => {
         'Cache-Control': 'private, max-age=300',
         'Content-Disposition': 'inline; filename="oncoresponde-elevenlabs.mp3"',
         'X-OncoResponde-Voice-Provider': 'ElevenLabs',
-        'X-OncoResponde-Voice-Gender': voiceGender,
         'X-OncoResponde-Voice-Id': voiceId,
+        'X-OncoResponde-Version': '3.4.0',
       },
     });
   } catch (error) {

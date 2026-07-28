@@ -12,15 +12,6 @@ type AnswerData = {
   personalizationNote?: string;
 };
 
-type VoiceOption = {
-  id: string;
-  name: string;
-  gender: 'female' | 'male' | 'unknown';
-  accent?: string | null;
-  description?: string | null;
-  previewUrl?: string | null;
-  recommended?: boolean;
-};
 
 type AnswerLocationState = {
   question?: string;
@@ -32,42 +23,6 @@ type AnswerLocationState = {
 };
 
 
-function VoiceGroup({ title, voices, selectedVoiceId, previewingId, onSelect, onPreview }: {
-  title: string;
-  voices: VoiceOption[];
-  selectedVoiceId: string;
-  previewingId: string;
-  onSelect: (voice: VoiceOption) => void;
-  onPreview: (voice: VoiceOption) => void;
-}) {
-  return (
-    <fieldset className="voice-group">
-      <legend>{title}</legend>
-      {voices.length === 0 ? (
-        <p className="voice-group__empty">No hay voces disponibles en este grupo.</p>
-      ) : voices.map((voice) => (
-        <div className={`voice-option ${selectedVoiceId === voice.id ? 'selected' : ''}`} key={voice.id}>
-          <label>
-            <input
-              type="radio"
-              name="oncoresponde-voice"
-              checked={selectedVoiceId === voice.id}
-              onChange={() => onSelect(voice)}
-            />
-            <span>
-              <strong>{voice.name}{voice.recommended && <span className="voice-recommended">Recomendada para OncoResponde</span>}</strong>
-              <small>{voice.accent || 'Acento de España verificado'}{voice.description ? ` · ${voice.description}` : ''}</small>
-            </span>
-          </label>
-          <button type="button" className="voice-preview" onClick={() => onPreview(voice)}>
-            {previewingId === voice.id ? '⏹ Detener muestra' : '▶ Escuchar muestra'}
-          </button>
-        </div>
-      ))}
-    </fieldset>
-  );
-}
-
 export default function Answer() {
   const { state } = useLocation();
   const request = (state ?? {}) as AnswerLocationState;
@@ -77,15 +32,6 @@ export default function Answer() {
   const [error, setError] = useState('');
   const [audioState, setAudioState] = useState<'idle' | 'loading' | 'playing' | 'paused'>('idle');
   const [audioNotice, setAudioNotice] = useState('');
-  const [voiceGender, setVoiceGender] = useState<'female' | 'male'>(() =>
-    localStorage.getItem('oncoresponde:voice-gender') === 'male' ? 'male' : 'female'
-  );
-  const [voices, setVoices] = useState<{ female: VoiceOption[]; male: VoiceOption[]; unknown: VoiceOption[] }>({ female: [], male: [], unknown: [] });
-  const [voicesLoading, setVoicesLoading] = useState(true);
-  const [voicesError, setVoicesError] = useState('');
-  const [selectedVoiceId, setSelectedVoiceId] = useState(() => localStorage.getItem('oncoresponde:voice-id') || '');
-  const [previewingId, setPreviewingId] = useState('');
-  const previewAudioRef = useRef<HTMLAudioElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioUrlRef = useRef<string | null>(null);
 
@@ -150,102 +96,16 @@ export default function Answer() {
 
 
   useEffect(() => {
-    const controller = new AbortController();
-    setVoicesLoading(true);
-    fetch('/.netlify/functions/voces', { signal: controller.signal })
-      .then(async (response) => {
-        const payload = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(payload.error || 'No se han podido cargar las voces.');
-        const nextVoices = {
-          female: Array.isArray(payload.female) ? payload.female : [],
-          male: Array.isArray(payload.male) ? payload.male : [],
-          unknown: Array.isArray(payload.unknown) ? payload.unknown : [],
-        };
-        setVoices(nextVoices);
-        setVoicesError('');
-        const all = [...nextVoices.female, ...nextVoices.male, ...nextVoices.unknown];
-        const stored = localStorage.getItem('oncoresponde:voice-id');
-        const storedVoice = all.find((voice) => voice.id === stored);
-        const recommendedVoice = all.find((voice) => voice.recommended);
-        const preferred = storedVoice
-          || recommendedVoice
-          || (voiceGender === 'male' ? nextVoices.male[0] : nextVoices.female[0])
-          || nextVoices.female[0]
-          || nextVoices.male[0]
-          || nextVoices.unknown[0];
-        if (preferred) {
-          setSelectedVoiceId(preferred.id);
-          localStorage.setItem('oncoresponde:voice-id', preferred.id);
-          if (preferred.gender !== 'unknown') {
-            setVoiceGender(preferred.gender);
-            localStorage.setItem('oncoresponde:voice-gender', preferred.gender);
-          }
-        }
-      })
-      .catch((caught: Error) => {
-        if (caught.name !== 'AbortError') setVoicesError(caught.message);
-      })
-      .finally(() => setVoicesLoading(false));
-    return () => controller.abort();
-  }, []);
-  useEffect(() => () => {
-    previewAudioRef.current?.pause();
-    audioRef.current?.pause();
-    if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
-    window.speechSynthesis?.cancel();
-  }, []);
+    // Elimina preferencias heredadas de versiones con selector dinámico.
+    localStorage.removeItem('oncoresponde:voice-id');
+    localStorage.removeItem('oncoresponde:voice-gender');
 
-  const selectVoice = (voice: VoiceOption) => {
-    stopListening();
-    previewAudioRef.current?.pause();
-    setPreviewingId('');
-    setSelectedVoiceId(voice.id);
-    localStorage.setItem('oncoresponde:voice-id', voice.id);
-    if (voice.gender !== 'unknown') {
-      setVoiceGender(voice.gender);
-      localStorage.setItem('oncoresponde:voice-gender', voice.gender);
-    }
-  };
-
-  const previewVoice = async (voice: VoiceOption) => {
-    previewAudioRef.current?.pause();
-    if (previewingId === voice.id) {
-      setPreviewingId('');
-      return;
-    }
-    setPreviewingId(voice.id);
-    try {
-      if (voice.previewUrl) {
-        const audio = new Audio(voice.previewUrl);
-        previewAudioRef.current = audio;
-        audio.onended = () => setPreviewingId('');
-        audio.onerror = () => setPreviewingId('');
-        await audio.play();
-        return;
-      }
-      const response = await fetch('/.netlify/functions/voz', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: 'Hola. Soy la voz de OncoResponde. Estoy aquí para acompañarte y ayudarte a comprender la información con calma.',
-          language: 'es',
-          voiceGender: voice.gender === 'male' ? 'male' : 'female',
-          voiceId: voice.id,
-        }),
-      });
-      if (!response.ok) throw new Error();
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const audio = new Audio(url);
-      previewAudioRef.current = audio;
-      audio.onended = () => { URL.revokeObjectURL(url); setPreviewingId(''); };
-      audio.onerror = () => { URL.revokeObjectURL(url); setPreviewingId(''); };
-      await audio.play();
-    } catch {
-      setPreviewingId('');
-      setAudioNotice('No se ha podido reproducir la muestra de esta voz. Comprueba los permisos de Text to Speech en ElevenLabs.');
-    }
-  };
+    return () => {
+      audioRef.current?.pause();
+      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+      window.speechSynthesis?.cancel();
+    };
+  }, []);
 
   const fallbackToDeviceVoice = (text: string) => {
     if (!('speechSynthesis' in window)) {
@@ -262,9 +122,7 @@ export default function Answer() {
 
     const voices = window.speechSynthesis.getVoices();
     const spanishSpain = voices.filter((voice) => /^es-ES$/i.test(voice.lang));
-    const femalePattern = /mónica|monica|helena|marisol|carmen|conchita|lucía|lucia|paulina|female|mujer|premium|enhanced|natural/i;
-    const malePattern = /jorge|enrique|pablo|diego|male|hombre|premium|enhanced|natural/i;
-    const preferredPattern = voiceGender === 'male' ? malePattern : femalePattern;
+    const preferredPattern = /mónica|monica|helena|marisol|carmen|conchita|lucía|lucia|paulina|female|mujer|premium|enhanced|natural/i;
     const preferred = spanishSpain.find((voice) => preferredPattern.test(voice.name))
       || spanishSpain.find((voice) => voice.localService)
       || spanishSpain[0];
@@ -297,11 +155,10 @@ export default function Answer() {
     setAudioNotice('Preparando una voz castellana de España con ElevenLabs…');
 
     try {
-      if (!selectedVoiceId) throw new Error('No voice selected');
       const response = await fetch('/.netlify/functions/voz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, language: 'es', voiceGender, voiceId: selectedVoiceId }),
+        body: JSON.stringify({ text, language: 'es' }),
       });
       if (!response.ok) throw new Error('TTS unavailable');
 
@@ -318,7 +175,7 @@ export default function Answer() {
         fallbackToDeviceVoice(text);
       };
       await audio.play();
-      setAudioNotice(`Voz ${voiceGender === 'male' ? 'masculina' : 'femenina'} de castellano de España, generada con ElevenLabs.`);
+      setAudioNotice('Voz oficial de OncoResponde, generada con ElevenLabs.');
       setAudioState('playing');
     } catch {
       fallbackToDeviceVoice(text);
@@ -380,35 +237,9 @@ export default function Answer() {
               </ul>
             </>
           )}
-          <section className="voice-selector" aria-labelledby="voice-selector-title">
-            <div className="voice-selector__header">
-              <div>
-                <h2 id="voice-selector-title">Elige la voz de OncoResponde</h2>
-                <p>Solo se muestran voces verificadas como español de España (es-ES).</p>
-              </div>
-              {voicesLoading && <span className="voice-selector__status">Cargando voces…</span>}
-            </div>
-
-            {voicesError && (
-              <div className="voice-selector__error" role="alert">
-                <strong>No se han podido cargar las voces.</strong>
-                <span>{voicesError}</span>
-                <small>En ElevenLabs, edita la API Key y activa los permisos <b>Voices: Read</b> y <b>Text to Speech</b>. Después vuelve a desplegar Netlify.</small>
-              </div>
-            )}
-
-            {!voicesLoading && !voicesError && (
-              <div className="voice-selector__groups">
-                <VoiceGroup title="👩 Femenina" voices={voices.female} selectedVoiceId={selectedVoiceId} previewingId={previewingId} onSelect={selectVoice} onPreview={previewVoice} />
-                <VoiceGroup title="👨 Masculina" voices={voices.male} selectedVoiceId={selectedVoiceId} previewingId={previewingId} onSelect={selectVoice} onPreview={previewVoice} />
-                {voices.unknown.length > 0 && (
-                  <VoiceGroup title="Otras voces españolas" voices={voices.unknown} selectedVoiceId={selectedVoiceId} previewingId={previewingId} onSelect={selectVoice} onPreview={previewVoice} />
-                )}
-                {voices.female.length === 0 && voices.male.length === 0 && voices.unknown.length === 0 && (
-                  <p className="voice-selector__empty">No hay voces con acento castellano de España verificable en tu cuenta. Añade desde la Voice Library una voz cuya ficha indique Spain, Spanish (Spain), Castilian Spanish o castellano y vuelve a cargar la aplicación.</p>
-                )}
-              </div>
-            )}
+          <section className="card answer-voice-card" aria-label="Voz de OncoResponde">
+            <strong>🔊 Voz de OncoResponde</strong>
+            <p>La aplicación utiliza una única voz seleccionada para ofrecer una experiencia coherente y cercana.</p>
           </section>
           <div className="row">
             <button type="button" onClick={listen} disabled={audioState === 'loading'}>

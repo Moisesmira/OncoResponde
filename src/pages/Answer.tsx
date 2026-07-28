@@ -155,7 +155,7 @@ export default function Answer() {
     setAudioNotice('Preparando una voz castellana de España con ElevenLabs…');
 
     try {
-      const response = await fetch('/.netlify/functions/voz?v=3.4.0-fixed-voice', {
+      const response = await fetch('/.netlify/functions/voz?v=3.4.0-audio-fix', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -177,12 +177,10 @@ export default function Answer() {
         throw new Error(message);
       }
 
-      const receivedVoiceId = response.headers.get('X-OncoResponde-Voice-Id');
-      if (receivedVoiceId !== 'dNjJKg63Fr5AXwIdkATa') {
-        throw new Error('El servidor no está utilizando la voz predeterminada de OncoResponde. Vuelve a desplegar con la caché limpia.');
-      }
-
       const blob = await response.blob();
+      if (!blob.size || !blob.type.startsWith('audio/')) {
+        throw new Error('El servidor no ha devuelto un archivo de audio válido.');
+      }
       if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
       const url = URL.createObjectURL(blob);
       audioUrlRef.current = url;
@@ -191,16 +189,20 @@ export default function Answer() {
       audioRef.current = audio;
       audio.onended = () => setAudioState('idle');
       audio.onerror = () => {
-        setAudioState('idle');
         fallbackToDeviceVoice(text);
       };
-      await audio.play();
-      setAudioNotice('Voz predeterminada de OncoResponde (dNjJKg63Fr5AXwIdkATa), generada con ElevenLabs.');
-      setAudioState('playing');
+
+      try {
+        await audio.play();
+        setAudioNotice('Voz predeterminada de OncoResponde, generada con ElevenLabs.');
+        setAudioState('playing');
+      } catch {
+        fallbackToDeviceVoice(text);
+      }
     } catch (caught) {
       const message = caught instanceof Error ? caught.message : 'No se ha podido generar el audio.';
-      setAudioNotice(`${message} No se usará otra voz para evitar confusiones.`);
-      setAudioState('idle');
+      setAudioNotice(`${message} Se utilizará temporalmente la voz española disponible en este dispositivo.`);
+      fallbackToDeviceVoice(text);
     }
   };
 

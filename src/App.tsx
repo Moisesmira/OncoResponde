@@ -22,6 +22,7 @@ import AppFooter from './components/AppFooter';
 import Feedback from './pages/Feedback';
 import OneMinute from './pages/OneMinute';
 import Program30 from './pages/Program30';
+import AudioLibrary from './pages/AudioLibrary';
 import LanguageSelector from './components/LanguageSelector';
 import { useLanguage } from './i18n/LanguageContext';
 
@@ -66,6 +67,7 @@ export default function App() {
       <Route path="/un-minuto" element={<OneMinute />} />
       <Route path="/escuchar" element={<OneMinute />} />
       <Route path="/programa-30-dias" element={<Program30 />} />
+      <Route path="/biblioteca-sonora" element={<AudioLibrary />} />
       <Route path="/ajustes" element={<SimplePage title={t("Ajustes y privacidad")} />} />
       </Routes>
       <AppFooter />

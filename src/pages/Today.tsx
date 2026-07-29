@@ -296,6 +296,17 @@ export default function Today() {
         </section>
 
 
+        <section className="sound-library-home-card" aria-labelledby="sound-library-home-title">
+          <div className="sound-library-home-card__icon" aria-hidden="true">🎧</div>
+          <div className="sound-library-home-card__copy">
+            <span className="section-kicker">Nueva colección</span>
+            <h2 id="sound-library-home-title">Biblioteca Sonora</h2>
+            <p>Escucha contenidos elaborados para acompañarte, ayudarte a comprender y ofrecerte unos minutos de calma.</p>
+            <small>Volumen I · Bienvenidos a OncoResponde</small>
+          </div>
+          <Link className="button" to="/biblioteca-sonora">▶ Abrir biblioteca</Link>
+        </section>
+
         <section className="v3-dashboard accompaniment-card" aria-labelledby="v3-dashboard-title">
           <div className="section-heading section-heading--compact">
             <div>

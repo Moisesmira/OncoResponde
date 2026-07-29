@@ -1,3 +1,13 @@
+# OncoResponde 3.6.7
+
+## Corrección visual del Hero
+- Eliminada la cabecera adicional para evitar la duplicidad del logotipo.
+- Se mantiene un único logotipo: el integrado en la imagen de portada.
+- Reducido el tamaño del saludo dinámico para mejorar la jerarquía visual.
+- El saludo y el texto se presentan en una tarjeta compacta sin tapar el rostro de la mujer.
+- Ajustado el comportamiento responsive para escritorio, tablet y móvil.
+- Conservado el aviso de información orientativa y el saludo según la hora.
+
 # OncoResponde 3.6.6
 
 ## Corregido

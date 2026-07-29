@@ -1,12 +1,11 @@
 import { useLanguage } from '../i18n/LanguageContext';
+
 export default function AppFooter() {
   const { t } = useLanguage();
   return (
     <footer className="app-footer" aria-label="Información de OncoResponde">
-      <strong>OncoResponde 3.6.2</strong>
-      <p>
-        {t('Información orientativa basada en fuentes científicas y guías clínicas. No sustituye la valoración de tu equipo sanitario ni los servicios de urgencias.')}
-      </p>
+      <strong>OncoResponde 3.6.3</strong>
+      <p>{t('Información orientativa.')}</p>
       <small>© 2026 Moisés Mira</small>
     </footer>
   );

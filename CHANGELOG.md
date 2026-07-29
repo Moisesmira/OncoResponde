@@ -1,3 +1,14 @@
+# OncoResponde 3.6.3
+
+## Correcciones visuales y comunicación
+
+- Sustituida la imagen de bienvenida por una versión limpia, sin el saludo fijo integrado.
+- El saludo dinámico es ahora el único saludo visible.
+- La figura de la mujer vuelve a quedar visible y diferenciada del bloque de texto.
+- Añadido un aviso de información orientativa con una formulación más clara sobre el uso de inteligencia artificial.
+- Simplificado el pie de página a la versión y «Información orientativa».
+- Eliminada la frase redundante sobre atención médica y servicios de urgencias del pie de página.
+
 ## 3.6.1 — saludo dinámico según la hora
 
 - Recupera el saludo visible de la pantalla de inicio.

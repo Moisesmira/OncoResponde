@@ -181,12 +181,20 @@ export default function Today() {
         <section className="today-hero today-hero--artwork" aria-labelledby="today-title">
           <img
             className="today-hero__artwork"
-            src="/assets/inicio-oncoresponde-3.2.5.jpeg"
+            src="/assets/inicio-oncoresponde-3.6.3.jpeg"
             alt="Mujer contemplando un camino al amanecer."
           />
           <div className="today-hero__dynamic-copy">
             <h1 id="today-title">{greeting}</h1>
             <p>{t('Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.')}</p>
+          </div>
+        </section>
+
+        <section className="home-guidance" role="note" aria-label={t('Información orientativa')}>
+          <span className="home-guidance__icon" aria-hidden="true">i</span>
+          <div>
+            <strong>{t('Información orientativa')}</strong>
+            <p>{t('Las respuestas están generadas mediante inteligencia artificial y tienen un carácter orientativo. Consulta siempre a tu equipo sanitario para cualquier decisión relacionada con tu salud.')}</p>
           </div>
         </section>
 

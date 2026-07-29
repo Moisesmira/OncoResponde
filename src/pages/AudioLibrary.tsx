@@ -132,7 +132,147 @@ La información ofrecida es orientativa y no sustituye la valoración de tu equi
 
 Gracias por confiar en OncoResponde. Seguimos a tu lado.`;
 
-const CACHE_NAME = 'oncoresponde-fixed-audio-v2';
+
+
+const AUDIO_FOUR_TEXT = `Hola.
+
+Gracias por continuar escuchando la Biblioteca Sonora de OncoResponde.
+
+En este audio queremos contarte qué puedes esperar de nosotros y cuál es el compromiso que asumimos contigo.
+
+Sabemos que, cuando aparece un cáncer, también aparecen muchas preguntas.
+
+No siempre es fácil encontrar información clara.
+
+A veces hay demasiados datos.
+
+Otras veces, la información resulta difícil de comprender o incluso puede generar más preocupación.
+
+Nuestro objetivo es ayudarte a distinguir lo importante.
+
+Queremos ofrecerte información rigurosa, actualizada y explicada con un lenguaje sencillo.
+
+Cada contenido de OncoResponde ha sido elaborado para ayudarte a comprender mejor el proceso oncológico y facilitar la comunicación con los profesionales que te atienden.
+
+Aquí encontrarás explicaciones sobre pruebas diagnósticas, tratamientos, efectos secundarios, alimentación, ejercicio físico, bienestar emocional y muchos otros temas que forman parte del día a día de muchas personas con cáncer.
+
+También queremos acompañarte emocionalmente.
+
+Sabemos que el bienestar no depende únicamente de los tratamientos.
+
+La tranquilidad, el descanso, la respiración consciente, la información comprensible y el apoyo también forman parte del cuidado.
+
+Por eso encontrarás ejercicios de relajación, meditaciones guiadas y contenidos pensados para ayudarte en los momentos de incertidumbre.
+
+Pero también queremos ser completamente transparentes.
+
+OncoResponde no sustituye la atención médica.
+
+Las respuestas que ofrecemos son orientativas y pueden no adaptarse exactamente a tu situación.
+
+Cada persona es diferente.
+
+Cada enfermedad tiene sus propias características.
+
+Y cada tratamiento debe individualizarse.
+
+Por eso, cualquier decisión relacionada con tu salud debe tomarse siempre junto a tu equipo sanitario.
+
+Nuestro compromiso es acompañarte.
+
+Escucharte.
+
+Ayudarte a comprender.
+
+Y ofrecerte herramientas que puedan hacer este camino un poco más fácil.
+
+Gracias por confiar en nosotros.
+
+Seguiremos trabajando para estar a tu lado.
+
+Gracias por escuchar este audio de la Biblioteca Sonora OncoResponde.
+
+Esperamos que esta información te haya resultado útil.
+
+Recuerda que puedes volver a escucharlo siempre que lo necesites.
+
+Gracias por confiar en nosotros.`;
+
+const AUDIO_FIVE_TEXT = `Hola.
+
+En este último audio del primer volumen queremos hablar de algo muy importante.
+
+La comunicación con tu equipo sanitario.
+
+Los profesionales que te atienden son las personas que mejor conocen tu situación clínica.
+
+Trabajar juntos, compartiendo información y resolviendo dudas, puede ayudarte a vivir el proceso con mayor tranquilidad y seguridad.
+
+No tengas miedo a preguntar.
+
+No existen preguntas pequeñas cuando hablamos de tu salud.
+
+Si algo no ha quedado claro durante una consulta, pide que te lo expliquen de otra manera.
+
+Comprender lo que está ocurriendo te permitirá participar de forma más activa en las decisiones relacionadas con tu tratamiento.
+
+Muchas personas encuentran útil preparar previamente las preguntas que desean hacer.
+
+Puedes anotarlas en una libreta, en el teléfono o incluso utilizar OncoResponde para ir organizando tus dudas.
+
+De este modo aprovecharás mejor el tiempo de la consulta.
+
+También es importante explicar cómo te encuentras realmente.
+
+Habla de tus síntomas físicos.
+
+Pero también de cómo te sientes emocionalmente.
+
+La ansiedad.
+
+El miedo.
+
+La tristeza.
+
+Las dificultades para dormir.
+
+El cansancio.
+
+Todo ello forma parte de tu salud y merece ser atendido.
+
+Si acudes acompañado por un familiar o una persona de confianza, esa persona también puede ayudarte a recordar la información recibida y apoyarte durante las decisiones importantes.
+
+Recuerda que las decisiones relacionadas con tu tratamiento se toman de forma individualizada.
+
+Los profesionales aportan su experiencia y sus conocimientos.
+
+Tú aportas tus preferencias, tus necesidades y cómo estás viviendo este proceso.
+
+Juntos formaréis el mejor equipo posible.
+
+Desde OncoResponde queremos ayudarte a preparar esas conversaciones.
+
+A comprender mejor las explicaciones.
+
+Y a sentirte más seguro cuando llegue el momento de tomar decisiones.
+
+Porque una buena comunicación también forma parte del tratamiento.
+
+Gracias por compartir este primer volumen con nosotros.
+
+Esperamos seguir acompañándote durante todo el camino.
+
+Has terminado el primer volumen de la Biblioteca Sonora OncoResponde.
+
+Esperamos que estos primeros audios te hayan ayudado a conocer mejor la aplicación y a sentirte acompañado desde el primer momento.
+
+En el siguiente volumen comenzaremos a comprender mejor qué es el cáncer, cómo se desarrolla y qué significan muchos de los términos médicos que pueden aparecer durante el proceso.
+
+Gracias por confiar en OncoResponde.
+
+Seguimos a tu lado.`;
+
+const CACHE_NAME = 'oncoresponde-fixed-audio-v3';
 
 type Track = {
   id: string;
@@ -168,8 +308,22 @@ const volumeTracks: Track[] = [
     text: AUDIO_THREE_TEXT,
     cacheKey: '/audio-cache/volumen-1-como-aprovechar-cristina.mp3',
   },
-  { id: 'esperar', title: 'Qué puedes esperar de nosotros', duration: '2 min', ready: false },
-  { id: 'equipo', title: 'Cómo hablar con tu equipo sanitario', duration: '4 min', ready: false },
+  {
+    id: 'esperar',
+    title: 'Qué puedes esperar de nosotros',
+    duration: '3 min',
+    ready: true,
+    text: AUDIO_FOUR_TEXT,
+    cacheKey: '/audio-cache/volumen-1-que-puedes-esperar-cristina.mp3',
+  },
+  {
+    id: 'equipo',
+    title: 'Cómo hablar con tu equipo sanitario',
+    duration: '4 min',
+    ready: true,
+    text: AUDIO_FIVE_TEXT,
+    cacheKey: '/audio-cache/volumen-1-hablar-equipo-sanitario-cristina.mp3',
+  },
 ];
 
 export default function AudioLibrary() {
@@ -244,7 +398,7 @@ export default function AudioLibrary() {
         }
       }
 
-      const response = await fetch('/.netlify/functions/voz?v=3.5.2-audio3', {
+      const response = await fetch('/.netlify/functions/voz?v=3.5.3-audios4-5', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: track.text }),

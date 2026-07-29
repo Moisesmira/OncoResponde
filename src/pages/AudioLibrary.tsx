@@ -83,6 +83,55 @@ Recuerda que la información que ofrecemos es orientativa y no sustituye el cons
 
 Gracias por confiar en nosotros. Seguimos a tu lado.`;
 
+
+const AUDIO_THREE_TEXT = `Hola.
+
+Me alegra que sigas aquí.
+
+Ahora que ya conoces la aplicación, quiero compartir contigo algunas ideas para que puedas sacar el máximo partido a OncoResponde.
+
+No se trata de utilizar todas sus funciones cada día. Se trata de encontrar el apoyo adecuado en el momento en que lo necesites.
+
+Hay días en los que quizá solo quieras resolver una duda. Otros días necesitarás comprender mejor un tratamiento. Y habrá momentos en los que simplemente te apetecerá escuchar una voz tranquila que te ayude a respirar y detenerte unos minutos.
+
+Todo eso forma parte de OncoResponde.
+
+Antes de una consulta médica, puedes utilizar la aplicación para preparar las preguntas que quieras hacer a tu equipo sanitario. Muchas personas descubren que, cuando llega la consulta, olvidan algunas de las dudas que habían pensado en casa. Anotarlas previamente puede ayudarte a aprovechar mejor ese tiempo.
+
+Después de una consulta, también puedes volver a la aplicación. A veces los profesionales utilizan términos médicos que necesitan un poco más de tiempo para ser comprendidos. Aquí podrás encontrar explicaciones sencillas que complementan la información recibida.
+
+Si vas a comenzar un tratamiento, puedes consultar cómo suele desarrollarse, qué efectos secundarios son frecuentes y qué recomendaciones generales pueden ayudarte a afrontarlo mejor.
+
+Recuerda que cada persona responde de una manera diferente. Por eso, la información que encontrarás tiene un carácter orientativo y nunca sustituye las indicaciones de tu equipo sanitario.
+
+También queremos acompañarte más allá de los aspectos médicos.
+
+Encontrarás contenidos dedicados al bienestar emocional, la alimentación, el ejercicio físico, el descanso y la relajación. Pequeños recursos que pueden ayudarte a cuidar de ti en el día a día.
+
+La Biblioteca Sonora está pensada precisamente para esos momentos. Cuando necesites detenerte. Cuando quieras comprender algo con calma. O simplemente cuando necesites sentir que alguien te acompaña.
+
+Si compartes este camino con un familiar o una persona cercana, invítale también a utilizar la aplicación. Muchas veces ellos tienen las mismas dudas que tú. Y comprender mejor el proceso puede ayudarles a acompañarte de una forma más tranquila y más útil.
+
+No existe una única forma de utilizar OncoResponde.
+
+Hazlo a tu ritmo. Vuelve cuando lo necesites. Explora solo aquello que te resulte útil.
+
+Porque cada paciente es diferente. Cada historia es diferente. Y cada proceso merece un acompañamiento respetuoso y personalizado.
+
+Esperamos que, poco a poco, esta aplicación se convierta en un lugar de confianza al que puedas regresar siempre que aparezca una nueva pregunta. O simplemente cuando necesites unos minutos para respirar.
+
+Gracias por seguir caminando con nosotros.
+
+Gracias por escuchar este audio de la Biblioteca Sonora OncoResponde.
+
+Esperamos que esta información te haya resultado útil.
+
+Recuerda que puedes volver a escuchar este contenido siempre que lo necesites y descubrir nuevos recursos en la aplicación.
+
+La información ofrecida es orientativa y no sustituye la valoración de tu equipo sanitario.
+
+Gracias por confiar en OncoResponde. Seguimos a tu lado.`;
+
 const CACHE_NAME = 'oncoresponde-fixed-audio-v2';
 
 type Track = {
@@ -111,7 +160,14 @@ const volumeTracks: Track[] = [
     text: AUDIO_TWO_TEXT,
     cacheKey: '/audio-cache/volumen-1-como-utilizar-cristina.mp3',
   },
-  { id: 'aprovechar', title: 'Cómo aprovechar OncoResponde', duration: '3 min', ready: false },
+  {
+    id: 'aprovechar',
+    title: 'Cómo aprovechar OncoResponde',
+    duration: '4 min',
+    ready: true,
+    text: AUDIO_THREE_TEXT,
+    cacheKey: '/audio-cache/volumen-1-como-aprovechar-cristina.mp3',
+  },
   { id: 'esperar', title: 'Qué puedes esperar de nosotros', duration: '2 min', ready: false },
   { id: 'equipo', title: 'Cómo hablar con tu equipo sanitario', duration: '4 min', ready: false },
 ];
@@ -188,7 +244,7 @@ export default function AudioLibrary() {
         }
       }
 
-      const response = await fetch('/.netlify/functions/voz?v=3.5.1-audio2', {
+      const response = await fetch('/.netlify/functions/voz?v=3.5.2-audio3', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: track.text }),

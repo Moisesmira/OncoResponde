@@ -1289,3 +1289,11 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
   .sound-track > button { grid-column:1 / -1; width:100%; }
 }
 .sound-track.is-active { border-color:#0b63ad; box-shadow:0 12px 30px rgba(11,99,173,.14); background:#f8fcff; }
+
+.sound-volume-card--pending { margin-top:34px; background:linear-gradient(180deg,#ffffff,#f8fbfd); }
+.sound-volume-card__cover--two { background:linear-gradient(145deg,#31586f,#7897a8); }
+.sound-volume-card__heading { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.sound-volume-card__badge { display:inline-flex; align-items:center; min-height:30px; padding:5px 10px; border-radius:999px; background:#eef3f6; color:#4b6474; font-size:.76rem; font-weight:850; }
+.sound-track-list--pending { margin-top:18px; }
+.sound-track-list--pending .sound-track { background:#fbfcfd; }
+.sound-track-list--pending .sound-track__status { display:inline-flex; margin:8px 0 0; }

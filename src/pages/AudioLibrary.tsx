@@ -326,6 +326,19 @@ const volumeTracks: Track[] = [
   },
 ];
 
+const volumeTwoTracks: Track[] = [
+  { id: 'que-es-cancer', title: '¿Qué es el cáncer?', duration: '3–4 min', ready: false },
+  { id: 'por-que-aparece', title: '¿Por qué aparece un cáncer?', duration: '3–4 min', ready: false },
+  { id: 'estadio', title: '¿Qué significa el estadio?', duration: '3–4 min', ready: false },
+  { id: 'metastasis', title: '¿Qué son las metástasis?', duration: '3–4 min', ready: false },
+  { id: 'diagnostico', title: '¿Cómo se diagnostica un cáncer?', duration: '3–4 min', ready: false },
+  { id: 'imagen', title: '¿Qué son las pruebas de imagen?', duration: '3–4 min', ready: false },
+  { id: 'biopsia', title: '¿Qué es una biopsia?', duration: '3–4 min', ready: false },
+  { id: 'respuesta', title: '¿Qué significa que un tratamiento funcione?', duration: '3–4 min', ready: false },
+  { id: 'comite', title: '¿Qué es un comité de tumores?', duration: '3–4 min', ready: false },
+  { id: 'mitos', title: 'Mitos y realidades sobre el cáncer', duration: '4 min', ready: false },
+];
+
 export default function AudioLibrary() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const objectUrlRef = useRef<string | null>(null);
@@ -398,7 +411,7 @@ export default function AudioLibrary() {
         }
       }
 
-      const response = await fetch('/.netlify/functions/voz?v=3.5.3-audios4-5', {
+      const response = await fetch('/.netlify/functions/voz?v=3.5.4-volumen2', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: track.text }),
@@ -543,6 +556,34 @@ export default function AudioLibrary() {
           </label>
         </div>
         {error && <p className="sound-player-error" role="alert">{error}</p>}
+      </section>
+
+
+
+      <section className="sound-volume-card sound-volume-card--pending" aria-labelledby="volume-two-title">
+        <div className="sound-volume-card__cover sound-volume-card__cover--two" aria-hidden="true"><span>II</span><small>Comprender el cáncer</small></div>
+        <div className="sound-volume-card__intro">
+          <div className="sound-volume-card__heading">
+            <span className="section-kicker">Volumen II · 10 audios</span>
+            <span className="sound-volume-card__badge">Próximamente</span>
+          </div>
+          <h2 id="volume-two-title">Comprender el cáncer</h2>
+          <p>Conceptos esenciales para entender mejor la enfermedad, el diagnóstico, las pruebas y las decisiones clínicas.</p>
+        </div>
+      </section>
+
+      <section className="sound-track-list sound-track-list--pending" aria-label="Próximos audios del Volumen II">
+        {volumeTwoTracks.map((track, index) => (
+          <article className="sound-track is-pending" key={track.id}>
+            <span className="sound-track__number">{String(index + 1).padStart(2, '0')}</span>
+            <div className="sound-track__body">
+              <h3>{track.title}</h3>
+              <small>{track.duration}</small>
+              <span className="sound-track__status">Próximamente</span>
+            </div>
+            <button type="button" disabled aria-label={`${track.title}: próximamente`}>Próximamente</button>
+          </article>
+        ))}
       </section>
 
       <section className="wellness-note" role="note">

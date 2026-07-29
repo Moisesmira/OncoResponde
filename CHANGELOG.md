@@ -1,3 +1,12 @@
+# OncoResponde 3.6.5
+
+## Mejoras visuales
+
+- Logotipo visible en una tarjeta superior de tamaño reducido.
+- Fotografía de la mujer mostrada con nitidez, sin degradado blanco aplicado por CSS.
+- Saludo dinámico integrado en una tarjeta flotante independiente.
+- Composición adaptada para escritorio, tablet y móvil.
+
 # OncoResponde 3.6.4
 
 ## Corrección visual del hero

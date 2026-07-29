@@ -184,6 +184,9 @@ export default function Today() {
             src="/assets/inicio-oncoresponde-3.6.4.jpeg"
             alt="Mujer contemplando un camino al amanecer."
           />
+          <div className="today-hero__brand" aria-label="OncoResponde">
+            <img src="/brand/logo-oncoresponde.png" alt="OncoResponde — Información, apoyo y acompañamiento" />
+          </div>
           <div className="today-hero__dynamic-copy">
             <h1 id="today-title">{greeting}</h1>
             <p>{t('Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.')}</p>

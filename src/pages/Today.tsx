@@ -178,16 +178,17 @@ export default function Today() {
   return (
     <>
       <main className="today-page">
-        <section className="today-hero today-hero--editorial" aria-labelledby="today-title">
+        <section className="today-hero today-hero--image-only" aria-label={t('Imagen de bienvenida')}>
           <img
             className="today-hero__artwork"
-            src="/assets/inicio-oncoresponde-3.6.4.jpeg"
+            src="/assets/inicio-oncoresponde-3.7.0.jpeg"
             alt="Mujer contemplando un camino al amanecer."
           />
-          <div className="today-hero__dynamic-copy">
-            <h1 id="today-title">{greeting}</h1>
-            <p>{t('Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.')}</p>
-          </div>
+        </section>
+
+        <section className="today-welcome" aria-labelledby="today-title">
+          <h1 id="today-title">{greeting}</h1>
+          <p>{t('Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.')}</p>
         </section>
 
         <section className="home-guidance" role="note" aria-label={t('Información orientativa')}>

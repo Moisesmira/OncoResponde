@@ -1478,3 +1478,69 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
   }
   .home-guidance p { font-size: .9rem; }
 }
+
+
+/* OncoResponde 3.7.0 · Rediseño editorial: imagen completa y contenido debajo */
+.today-hero.today-hero--image-only {
+  min-height: 0 !important;
+  aspect-ratio: 1536 / 566;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #eef5f8;
+  box-shadow: 0 18px 42px rgba(20, 65, 95, .12);
+}
+.today-hero--image-only .today-hero__artwork {
+  position: static;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+.today-welcome {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: clamp(26px, 4vw, 42px) 18px 8px;
+  text-align: center;
+}
+.today-welcome h1 {
+  margin: 0 0 10px;
+  color: #123e6f;
+  font-size: clamp(1.85rem, 4vw, 2.65rem);
+  line-height: 1.08;
+  letter-spacing: -.025em;
+}
+.today-welcome p {
+  max-width: 760px;
+  margin: 0 auto;
+  color: #244f6e;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-weight: 650;
+  line-height: 1.5;
+}
+.today-page > .home-guidance {
+  max-width: 900px;
+  margin: 18px auto 6px;
+}
+@media (max-width: 720px) {
+  .today-hero.today-hero--image-only {
+    aspect-ratio: 16 / 10;
+    border-radius: 22px;
+  }
+  .today-hero--image-only .today-hero__artwork {
+    object-position: 42% center;
+  }
+  .today-welcome {
+    padding: 24px 12px 6px;
+  }
+  .today-welcome h1 {
+    font-size: clamp(1.7rem, 8vw, 2.15rem);
+  }
+  .today-welcome p {
+    font-size: .98rem;
+  }
+  .today-page > .home-guidance {
+    margin-top: 14px;
+  }
+}
+

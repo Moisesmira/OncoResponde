@@ -1,3 +1,21 @@
+# OncoResponde 3.7.0
+
+## Rediseño editorial de la pantalla de inicio
+
+- Fotografía panorámica completa, sin textos, tarjetas ni logotipos superpuestos.
+- Eliminado el logotipo duplicado del contenido; se conserva únicamente el de la cabecera general.
+- Saludo dinámico situado debajo de la imagen y reducido para mejorar la jerarquía visual.
+- Mensaje de acompañamiento e información orientativa organizados en bloques independientes.
+- Ajustes específicos para escritorio, tableta y móvil.
+
+# OncoResponde 3.6.8
+
+- La fotografía de bienvenida se muestra completa y sin elementos superpuestos.
+- El saludo dinámico aparece debajo de la imagen con un tamaño más contenido.
+- El aviso de información orientativa se sitúa debajo del saludo.
+- El logotipo se muestra una sola vez y con un tamaño reducido.
+- Ajustes específicos para móvil, tableta y escritorio.
+
 # OncoResponde 3.6.7
 
 ## Corrección visual del Hero

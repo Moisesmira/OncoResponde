@@ -1,3 +1,13 @@
+# OncoResponde 3.6.4
+
+## Corrección visual del hero
+
+- Sustituido el degradado blanco invasivo por un panel lateral sólido y limpio.
+- La mujer y la fotografía quedan visibles sin efecto de desvanecimiento.
+- El saludo dinámico se mantiene como único saludo renderizado.
+- Adaptación responsive: panel lateral en escritorio y tarjeta translúcida en móvil.
+- Nueva imagen recortada sin la zona blanca integrada de la versión anterior.
+
 # OncoResponde 3.6.3
 
 ## Correcciones visuales y comunicación

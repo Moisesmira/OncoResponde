@@ -181,7 +181,7 @@ export default function Today() {
         <section className="today-hero today-hero--artwork" aria-labelledby="today-title">
           <img
             className="today-hero__artwork"
-            src="/assets/inicio-oncoresponde-3.6.3.jpeg"
+            src="/assets/inicio-oncoresponde-3.6.4.jpeg"
             alt="Mujer contemplando un camino al amanecer."
           />
           <div className="today-hero__dynamic-copy">

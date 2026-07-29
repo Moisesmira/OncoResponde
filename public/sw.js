@@ -1,4 +1,4 @@
-const APP_VERSION = '3.6.3';
+const APP_VERSION = '3.6.4';
 const CACHE = `oncoresponde-${APP_VERSION}`;
 const APP_SHELL = [
   '/',

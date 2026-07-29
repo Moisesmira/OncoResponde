@@ -4,7 +4,7 @@ export default function AppFooter() {
   const { t } = useLanguage();
   return (
     <footer className="app-footer" aria-label="Información de OncoResponde">
-      <strong>OncoResponde 3.6.3</strong>
+      <strong>OncoResponde 3.6.4</strong>
       <p>{t('Información orientativa.')}</p>
       <small>© 2026 Moisés Mira</small>
     </footer>

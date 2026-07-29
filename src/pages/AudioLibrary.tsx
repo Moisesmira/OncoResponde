@@ -27,12 +27,90 @@ Gracias por confiar en nosotros. Gracias por permitirnos acompañarte.
 
 Bienvenido a OncoResponde. Aquí comienza un camino en el que no estarás solo.`;
 
-const CACHE_NAME = 'oncoresponde-fixed-audio-v1';
-const CACHE_KEY = '/audio-cache/volumen-1-bienvenido-cristina.mp3';
+const AUDIO_TWO_TEXT = `Hola de nuevo.
 
-const volumeTracks = [
-  { id: 'bienvenido', title: 'Bienvenido a OncoResponde', duration: '3–4 min', ready: true },
-  { id: 'utilizar', title: 'Cómo utilizar la aplicación', duration: '2 min', ready: false },
+Me alegra que continúes con nosotros.
+
+En este audio quiero enseñarte cómo utilizar OncoResponde de una forma sencilla y aprovechar al máximo todo lo que la aplicación puede ofrecerte.
+
+No es necesario explorar todas las funciones desde el primer día.
+
+Cada persona vive el proceso del cáncer de una manera diferente, y la aplicación está pensada para adaptarse a tus necesidades en cada momento.
+
+En la pantalla principal encontrarás diferentes apartados.
+
+Puedes utilizarlos en el orden que prefieras.
+
+Si tienes una duda concreta, simplemente escríbela o háblame utilizando la función de voz.
+
+Intentaré responderte con información clara, comprensible y basada en fuentes científicas fiables.
+
+Recuerda que mis respuestas tienen un carácter orientativo y nunca sustituyen la valoración de los profesionales que conocen tu caso.
+
+También encontrarás apartados dedicados al bienestar.
+
+Podrás acceder a recomendaciones sobre alimentación, actividad física, descanso, bienestar emocional y otras áreas que pueden ayudarte durante el tratamiento y la recuperación.
+
+Si en algún momento necesitas detenerte unos minutos, puedes acceder a la Biblioteca Sonora.
+
+Allí encontrarás explicaciones, ejercicios de respiración, meditaciones guiadas y contenidos creados para acompañarte cuando más lo necesites.
+
+No existe una forma correcta de utilizar OncoResponde.
+
+Algunas personas consultan la aplicación antes de una visita médica para preparar sus preguntas.
+
+Otras la utilizan después de la consulta para comprender mejor la información recibida.
+
+Y muchas vuelven simplemente cuando necesitan resolver una duda o encontrar un momento de calma.
+
+Te animamos también a compartir la aplicación con las personas que te acompañan.
+
+Familiares y cuidadores suelen tener las mismas dudas que los pacientes, y comprender mejor el proceso puede ayudarles a ofrecer un apoyo más útil y más tranquilo.
+
+Nuestro objetivo es que OncoResponde sea una herramienta sencilla, cercana y siempre disponible.
+
+Un lugar donde encontrar respuestas cuando las necesites y un apoyo entre una consulta y la siguiente.
+
+Gracias por seguir con nosotros.
+
+Continuamos acompañándote, paso a paso.
+
+Gracias por escuchar este audio de la Biblioteca Sonora OncoResponde.
+
+Puedes volver a escucharlo siempre que lo necesites y descubrir el resto de contenidos disponibles en la aplicación.
+
+Recuerda que la información que ofrecemos es orientativa y no sustituye el consejo de tu equipo sanitario.
+
+Gracias por confiar en nosotros. Seguimos a tu lado.`;
+
+const CACHE_NAME = 'oncoresponde-fixed-audio-v2';
+
+type Track = {
+  id: string;
+  title: string;
+  duration: string;
+  ready: boolean;
+  text?: string;
+  cacheKey?: string;
+};
+
+const volumeTracks: Track[] = [
+  {
+    id: 'bienvenido',
+    title: 'Bienvenido a OncoResponde',
+    duration: '3–4 min',
+    ready: true,
+    text: AUDIO_ONE_TEXT,
+    cacheKey: '/audio-cache/volumen-1-bienvenido-cristina.mp3',
+  },
+  {
+    id: 'utilizar',
+    title: 'Cómo utilizar la aplicación',
+    duration: '3 min',
+    ready: true,
+    text: AUDIO_TWO_TEXT,
+    cacheKey: '/audio-cache/volumen-1-como-utilizar-cristina.mp3',
+  },
   { id: 'aprovechar', title: 'Cómo aprovechar OncoResponde', duration: '3 min', ready: false },
   { id: 'esperar', title: 'Qué puedes esperar de nosotros', duration: '2 min', ready: false },
   { id: 'equipo', title: 'Cómo hablar con tu equipo sanitario', duration: '4 min', ready: false },
@@ -41,51 +119,95 @@ const volumeTracks = [
 export default function AudioLibrary() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const objectUrlRef = useRef<string | null>(null);
+  const [activeTrack, setActiveTrack] = useState<Track>(volumeTracks[0]);
   const [audioUrl, setAudioUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [error, setError] = useState('');
   const [rate, setRate] = useState(1);
 
+  function clearObjectUrl() {
+    if (objectUrlRef.current) {
+      URL.revokeObjectURL(objectUrlRef.current);
+      objectUrlRef.current = null;
+    }
+  }
+
   useEffect(() => {
     let cancelled = false;
+    setPlaying(false);
+    setAudioUrl('');
+    setError('');
+    clearObjectUrl();
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.removeAttribute('src');
+      audioRef.current.load();
+    }
+
     async function loadCachedAudio() {
-      if (!('caches' in window)) return;
+      if (!activeTrack.cacheKey || !('caches' in window)) return;
       const cache = await caches.open(CACHE_NAME);
-      const cached = await cache.match(CACHE_KEY);
+      const cached = await cache.match(activeTrack.cacheKey);
       if (!cached || cancelled) return;
       const blob = await cached.blob();
       const url = URL.createObjectURL(blob);
+      if (cancelled) {
+        URL.revokeObjectURL(url);
+        return;
+      }
       objectUrlRef.current = url;
       setAudioUrl(url);
     }
+
     loadCachedAudio().catch(() => undefined);
     return () => {
       cancelled = true;
-      if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
     };
-  }, []);
+  }, [activeTrack.id]);
 
-  async function ensureAudio() {
-    if (audioUrl) return audioUrl;
+  useEffect(() => () => clearObjectUrl(), []);
+
+  async function ensureAudio(track = activeTrack) {
+    if (track.id === activeTrack.id && audioUrl) return audioUrl;
+    if (!track.text || !track.cacheKey) throw new Error('Este audio todavía no está disponible.');
+
     setLoading(true);
     setError('');
     try {
-      const response = await fetch('/.netlify/functions/voz', {
+      if ('caches' in window) {
+        const cache = await caches.open(CACHE_NAME);
+        const cached = await cache.match(track.cacheKey);
+        if (cached) {
+          const cachedBlob = await cached.blob();
+          clearObjectUrl();
+          const cachedUrl = URL.createObjectURL(cachedBlob);
+          objectUrlRef.current = cachedUrl;
+          setAudioUrl(cachedUrl);
+          return cachedUrl;
+        }
+      }
+
+      const response = await fetch('/.netlify/functions/voz?v=3.5.1-audio2', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: AUDIO_ONE_TEXT }),
+        body: JSON.stringify({ text: track.text }),
       });
       if (!response.ok) {
         const details = await response.json().catch(() => ({}));
         throw new Error(details.error || 'No se ha podido crear el audio con Cristina.');
       }
       const blob = await response.blob();
-      if (!blob.size || !blob.type.includes('audio')) throw new Error('La respuesta recibida no contiene un audio válido.');
+      if (!blob.size || !blob.type.includes('audio')) {
+        throw new Error('La respuesta recibida no contiene un audio válido.');
+      }
       if ('caches' in window) {
         const cache = await caches.open(CACHE_NAME);
-        await cache.put(CACHE_KEY, new Response(blob, { headers: { 'Content-Type': blob.type || 'audio/mpeg' } }));
+        await cache.put(track.cacheKey, new Response(blob, {
+          headers: { 'Content-Type': blob.type || 'audio/mpeg' },
+        }));
       }
+      clearObjectUrl();
       const url = URL.createObjectURL(blob);
       objectUrlRef.current = url;
       setAudioUrl(url);
@@ -95,16 +217,26 @@ export default function AudioLibrary() {
     }
   }
 
-  async function playAudio() {
+  async function selectAndPlay(track: Track) {
+    if (!track.ready) return;
     try {
-      const url = await ensureAudio();
+      if (activeTrack.id !== track.id) {
+        setActiveTrack(track);
+        setAudioUrl('');
+        setPlaying(false);
+        setError('');
+      }
+      const url = await ensureAudio(track);
       const player = audioRef.current;
       if (!player) return;
       if (player.src !== url) player.src = url;
       player.playbackRate = rate;
       await player.play();
       setPlaying(true);
-      localStorage.setItem('oncoresponde:last-audio', JSON.stringify({ title: 'Bienvenido a OncoResponde', id: 'vol1-bienvenido' }));
+      localStorage.setItem('oncoresponde:last-audio', JSON.stringify({
+        title: track.title,
+        id: `vol1-${track.id}`,
+      }));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se ha podido reproducir el audio.');
     }
@@ -149,33 +281,54 @@ export default function AudioLibrary() {
       </section>
 
       <section className="sound-track-list" aria-label="Audios del Volumen I">
-        {volumeTracks.map((track, index) => (
-          <article className={`sound-track${track.ready ? ' is-ready' : ' is-pending'}`} key={track.id}>
-            <span className="sound-track__number">{String(index + 1).padStart(2, '0')}</span>
-            <div className="sound-track__body">
-              <h3>{track.title}</h3>
-              <small>{track.duration} · Voz de Cristina</small>
-              {!track.ready && <span className="sound-track__status">Próximamente</span>}
-            </div>
-            {track.ready ? <button type="button" onClick={playing ? togglePause : playAudio} disabled={loading}>
-              {loading ? 'Creando audio…' : playing ? '⏸ Pausar' : '▶ Escuchar'}
-            </button> : <button type="button" disabled>Próximamente</button>}
-          </article>
-        ))}
+        {volumeTracks.map((track, index) => {
+          const isActive = activeTrack.id === track.id;
+          return (
+            <article className={`sound-track${track.ready ? ' is-ready' : ' is-pending'}${isActive ? ' is-active' : ''}`} key={track.id}>
+              <span className="sound-track__number">{String(index + 1).padStart(2, '0')}</span>
+              <div className="sound-track__body">
+                <h3>{track.title}</h3>
+                <small>{track.duration} · Voz de Cristina</small>
+                {!track.ready && <span className="sound-track__status">Próximamente</span>}
+              </div>
+              {track.ready ? (
+                <button
+                  type="button"
+                  onClick={() => isActive && playing ? togglePause() : selectAndPlay(track)}
+                  disabled={loading}
+                >
+                  {loading && isActive ? 'Creando audio…' : isActive && playing ? '⏸ Pausar' : '▶ Escuchar'}
+                </button>
+              ) : <button type="button" disabled>Próximamente</button>}
+            </article>
+          );
+        })}
       </section>
 
       <section className="sound-player-card" aria-live="polite">
         <div>
           <span className="section-kicker">Ahora escuchas</span>
-          <h2>Bienvenido a OncoResponde</h2>
+          <h2>{activeTrack.title}</h2>
           <p>{audioUrl ? 'Audio disponible en este dispositivo.' : 'La primera vez se creará con la voz Cristina y quedará guardado en este dispositivo.'}</p>
         </div>
-        <audio ref={audioRef} src={audioUrl || undefined} onEnded={() => setPlaying(false)} onPause={() => setPlaying(false)} onPlay={() => setPlaying(true)} controls={Boolean(audioUrl)} preload="metadata" />
+        <audio
+          ref={audioRef}
+          src={audioUrl || undefined}
+          onEnded={() => setPlaying(false)}
+          onPause={() => setPlaying(false)}
+          onPlay={() => setPlaying(true)}
+          controls={Boolean(audioUrl)}
+          preload="metadata"
+        />
         <div className="sound-player-card__controls">
-          <button type="button" onClick={playAudio} disabled={loading}>{loading ? 'Creando…' : '▶ Reproducir'}</button>
+          <button type="button" onClick={() => selectAndPlay(activeTrack)} disabled={loading}>
+            {loading ? 'Creando…' : '▶ Reproducir'}
+          </button>
           <label>Velocidad
             <select value={rate} onChange={(event) => changeRate(Number(event.target.value))}>
-              <option value="0.75">0,75×</option><option value="1">1×</option><option value="1.25">1,25×</option>
+              <option value="0.75">0,75×</option>
+              <option value="1">1×</option>
+              <option value="1.25">1,25×</option>
             </select>
           </label>
         </div>

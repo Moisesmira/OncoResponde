@@ -1288,3 +1288,4 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
   .sound-track { grid-template-columns:48px 1fr; }
   .sound-track > button { grid-column:1 / -1; width:100%; }
 }
+.sound-track.is-active { border-color:#0b63ad; box-shadow:0 12px 30px rgba(11,99,173,.14); background:#f8fcff; }

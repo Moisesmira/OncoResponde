@@ -1297,3 +1297,69 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 .sound-track-list--pending { margin-top:18px; }
 .sound-track-list--pending .sound-track { background:#fbfcfd; }
 .sound-track-list--pending .sound-track__status { display:inline-flex; margin:8px 0 0; }
+
+/* OncoResponde 3.6.0 · actualización de la PWA sin reinstalar */
+.update-prompt{
+  position:fixed;
+  z-index:10000;
+  right:18px;
+  bottom:18px;
+  width:min(430px,calc(100vw - 36px));
+  display:grid;
+  grid-template-columns:46px 1fr auto;
+  gap:12px 14px;
+  align-items:center;
+  padding:16px;
+  border:1px solid rgba(159,200,218,.9);
+  border-radius:20px;
+  background:rgba(255,255,255,.98);
+  box-shadow:0 18px 48px rgba(7,59,111,.24);
+  color:#173f5b;
+}
+.update-prompt__icon{
+  width:46px;
+  height:46px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  background:#e8f5fc;
+  color:#0b63ad;
+  font-size:1.7rem;
+  font-weight:900;
+}
+.update-prompt__content{display:grid;gap:3px;min-width:0}
+.update-prompt__content strong{font-size:1rem;color:#123f62}
+.update-prompt__content span{font-size:.86rem;line-height:1.4;color:#587181}
+.update-prompt button{
+  min-height:44px;
+  padding:10px 14px;
+  border:0;
+  border-radius:13px;
+  background:#0b63ad;
+  color:#fff;
+  font:inherit;
+  font-size:.84rem;
+  font-weight:850;
+  white-space:nowrap;
+  cursor:pointer;
+}
+.update-prompt button:disabled{opacity:.65;cursor:wait}
+.update-prompt small{
+  grid-column:2 / -1;
+  color:#718592;
+  font-size:.72rem;
+  font-weight:750;
+}
+@media(max-width:620px){
+  .update-prompt{
+    right:14px;
+    bottom:14px;
+    width:calc(100vw - 28px);
+    grid-template-columns:42px 1fr;
+    border-radius:18px;
+  }
+  .update-prompt__icon{width:42px;height:42px}
+  .update-prompt button{grid-column:1 / -1;width:100%}
+  .update-prompt small{grid-column:1 / -1;text-align:center}
+}
+@media print{.update-prompt{display:none!important}}

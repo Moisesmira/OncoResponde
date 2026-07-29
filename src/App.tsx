@@ -25,12 +25,14 @@ import Program30 from './pages/Program30';
 import AudioLibrary from './pages/AudioLibrary';
 import LanguageSelector from './components/LanguageSelector';
 import { useLanguage } from './i18n/LanguageContext';
+import UpdatePrompt from './components/UpdatePrompt';
 
 export default function App() {
   const { t } = useLanguage();
   return (
     <div className="app-shell">
       <LanguageSelector />
+      <UpdatePrompt />
       <Routes>
       <Route path="/" element={<Today />} />
       <Route path="/hablame" element={<Voice />} />

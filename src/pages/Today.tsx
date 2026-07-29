@@ -178,18 +178,28 @@ export default function Today() {
   return (
     <>
       <main className="today-page">
-        <section className="today-hero today-hero--artwork" aria-labelledby="today-title">
-          <img
-            className="today-hero__artwork"
-            src="/assets/inicio-oncoresponde-3.6.4.jpeg"
-            alt="Mujer contemplando un camino al amanecer."
-          />
-          <div className="today-hero__brand" aria-label="OncoResponde">
-            <img src="/brand/logo-oncoresponde.png" alt="OncoResponde — Información, apoyo y acompañamiento" />
-          </div>
-          <div className="today-hero__dynamic-copy">
-            <h1 id="today-title">{greeting}</h1>
-            <p>{t('Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.')}</p>
+        <section className="today-hero today-hero--editorial" aria-labelledby="today-title">
+          <header className="today-hero__header">
+            <img
+              className="today-hero__logo"
+              src="/brand/logo-oncoresponde.png"
+              alt="OncoResponde — Información, apoyo y acompañamiento"
+            />
+          </header>
+
+          <div className="today-hero__layout">
+            <div className="today-hero__dynamic-copy">
+              <h1 id="today-title">{greeting}</h1>
+              <p>{t('Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.')}</p>
+            </div>
+
+            <div className="today-hero__visual">
+              <img
+                className="today-hero__artwork"
+                src="/assets/inicio-oncoresponde-3.6.4.jpeg"
+                alt="Mujer contemplando un camino al amanecer."
+              />
+            </div>
           </div>
         </section>
 

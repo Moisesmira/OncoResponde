@@ -1,3 +1,13 @@
+# OncoResponde 3.6.6
+
+## Corregido
+- Eliminado el logotipo duplicado integrado visualmente en la portada mediante un recorte editorial de la fotografía.
+- Nuevo encabezado blanco independiente con el logotipo oficial, más pequeño y completamente visible.
+- Eliminado el degradado blanco superpuesto sobre la mujer.
+- La fotografía se muestra nítida y separada del bloque de saludo.
+- Diseño reorganizado en dos columnas en escritorio y apilado en móvil.
+- Conservado el saludo dinámico y el aviso de información orientativa.
+
 # OncoResponde 3.6.5
 
 ## Mejoras visuales

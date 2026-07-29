@@ -1,4 +1,4 @@
-const APP_VERSION = '3.6.5';
+const APP_VERSION = '3.6.6';
 const CACHE = `oncoresponde-${APP_VERSION}`;
 const APP_SHELL = [
   '/',
@@ -9,7 +9,7 @@ const APP_SHELL = [
   '/brand/apple-touch-icon.png',
   '/brand/logo-oncoresponde.png',
   '/assets/camino.png',
-  '/assets/inicio-oncoresponde-3.2.5.jpeg',
+  '/assets/inicio-oncoresponde-3.6.4.jpeg',
 ];
 
 self.addEventListener('install', (event) => {

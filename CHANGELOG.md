@@ -163,3 +163,11 @@ Este archivo documenta las modificaciones incorporadas en cada versión. El form
 - La mejor voz femenina disponible se marca como «Recomendada para OncoResponde»; si no hay voz femenina, se recomienda la mejor voz es-ES disponible.
 - La voz recomendada se selecciona automáticamente cuando el usuario todavía no ha guardado una preferencia.
 
+
+## 3.6.2 · Corrección visual del saludo dinámico
+
+- Eliminada la capa oscura que ocultaba la imagen de la mujer.
+- Reubicado el saludo dinámico en la esquina superior izquierda.
+- Reubicado el texto de acompañamiento para conservar la composición original.
+- Añadido un degradado claro que oculta el saludo fijo integrado en la imagen de fondo.
+- Mantenido el cambio automático entre «Buenos días», «Buenas tardes» y «Buenas noches».

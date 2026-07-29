@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const APP_VERSION = '3.6.1';
+const APP_VERSION = '3.6.2';
 const UPDATE_INTERVAL_MS = 60 * 60 * 1000;
 
 export default function UpdatePrompt() {

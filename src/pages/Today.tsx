@@ -91,11 +91,11 @@ function HandshakeIcon() {
   );
 }
 
-function getGreeting(t: (text:string)=>string) {
-  const hour = new Date().getHours();
-  if (hour < 12) return t('Buenos días');
-  if (hour < 20) return t('Buenas tardes');
-  return t('Buenas noches');
+function getGreetingKey(date = new Date()): 'Buenos días' | 'Buenas tardes' | 'Buenas noches' {
+  const hour = date.getHours();
+  if (hour >= 6 && hour < 14) return 'Buenos días';
+  if (hour >= 14 && hour < 20) return 'Buenas tardes';
+  return 'Buenas noches';
 }
 
 export default function Today() {
@@ -104,6 +104,8 @@ export default function Today() {
   const selected = mood ? recommendations[mood] : null;
   const homeInsights = getHomeInsights();
   const dailyEpisode = getDailyEpisode();
+  const [greetingKey, setGreetingKey] = useState(getGreetingKey);
+  const greeting = t(greetingKey);
   const [minutePlaying, setMinutePlaying] = useState(false);
   const [dailyGoalDone, setDailyGoalDone] = useState(() => localStorage.getItem('oncoresponde:daily-goal:'+new Date().toISOString().slice(0,10)) === '1');
   const moodHistory = readMoodHistory().slice(0,7);
@@ -114,6 +116,25 @@ export default function Today() {
     const saved = window.localStorage.getItem(`oncoresponde-minute-feedback-${dailyEpisode.id}`);
     return saved === 'yes' || saved === 'no' ? saved : null;
   });
+
+  useEffect(() => {
+    const updateGreeting = () => setGreetingKey(getGreetingKey());
+
+    updateGreeting();
+    const intervalId = window.setInterval(updateGreeting, 60_000);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') updateGreeting();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', updateGreeting);
+
+    return () => {
+      window.clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', updateGreeting);
+    };
+  }, []);
 
   useEffect(() => () => window.speechSynthesis?.cancel(), []);
 
@@ -158,12 +179,15 @@ export default function Today() {
     <>
       <main className="today-page">
         <section className="today-hero today-hero--artwork" aria-labelledby="today-title">
-          <h1 id="today-title" className="sr-only">{getGreeting(t)}</h1>
           <img
             className="today-hero__artwork"
             src="/assets/inicio-oncoresponde-3.2.5.jpeg"
-            alt="OncoResponde. Buenos días. Estoy aquí para ayudarte a comprender mejor lo que estás viviendo. Mujer contemplando un camino al amanecer."
+            alt="Mujer contemplando un camino al amanecer."
           />
+          <div className="today-hero__dynamic-copy">
+            <h1 id="today-title">{greeting}</h1>
+            <p>{t('Estoy aquí para ayudarte a comprender mejor lo que estás viviendo.')}</p>
+          </div>
         </section>
 
         <section className="card mood-card" aria-labelledby="mood-title">

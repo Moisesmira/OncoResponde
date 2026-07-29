@@ -1,3 +1,11 @@
+## 3.6.1 — saludo dinámico según la hora
+
+- Recupera el saludo visible de la pantalla de inicio.
+- Muestra «Buenos días» de 06:00 a 13:59, «Buenas tardes» de 14:00 a 19:59 y «Buenas noches» de 20:00 a 05:59.
+- Actualiza el saludo cada minuto, al volver la aplicación al primer plano y al recuperar el foco.
+- Mantiene el saludo traducido en español, catalán e inglés.
+- Sustituye el texto fijo incrustado visualmente mediante una capa dinámica accesible.
+
 ## 3.4.0 — voz fija oficial de OncoResponde
 
 - Se fija en el servidor la voz de ElevenLabs `dNjJKg63Fr5AXwIdkATa`.

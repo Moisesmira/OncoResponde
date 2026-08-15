@@ -4,6 +4,7 @@ import BottomNav from '../components/BottomNav';
 import NavHeader from '../components/NavHeader';
 import { oneMinuteEpisodes, type AudioCategory, type OneMinuteEpisode } from '../data/oneMinuteEpisodes';
 import { useAppStore } from '../store/useAppStore';
+import { useCristinaVoice } from '../hooks/useCristinaVoice';
 
 const ALL = 'Todos';
 const categories: Array<AudioCategory | typeof ALL> = [ALL, 'Respiración', 'Bienestar emocional', 'Tratamientos', 'Dormir mejor', 'Espera', 'Familia', 'Meditaciones', 'Primeros días'];
@@ -29,13 +30,12 @@ export default function OneMinute() {
   const [favourites, setFavourites] = useState<string[]>(() => readList(LS_FAV));
   const [recent, setRecent] = useState<string[]>(() => readList(LS_RECENT));
   const [feedback, setFeedback] = useState<Record<string, 'yes' | 'no'>>(() => readFeedback());
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const cristina = useCristinaVoice();
   const [ambient, setAmbient] = useState<AmbientId | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const ambientNodesRef = useRef<AudioNode[]>([]);
 
   useEffect(() => () => {
-    window.speechSynthesis?.cancel();
     ambientNodesRef.current.forEach((node) => { try { node.disconnect(); } catch { /* no-op */ } });
     audioContextRef.current?.close().catch(() => undefined);
   }, []);
@@ -63,25 +63,23 @@ export default function OneMinute() {
     const next = [id, ...recent.filter((item) => item !== id)].slice(0, 6);
     setRecent(next); localStorage.setItem(LS_RECENT, JSON.stringify(next));
   }
-  function play(episode: OneMinuteEpisode, selectedRate = rate) {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const speech = new SpeechSynthesisUtterance(episode.script);
-    speech.lang = 'es-ES'; speech.rate = selectedRate;
-    speech.onend = () => { setActiveId(null); setPaused(false); };
-    speech.onerror = () => { setActiveId(null); setPaused(false); };
-    utteranceRef.current = speech;
+  async function play(episode: OneMinuteEpisode, selectedRate = rate) {
     setActiveId(episode.id); setPaused(false); rememberRecent(episode.id);
     localStorage.setItem('oncoresponde:last-audio', JSON.stringify({ id: episode.id, title: episode.title, at: new Date().toISOString() }));
-    window.speechSynthesis.speak(speech);
+    await cristina.speak({
+      text: episode.script,
+      cacheKey: `minute-${episode.id}`,
+      rate: selectedRate,
+      onEnded: () => { setActiveId(null); setPaused(false); },
+    });
   }
-  function togglePause() {
+  async function togglePause() {
     if (!activeId) return;
-    if (paused) window.speechSynthesis.resume(); else window.speechSynthesis.pause();
+    await cristina.togglePause();
     setPaused(!paused);
   }
-  function stop() { window.speechSynthesis?.cancel(); setActiveId(null); setPaused(false); }
-  function changeRate(next: number) { setRate(next); if (activeEpisode) play(activeEpisode, next); }
+  function stop() { cristina.stop(); setActiveId(null); setPaused(false); }
+  function changeRate(next: number) { setRate(next); cristina.setRate(next); }
   function toggleFavourite(id: string) {
     const next = favourites.includes(id) ? favourites.filter((item) => item !== id) : [id, ...favourites];
     setFavourites(next); localStorage.setItem(LS_FAV, JSON.stringify(next));

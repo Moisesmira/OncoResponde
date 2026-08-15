@@ -102,7 +102,7 @@ export default async (req) => {
         'X-OncoResponde-Voice-Provider': 'ElevenLabs',
         'X-OncoResponde-Voice-Id': ONCORESPONDE_VOICE_ID,
         'X-OncoResponde-Voice-Name': ONCORESPONDE_VOICE_NAME,
-        'X-OncoResponde-Version': '3.4.1',
+        'X-OncoResponde-Version': '3.8.0',
       },
     });
   } catch (error) {

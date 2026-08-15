@@ -6,6 +6,7 @@ import { getHomeInsights } from '../utils/personalAssistantContext';
 import { getDailyEpisode } from '../data/oneMinuteEpisodes';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../i18n/LanguageContext';
+import { useCristinaVoice } from '../hooks/useCristinaVoice';
 
 type MoodId = 'bien' | 'regular' | 'preocupado' | 'apoyo';
 
@@ -111,6 +112,7 @@ export default function Today() {
   const moodHistory = readMoodHistory().slice(0,7);
   let lastAudioTitle = ''; try { lastAudioTitle = JSON.parse(localStorage.getItem('oncoresponde:last-audio') || '{}').title || ''; } catch {}
   const [minutePaused, setMinutePaused] = useState(false);
+  const cristina = useCristinaVoice();
   const [minuteRate, setMinuteRate] = useState(0.85);
   const [minuteFeedback, setMinuteFeedback] = useState<'yes' | 'no' | null>(() => {
     const saved = window.localStorage.getItem(`oncoresponde-minute-feedback-${dailyEpisode.id}`);
@@ -136,35 +138,30 @@ export default function Today() {
     };
   }, []);
 
-  useEffect(() => () => window.speechSynthesis?.cancel(), []);
-
   function saveMinuteFeedback(value: 'yes' | 'no') {
     setMinuteFeedback(value);
     window.localStorage.setItem(`oncoresponde-minute-feedback-${dailyEpisode.id}`, value);
   }
 
-  function playDailyMinute(rate = minuteRate) {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const speech = new SpeechSynthesisUtterance(dailyEpisode.script);
-    speech.lang = 'es-ES';
-    speech.rate = rate;
-    speech.onend = () => { setMinutePlaying(false); setMinutePaused(false); };
-    speech.onerror = () => { setMinutePlaying(false); setMinutePaused(false); };
+  async function playDailyMinute(rate = minuteRate) {
     setMinutePlaying(true);
     setMinutePaused(false);
-    window.speechSynthesis.speak(speech);
+    await cristina.speak({
+      text: dailyEpisode.script,
+      cacheKey: `minute-${dailyEpisode.id}`,
+      rate,
+      onEnded: () => { setMinutePlaying(false); setMinutePaused(false); },
+    });
   }
 
-  function toggleDailyMinutePause() {
-    if (!minutePlaying || !('speechSynthesis' in window)) return;
-    if (minutePaused) window.speechSynthesis.resume();
-    else window.speechSynthesis.pause();
+  async function toggleDailyMinutePause() {
+    if (!minutePlaying) return;
+    await cristina.togglePause();
     setMinutePaused(!minutePaused);
   }
 
   function stopDailyMinute() {
-    window.speechSynthesis?.cancel();
+    cristina.stop();
     setMinutePlaying(false);
     setMinutePaused(false);
   }
@@ -172,7 +169,7 @@ export default function Today() {
   function increaseDailyMinuteRate() {
     const nextRate = minuteRate >= 1.15 ? 0.85 : Number((minuteRate + 0.15).toFixed(2));
     setMinuteRate(nextRate);
-    if (minutePlaying) playDailyMinute(nextRate);
+    cristina.setRate(nextRate);
   }
 
   return (

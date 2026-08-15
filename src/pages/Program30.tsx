@@ -4,6 +4,7 @@ import NavHeader from '../components/NavHeader';
 import BottomNav from '../components/BottomNav';
 import { program30 } from '../data/program30';
 import { oneMinuteEpisodes } from '../data/oneMinuteEpisodes';
+import { useCristinaVoice } from '../hooks/useCristinaVoice';
 
 const START='oncoresponde:program30:start';
 const DONE='oncoresponde:program30:done';
@@ -12,9 +13,10 @@ function getCurrentDay(){ const raw=localStorage.getItem(START); if(!raw){localS
 
 export default function Program30(){
  const [done,setDone]=useState<number[]>(readDone); const current=getCurrentDay();
+ const cristina=useCristinaVoice();
  const today=program30[current-1]; const episode=useMemo(()=>oneMinuteEpisodes.find(e=>e.id===today.episodeId)!,[today]);
  function toggle(day:number){const next=done.includes(day)?done.filter(d=>d!==day):[...done,day];setDone(next);localStorage.setItem(DONE,JSON.stringify(next));}
- function play(){ if(!('speechSynthesis'in window))return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(episode.script);u.lang='es-ES';u.rate=.85;speechSynthesis.speak(u);localStorage.setItem('oncoresponde:last-audio',JSON.stringify({id:episode.id,title:episode.title,at:new Date().toISOString()})); }
+ async function play(){ await cristina.speak({text:episode.script,cacheKey:`minute-${episode.id}`,rate:.85});localStorage.setItem('oncoresponde:last-audio',JSON.stringify({id:episode.id,title:episode.title,at:new Date().toISOString()})); }
  return <><main className="program-page"><NavHeader title="Programa de 30 días" backTo="/" backLabel="Inicio" />
  <section className="program-hero"><span className="section-kicker">Acompañamiento inicial</span><h1>30 días, un paso cada día</h1><p>Un audio breve y una acción sencilla. Puedes avanzar a tu ritmo y consultar toda la biblioteca cuando quieras.</p><div className="program-progress"><b>{done.length}/30</b><span>completados</span><div><i style={{width:`${done.length/30*100}%`}} /></div></div></section>
  <section className="program-today"><div><span className="section-kicker">Día {current}</span><h2>{today.title}</h2><p>{today.description}</p></div><button onClick={play}>▶ Escuchar</button><div className="program-action"><strong>Objetivo de hoy</strong><p>{today.action}</p><button className={done.includes(current)?'is-complete':''} onClick={()=>toggle(current)}>{done.includes(current)?'✓ Conseguido':'Marcar como realizado'}</button></div><Link className="button secondary" to="/hablame" state={{prefill:`Hoy he trabajado el tema «${today.title}» y quisiera preguntar: `}}>💬 Hablar sobre este tema</Link></section>

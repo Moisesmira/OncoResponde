@@ -1,3 +1,14 @@
+# OncoResponde 3.8.0
+
+## 3.8.0 — Cristina como voz única
+
+- Sustituida la voz nativa del dispositivo en «Tu minuto de hoy», «Un minuto para ti», relajaciones y el programa de 30 días.
+- Todas las reproducciones habladas dinámicas utilizan exclusivamente Cristina de ElevenLabs (`dNjJKg63Fr5AXwIdkATa`).
+- Los MP3 generados para contenidos fijos se guardan y reutilizan en el dispositivo para evitar nuevas generaciones y reducir consumo.
+- La Biblioteca Sonora conserva su reutilización de MP3 y la respuesta de IA mantiene la generación protegida desde Netlify.
+- Si ElevenLabs no está disponible, la aplicación muestra el error y permanece en silencio: no utiliza la voz robótica del dispositivo.
+- Actualizados versión, pie de página y caché de la PWA.
+
 # OncoResponde 3.7.0
 
 ## Rediseño editorial de la pantalla de inicio

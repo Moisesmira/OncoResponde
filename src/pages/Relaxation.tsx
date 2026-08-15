@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import NavHeader from '../components/NavHeader';
 import BottomNav from '../components/BottomNav';
+import { useCristinaVoice } from '../hooks/useCristinaVoice';
 
 type SpokenTrack = {
   id: string;
@@ -49,38 +50,34 @@ export default function Relaxation() {
   const [ambient, setAmbient] = useState<AmbientId | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const ambientNodesRef = useRef<AudioNode[]>([]);
+  const cristina = useCristinaVoice();
 
   const activeTrack = useMemo(() => spokenTracks.find((track) => track.id === activeId), [activeId]);
 
   useEffect(() => () => {
-    window.speechSynthesis?.cancel();
     stopAmbient();
   }, []);
 
   function stopSpeech() {
-    window.speechSynthesis?.cancel();
+    cristina.stop();
     setActiveId(null);
     setIsPaused(false);
   }
 
-  function playTrack(track: SpokenTrack) {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(track.script);
-    utterance.lang = 'es-ES';
-    utterance.rate = rate;
-    utterance.pitch = 1;
-    utterance.onend = () => { setActiveId(null); setIsPaused(false); };
-    utterance.onerror = () => { setActiveId(null); setIsPaused(false); };
+  async function playTrack(track: SpokenTrack) {
     setActiveId(track.id);
     setIsPaused(false);
-    window.speechSynthesis.speak(utterance);
+    await cristina.speak({
+      text: track.script,
+      cacheKey: `relaxation-${track.id}`,
+      rate,
+      onEnded: () => { setActiveId(null); setIsPaused(false); },
+    });
   }
 
-  function togglePause() {
+  async function togglePause() {
     if (!activeId) return;
-    if (isPaused) window.speechSynthesis.resume();
-    else window.speechSynthesis.pause();
+    await cristina.togglePause();
     setIsPaused(!isPaused);
   }
 
@@ -121,7 +118,7 @@ export default function Relaxation() {
 
   function changeRate(value: number) {
     setRate(value);
-    if (activeTrack) playTrack(activeTrack);
+    cristina.setRate(value);
   }
 
   return (
@@ -133,7 +130,7 @@ export default function Relaxation() {
           <span className="section-kicker">Un momento para ti</span>
           <h1>🎧 Escucha y relájate</h1>
           <p>Guías habladas, micro-podcasts y sonidos suaves para acompañar momentos de espera, inquietud o descanso.</p>
-          <p className="privacy-inline">Los audios se generan en tu dispositivo. No necesitas introducir datos personales.</p>
+          <p className="privacy-inline">Las guías utilizan la voz de Cristina y se reutilizan después de su primera reproducción. No necesitas introducir datos personales.</p>
         </section>
 
         <section className="relax-player card" aria-live="polite">

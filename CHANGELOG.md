@@ -1,3 +1,12 @@
+# OncoResponde 3.8.1
+
+## 3.8.1 — Respuestas sonoras más breves
+
+- Cristina lee un resumen específico para audio de 35 a 55 palabras, en lugar de la respuesta visual completa.
+- Eliminadas del audio introducciones repetitivas como «Lo más importante», «Sugerencias prácticas» y «En resumen».
+- La respuesta escrita conserva íntegramente el resumen, la explicación, las recomendaciones y las señales de consulta.
+- Menor consumo de caracteres y créditos de ElevenLabs en cada consulta.
+
 # OncoResponde 3.8.0
 
 ## 3.8.0 — Cristina como voz única

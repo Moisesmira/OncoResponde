@@ -133,6 +133,7 @@ const parseModelJson = (text) => {
 const fallbackPayloadFromText = (text, profileContext) => ({
   summary: 'Orientación general',
   answer: cleanText(text, 2200) || 'No se ha podido generar una respuesta completa. Inténtalo de nuevo.',
+  audioSummary: cleanText(text, 420) || 'Consulta la respuesta escrita y comenta cualquier duda con tu equipo sanitario.',
   actions: [
     'Anota la duda principal para comentarla con tu equipo sanitario.',
     'Sigue las indicaciones que ya te hayan dado para tu situación concreta.',
@@ -151,6 +152,7 @@ const responseSchema = {
   properties: {
     summary: { type: 'string' },
     answer: { type: 'string' },
+    audioSummary: { type: 'string' },
     actions: {
       type: 'array',
       minItems: 3,
@@ -161,7 +163,7 @@ const responseSchema = {
     followUp: { type: 'string' },
     personalizationNote: { type: 'string' },
   },
-  required: ['summary', 'answer', 'actions', 'whenToConsult', 'followUp', 'personalizationNote'],
+  required: ['summary', 'answer', 'audioSummary', 'actions', 'whenToConsult', 'followUp', 'personalizationNote'],
 };
 
 export default async (req) => {
@@ -192,6 +194,7 @@ export default async (req) => {
 
     const prompt = `${basePrompt}\n${clinicalContext}\n${tumorContext}\n${optionalProfile}\nContexto adicional de la interfaz: ${clientContext || 'ninguno'}.\n
 Responde respetando el formato solicitado. La explicación debe tener un máximo aproximado de 180 palabras. Incluye exactamente tres recomendaciones prácticas y prudentes.
+El campo audioSummary será lo único que se leerá en voz alta: redáctalo como una respuesta directa, natural y autosuficiente de 35 a 55 palabras. No empieces con títulos ni fórmulas como «Lo más importante», «Sugerencias prácticas», «En resumen» u «Orientación general». Incluye una señal de alarma solo cuando sea clínicamente relevante.
 
 Pregunta de la persona: ${question}`;
 
@@ -258,6 +261,7 @@ Pregunta de la persona: ${question}`;
       ? {
           summary: cleanText(parsed.summary, 350) || 'Orientación general',
           answer: cleanText(parsed.answer, 2200) || cleanText(text, 2200),
+          audioSummary: cleanText(parsed.audioSummary, 500) || cleanText(parsed.answer, 420) || cleanText(text, 420),
           actions: Array.isArray(parsed.actions)
             ? parsed.actions.map((item) => cleanText(item, 320)).filter(Boolean).slice(0, 3)
             : [],

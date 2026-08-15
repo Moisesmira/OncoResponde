@@ -5,6 +5,7 @@ import NavHeader from '../components/NavHeader';
 type AnswerData = {
   summary: string;
   answer: string;
+  audioSummary: string;
   actions?: string[];
   whenToConsult: string;
   followUp?: string;
@@ -122,12 +123,12 @@ export default function Answer() {
       return;
     }
 
-    const text = `${data.summary}. ${data.answer}`;
+    const text = data.audioSummary || data.answer;
     setAudioState('loading');
     setAudioNotice('Preparando una voz castellana de España con ElevenLabs…');
 
     try {
-      const response = await fetch('/.netlify/functions/voz?v=3.4.1-cristina-exacta', {
+      const response = await fetch('/.netlify/functions/voz?v=3.8.1-respuesta-breve', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

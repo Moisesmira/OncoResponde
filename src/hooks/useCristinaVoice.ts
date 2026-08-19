@@ -55,7 +55,7 @@ export function useCristinaVoice() {
       }
 
       if (!src) {
-        const response = await fetch('/.netlify/functions/voz?v=3.8.1-cristina-unica', {
+        const response = await fetch('/.netlify/functions/voz?v=3.8.2-cristina-unica', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text }),

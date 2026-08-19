@@ -128,7 +128,7 @@ export default function Answer() {
     setAudioNotice('Preparando una voz castellana de España con ElevenLabs…');
 
     try {
-      const response = await fetch('/.netlify/functions/voz?v=3.8.1-respuesta-breve', {
+      const response = await fetch('/.netlify/functions/voz?v=3.8.2-respuesta-breve', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

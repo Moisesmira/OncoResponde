@@ -1,4 +1,11 @@
-# OncoResponde 3.8.1
+# OncoResponde 3.8.2
+
+## 3.8.2 — Programa de 30 días completamente reproducible
+
+- Añadido un botón `▶ Escuchar` independiente en cada uno de los 30 días.
+- Cada botón reproduce su episodio correspondiente mediante la voz de Cristina.
+- El día actual continúa destacado y la acción de marcar como realizado se mantiene separada.
+- Centralizada la reproducción en una única función reutilizable.
 
 ## 3.8.1 — Respuestas sonoras más breves
 

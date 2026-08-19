@@ -1208,6 +1208,7 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
 /* OncoResponde 3.0 */
 .v3-dashboard{margin:1.25rem auto;max-width:1180px;padding:0 1rem}.v3-dashboard__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.daily-goal-card,.mood-mini-card,.context-card,.program-today,.program-hero{background:var(--card,#fff);border:1px solid var(--border,#dbe4ee);border-radius:20px;padding:1.15rem}.daily-goal-card button.is-complete,.program-action button.is-complete{background:#e8f7ee;border-color:#8bc9a1;color:#185b31}.mood-mini-chart{display:flex;align-items:flex-end;gap:.55rem;min-height:105px;margin:.75rem 0}.mood-mini-chart>span{display:flex;flex-direction:column;align-items:center;gap:.25rem;flex:1}.mood-mini-chart i{display:block;width:100%;max-width:22px;border-radius:999px 999px 4px 4px;background:linear-gradient(180deg,#6da8dd,#2f6fa6)}.program-page{max-width:1180px;margin:0 auto;padding:0 1rem 5rem}.program-hero{margin:1rem 0}.program-progress>div{height:10px;border-radius:999px;background:#e7edf4;overflow:hidden;margin-top:.5rem}.program-progress i{display:block;height:100%;background:#397fb6}.program-today{display:grid;gap:1rem;margin-bottom:1rem}.program-action{padding:1rem;border-radius:16px;background:#f3f8fc}.program-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem}.program-day{position:relative;border:1px solid #dbe4ee;border-radius:16px;padding:1rem;background:#fff;display:grid;gap:.4rem}.program-day>button{position:absolute;top:.75rem;right:.75rem}.program-day.is-current{outline:3px solid rgba(57,127,182,.18);border-color:#397fb6}.program-day.is-done{background:#f2fbf5}.program-day>span,.program-day>small{color:#5f7182}
 @media(max-width:800px){.v3-dashboard__grid,.program-grid{grid-template-columns:1fr}.v3-dashboard{padding:0}.program-page{padding-left:.75rem;padding-right:.75rem}}
+.program-day>.program-day-actions{position:static;display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.35rem}.program-day>.program-day-actions button{position:static}.program-day>.program-day-actions button.is-complete{background:#e8f7ee;border-color:#8bc9a1;color:#185b31}
 
 /* OncoResponde 3.0 — jerarquía de inicio revisada */
 .accompaniment-card{padding:1.25rem;border:1px solid #d7e6ee;border-radius:24px;background:linear-gradient(135deg,#f2f8fc,#fff 60%,#f1faf7);box-shadow:0 14px 34px rgba(29,76,102,.07)}
@@ -1543,4 +1544,3 @@ textarea { width: 100%; min-height: 120px; border: 1px solid #bad4e5; border-rad
     margin-top: 14px;
   }
 }
-
